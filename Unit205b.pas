@@ -130,7 +130,6 @@ type
     DBText7: TDBText;
     Label6: TLabel;
     dxEdit1: TdxEdit;
-    Edit1: TEdit;
     PopupMenu1: TPopupMenu;
     hello1: TMenuItem;
     dxDBMemo1: TdxDBMemo;
@@ -178,6 +177,8 @@ type
     DBText16: TDBText;
     Label11: TLabel;
     DBText11: TDBText;
+    Edit1: TEdit;
+    Edit2: TEdit;
     procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -345,7 +346,6 @@ label1.caption:=self.caption;
 //label1.caption:=ent_title+' '+self.caption;
 dxDateEdit1.date:=date;
 dxDateEdit4.date:=date;
-label1.caption:=ent_title+' '+self.caption;
 setunupdatestatus;
 end;
 
@@ -368,18 +368,31 @@ begin
         gifimage1.visible:= fieldbyname('bod_status_id').asinteger=1;
         if state=dsbrowse then setunupdatestatus;
     end;
-    if (pagecontrol1.activepage=TabSheet1) or (bill.fieldbyname('bod_id').asinteger=0) then exit;
+//    if (pagecontrol1.activepage=TabSheet1) or (bill.fieldbyname('bod_id').asinteger=0) then exit;
+    if (bill.fieldbyname('bod_id').asinteger=0) then exit;
     with bill_dtl do
     begin
         if tag<>bill.fieldbyname('bod_id').asinteger then
         begin
-            if bill.RecordCount=0 then
-            begin
-                if active then close;
-                tag:=0;
-            end
+            if active then close;
+            if bill.RecordCount=0 then tag:=0
             else
             begin
+                commandtext:='select b.dtl_id,b.amot,h.* from tb_bill_dtl b inner join (';
+                commandtext:=commandtext+' select bod_type=''²É¹º'',b.bod_id,b.dtl_id,b.med_id,b.price,b.rela_value,b.amot,a.carry_dt,bod_cd=GBELN,agent_id=0,agent=NAME_FIRST,';  //bod_id=b.med_id,
+                commandtext:=commandtext+' material_code=a.MATNR,med_code='''',med_name=ARKTX,specifi=ZGG,pdt_place=ZSCQY,med_unit=''''';
+                commandtext:=commandtext+' from tb_bill_dtl b'; //
+                commandtext:=commandtext+' inner join SAP_ZSD_015 a on b.med_id=a.rec_id';
+                commandtext:=commandtext+' where b.bod_id='+bill.fieldbyname('bod_id').asstring+'  and b.type_id=0'; //+' and b.type_id=36 and b.med_id=c.bod_id';
+                commandtext:=commandtext+' union all ';
+                commandtext:=commandtext+' select c.bod_type,b.bod_id,b.dtl_id,b.med_id,b.price,b.rela_value,b.amot,c.carry_dt,c.bod_cd,c.agent_id,c.agent,';
+                commandtext:=commandtext+' c.material_code,c.med_code,c.med_name,c.specifi,c.pdt_place,c.med_unit'; //,c.bod_type,c.bod_cd1,d.type_id2';
+                commandtext:=commandtext+' from tb_bill_dtl b'; //
+                commandtext:=commandtext+' inner join vi_bodstadtlmed c on b.bod_id=c.bod_id and (b.type_id=36 and b.med_id=c.bod_id1 or b.type_id=1 and b.med_id=c.rec_id)';
+                commandtext:=commandtext+' where b.bod_id='+bill.fieldbyname('bod_id').asstring; //+' and b.type_id=36 and b.med_id=c.bod_id';
+                commandtext:=commandtext+' ) h on b.dtl_id=h.dtl_id';
+edit2.text:=commandtext;                
+{
                 commandtext:='select bod_type=''²É¹º'',b.bod_id,b.dtl_id,b.med_id,b.price,b.rela_value,b.amot,a.carry_dt,bod_cd=GBELN,agent_id=0,agent=NAME_FIRST,';  //bod_id=b.med_id,
                 commandtext:=commandtext+' material_code=a.MATNR,med_code='''',med_name=ARKTX,specifi=ZGG,pdt_place=ZSCQY,med_unit=''''';
                 commandtext:=commandtext+' from tb_bill_dtl b'; //
@@ -391,6 +404,7 @@ begin
                 commandtext:=commandtext+' from tb_bill_dtl b'; //
                 commandtext:=commandtext+' inner join vi_bodstadtlmed c on b.bod_id=c.bod_id and (b.type_id=36 and b.med_id=c.bod_id1 or b.type_id=1 and b.med_id=c.rec_id)';
                 commandtext:=commandtext+' where b.bod_id='+bill.fieldbyname('bod_id').asstring; //+' and b.type_id=36 and b.med_id=c.bod_id';
+}
 {
                 if active then close;
                 commandtext:='select b.bod_id,b.dtl_id,b.med_id,b.price,b.rela_value,b.amot,c.carry_dt,c.bod_cd,c.agent_id,c.agent,';

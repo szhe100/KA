@@ -289,7 +289,7 @@ end;
 procedure Tsetexpay.dxDBGrid1DblClick(Sender: TObject);
 begin
 pagecontrol1.activepage:=tabsheet2;
-DSbillDataChange(PageControl1,nil);
+//DSbillDataChange(PageControl1,nil);
 end;
 
 procedure Tsetexpay.FormKeyPress(Sender: TObject; var Key: Char);
@@ -464,16 +464,14 @@ begin
         gifimage1.visible:= fieldbyname('bod_status_id').asinteger=1;
         if state=dsbrowse then setunupdatestatus;
     end;
-    if (pagecontrol1.activepage=TabSheet1) or (bill.fieldbyname('bod_id').asinteger=0) then exit;
+//    if (pagecontrol1.activepage=TabSheet1) or (bill.fieldbyname('bod_id').asinteger=0) then exit;
+    if (bill.fieldbyname('bod_id').asinteger=0) then exit;
     with bill_dtl do
     begin
         if tag<>bill.fieldbyname('bod_id').asinteger then
         begin
-            if bill.RecordCount=0 then
-            begin
-                if active then close;
-                tag:=0;
-            end
+            if active then close;
+            if bill.RecordCount=0 then tag:=0
             else
             begin
                 if active then close;

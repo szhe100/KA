@@ -139,7 +139,6 @@ type
     Label35: TLabel;
     dxDBDateEdit1: TdxDBDateEdit;
     SpeedButton2: TSpeedButton;
-    Edit1: TEdit;
     billcheck_dt1: TDateTimeField;
     Label16: TLabel;
     Label10: TLabel;
@@ -213,6 +212,8 @@ type
     billstoppay: TBooleanField;
     dxDBGrid1creat_dt: TdxDBGridColumn;
     dxDBGrid1check_dt: TdxDBGridColumn;
+    Edit1: TEdit;
+    Edit2: TEdit;
     procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -283,7 +284,7 @@ procedure Tsetexpay3.FormActivate(Sender: TObject);
 begin
 with homebank do
 begin
-    if active=true then close;
+    if active then close;
     commandtext:='select * from tb_bank where comp_id='+inttostr(compid);
     open;
 end;
@@ -293,9 +294,9 @@ end;
 procedure Tsetexpay3.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
-with homebank  do if active=true then close;
-with bill do if active=true then close;
-with bill_dtl do if active=true then close;
+with homebank  do if active then close;
+with bill do if active then close;
+with bill_dtl do if active then close;
 end;
 
 procedure Tsetexpay3.FormClose(Sender: TObject;
@@ -330,7 +331,7 @@ begin
 // refresh speedbutton
 with bill_dtl do
 begin
-    if active=true then close;
+    if active then close;
     tag:=0;
 end;
 with bill do
@@ -394,11 +395,11 @@ begin
         dxdbedit1.enabled:=(recordcount>0) and (fieldbyname('creat_by').asinteger=curuserid);
         dxDBDateEdit1.enabled:=(recordcount>0) and (fieldbyname('creat_by').asinteger=curuserid);
         dxDBMemo1.enabled:=(recordcount>0) and (fieldbyname('creat_by').asinteger=curuserid);
-        speedbutton1.enabled:=(state=dsbrowse) and (active=true) and (recordcount>0)
+        speedbutton1.enabled:=(state=dsbrowse) and (active) and (recordcount>0)
             and (fieldbyname('bod_status_id').asinteger=5);
-        speedbutton2.enabled:=(state=dsbrowse) and (active=true) and (recordcount>0)
+        speedbutton2.enabled:=(state=dsbrowse) and (active) and (recordcount>0)
             and (fieldbyname('bod_status_id').asinteger=5);
-        speedbutton3.enabled:=(state=dsbrowse) and (active=true) and (recordcount>0)
+        speedbutton3.enabled:=(state=dsbrowse) and (active) and (recordcount>0)
             and (fieldbyname('bod_status_id').asinteger=1)
             and (fieldbyname('check_by').asinteger=curuserid);
 //            and (datetostr(fieldbyname('check_dt').asdatetime)=datetostr(dt0)); // 审核当天可反审
@@ -410,13 +411,24 @@ begin
     begin
         if tag<>bill.fieldbyname('bod_id').asinteger then
         begin
-            if bill.RecordCount=0 then
-            begin
-                if active=true then close;
-                tag:=0;
-            end
+            if active then close;
+            if bill.RecordCount=0 then tag:=0
             else
             begin
+                commandtext:='select b.dtl_id,b.amot,h.* from tb_bill_dtl b inner join (';
+                commandtext:=commandtext+' select bod_type=''采购'',b.bod_id,b.dtl_id,b.med_id,b.price,b.rela_value,b.amot,a.carry_dt,bod_cd=GBELN,agent_id=0,agent=NAME_FIRST,';  //bod_id=b.med_id,
+                commandtext:=commandtext+' material_code=a.MATNR,med_code='''',med_name=ARKTX,specifi=ZGG,pdt_place=ZSCQY,med_unit=''''';
+                commandtext:=commandtext+' from tb_bill_dtl b'; //
+                commandtext:=commandtext+' inner join SAP_ZSD_015 a on b.med_id=a.rec_id';
+                commandtext:=commandtext+' where b.bod_id='+bill.fieldbyname('bod_id').asstring+'  and b.type_id=0'; //+' and b.type_id=36 and b.med_id=c.bod_id';
+                commandtext:=commandtext+' union all ';
+                commandtext:=commandtext+' select c.bod_type,b.bod_id,b.dtl_id,b.med_id,b.price,b.rela_value,b.amot,c.carry_dt,c.bod_cd,c.agent_id,c.agent,';
+                commandtext:=commandtext+' c.material_code,c.med_code,c.med_name,c.specifi,c.pdt_place,c.med_unit'; //,c.bod_type,c.bod_cd1,d.type_id2';
+                commandtext:=commandtext+' from tb_bill_dtl b'; //
+                commandtext:=commandtext+' inner join vi_bodstadtlmed c on b.bod_id=c.bod_id and (b.type_id=36 and b.med_id=c.bod_id1 or b.type_id=1 and b.med_id=c.rec_id)';
+                commandtext:=commandtext+' where b.bod_id='+bill.fieldbyname('bod_id').asstring; //+' and b.type_id=36 and b.med_id=c.bod_id';
+                commandtext:=commandtext+' ) h on b.dtl_id=h.dtl_id';
+{
                 commandtext:='select bod_type=''采购'',b.bod_id,b.dtl_id,b.med_id,b.price,b.rela_value,b.amot,a.carry_dt,bod_cd=GBELN,agent_id=0,agent=NAME_FIRST,';  //bod_id=b.med_id,
                 commandtext:=commandtext+' material_code=a.MATNR,med_code='''',med_name=ARKTX,specifi=ZGG,pdt_place=ZSCQY,med_unit=''''';
                 commandtext:=commandtext+' from tb_bill_dtl b'; //
@@ -428,8 +440,9 @@ begin
                 commandtext:=commandtext+' from tb_bill_dtl b'; //
                 commandtext:=commandtext+' inner join vi_bodstadtlmed c on b.bod_id=c.bod_id and (b.type_id=36 and b.med_id=c.bod_id1 or b.type_id=1 and b.med_id=c.rec_id)';
                 commandtext:=commandtext+' where b.bod_id='+bill.fieldbyname('bod_id').asstring; //+' and b.type_id=36 and b.med_id=c.bod_id';
+}
 {
-                if active=true then close;
+                if active then close;
                 commandtext:='select b.bod_id,b.dtl_id,b.med_id,b.price,b.rela_value,b.amot,c.carry_dt,c.bod_cd,c.agent_id,c.agent,';
                 commandtext:=commandtext+' c.med_name,c.med_code,c.specifi,c.pdt_place,c.med_unit,c.bod_type,c.bod_cd1,d.type_id2';
                 commandtext:=commandtext+' from tb_bill_dtl b'; //
@@ -527,7 +540,7 @@ procedure Tsetexpay3.SpeedButton1Click(Sender: TObject);
 begin
 with dm.pubqry do
 begin
-    if active=true then close;
+    if active then close;
     commandtext:='select top 1 bod_status_id from tb_bill where bod_id='+bill.fieldbyname('bod_id').asstring;
     open;
     if fields[0].asinteger=1 then raise Exception.Create('本单已审核，不可送回');
@@ -536,7 +549,7 @@ if MessageBox(0,'确定将本单送回至制单人','请注意',MB_YESNO+MB_ICONQUESTION)<>IDY
 setprogress(1);
 with dm.pubqry do
 begin
-    if active=True then close;
+    if active then close;
     commandtext:='update tb_bill set bod_status_id=0 where bod_id='+bill.fieldbyname('bod_id').asstring;
     execute;
     close;
@@ -546,7 +559,7 @@ bill.delete;
 fsendback:=False;
 with bill_dtl do
 begin
-    if active=true then close;
+    if active then close;
     tag:=0; //可以刷新
 end;
 DSbillDataChange(nil,nil);  //刷新cdsbill_dtl
@@ -559,7 +572,7 @@ var s: string;
 begin
 with dm.pubqry do
 begin
-    if active=True then close;
+    if active then close;
     commandtext:='select top 1 c.mate_name from tb_bill a,tb_busimate c ';
     commandtext:=commandtext+' where a.bod_id='+bill.fieldbyname('bod_id').asstring+' and a.agent_id=c.mate_id and c.stoppay=1';
     open;
@@ -575,7 +588,7 @@ setprogress(1);
 SpeedButton2.enabled:=false; // 避免连续按两次
 with dm.pubqry do
 begin
-    if active=true then close;
+    if active then close;
     commandtext:='sp_updatestock37 37,'+bill.fieldbyname('bod_id').asstring+','+inttostr(curuserid);
     try
         execute;
@@ -593,7 +606,7 @@ procedure Tsetexpay3.SpeedButton3Click(Sender: TObject);
 begin
 with dm.pubqry do
 begin
-    if active=True then close;
+    if active then close;
     commandtext:='select top 1 bod_cd from tb_bill a,tb_bill_dtl b where a.bod_type_id=30 and a.bod_id=b.bod_id and b.med_id='+bill.fieldbyname('bod_id').asstring;
     open;
     if recordcount>0 then raise Exception.Create('本单已生成'+fieldbyname('bod_cd').asstring+'号出纳付款单，不可反审');
@@ -603,7 +616,7 @@ setprogress(1);
 speedbutton3.enabled:=false; // 避免连续按两次 保证后续语句出现异常也不可 再按
 with dm.pubqry do
 begin
-    if active=true then close;
+    if active then close;
     commandtext:='sp_updatestock37 -37,'+bill.fieldbyname('bod_id').asstring+','+inttostr(curuserid);
     try
         execute;
@@ -701,7 +714,7 @@ if mi=0 then raise Exception.Create('选择单据无效(已审核单据不可再审)');
 
 with dm.pubqry do
 begin
-    if active=True then close;
+    if active then close;
     commandtext:='select top 3 a.bod_cd,c.mate_name from tb_bill a,tb_busimate c ';
     commandtext:=commandtext+' where a.bod_id in ('+t+') and a.agent_id=c.mate_id and c.stoppay=1';
     open;
@@ -721,7 +734,7 @@ begin
     end;
 	if MessageBox(0,'确定所选单据审核通过','请注意',MB_YESNO+MB_ICONQUESTION)<>IDYES then abort;
     setprogress(1);
-    if active=true then close;
+    if active then close;
     commandtext:='select bod_id from tb_bill where bod_id in ('+t+')';
     open;
     if recordcount=0 then abort;
@@ -731,7 +744,7 @@ begin
             begin
                 with pubqry do
                 begin
-                    if active=true then close;
+                    if active then close;
     				commandtext:='sp_updatestock37 37,'+dm.pubqry.fieldbyname('bod_id').asstring+','+inttostr(curuserid);
                     execute;
                 end;
@@ -744,7 +757,7 @@ begin
             MessageBox(0,'单据审核失败','请注意',MB_OK+MB_ICONERROR);
         end;
     finally
-        if active=true then close;
+        if active then close;
         setprogress(0);
     end;
 end;

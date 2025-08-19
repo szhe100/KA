@@ -335,7 +335,7 @@ object setexpay3: Tsetexpay3
         Height = 386
         Align = alClient
         BevelOuter = bvNone
-        Color = 13171149
+        Color = 14613729
         Font.Charset = GB2312_CHARSET
         Font.Color = clWindowText
         Font.Height = -12
@@ -435,7 +435,7 @@ object setexpay3: Tsetexpay3
         object Shape1: TShape
           Left = 233
           Top = 64
-          Width = 231
+          Width = 276
           Height = 1
           Pen.Color = 14065456
         end
@@ -511,7 +511,7 @@ object setexpay3: Tsetexpay3
           Width = 806
           Height = 259
           Anchors = [akLeft, akTop, akRight]
-          Brush.Color = 13433814
+          Brush.Color = 14613729
           Pen.Color = 14065456
           Pen.Width = 2
           Shape = stRoundRect
@@ -733,7 +733,7 @@ object setexpay3: Tsetexpay3
           Left = 231
           Top = 63
           Width = 281
-          Color = 13171149
+          Color = 14613729
           Style.BorderColor = 14065456
           Style.BorderStyle = xbsSingle
           Style.ButtonStyle = btsSimple
@@ -774,15 +774,6 @@ object setexpay3: Tsetexpay3
           StyleController = StyleController
           SaveTime = False
         end
-        object Edit1: TEdit
-          Left = 178
-          Top = 283
-          Width = 121
-          Height = 20
-          TabOrder = 3
-          Text = 'Edit1'
-          Visible = False
-        end
         object dxDBGrid2: TdxDBGrid
           Left = 16
           Top = 102
@@ -800,7 +791,7 @@ object setexpay3: Tsetexpay3
           Color = clWhite
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 4
+          TabOrder = 3
           DataSource = DSbill_dtl
           Filter.Criteria = {00000000}
           HighlightColor = 16777088
@@ -925,6 +916,24 @@ object setexpay3: Tsetexpay3
             SummaryField = 'amot'
             SummaryFormat = '###,###,##0.00;; '
           end
+        end
+        object Edit1: TEdit
+          Left = 169
+          Top = 285
+          Width = 121
+          Height = 20
+          TabOrder = 4
+          Text = 'Edit1'
+          Visible = False
+        end
+        object Edit2: TEdit
+          Left = 170
+          Top = 310
+          Width = 121
+          Height = 20
+          TabOrder = 5
+          Text = 'Edit2'
+          Visible = False
         end
       end
     end

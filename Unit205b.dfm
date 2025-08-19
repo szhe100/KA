@@ -335,7 +335,7 @@ object setexpay2: Tsetexpay2
         Height = 386
         Align = alClient
         BevelOuter = bvNone
-        Color = 16440572
+        Color = 16507901
         Font.Charset = GB2312_CHARSET
         Font.Color = clWindowText
         Font.Height = -12
@@ -451,7 +451,7 @@ object setexpay2: Tsetexpay2
         object Shape1: TShape
           Left = 233
           Top = 64
-          Width = 231
+          Width = 275
           Height = 1
           Pen.Color = 14065456
         end
@@ -511,7 +511,7 @@ object setexpay2: Tsetexpay2
           Width = 806
           Height = 259
           Anchors = [akLeft, akTop, akRight]
-          Brush.Color = 16638206
+          Brush.Color = 16507901
           Pen.Color = 14065456
           Pen.Width = 2
           Shape = stRoundRect
@@ -733,7 +733,7 @@ object setexpay2: Tsetexpay2
           Left = 231
           Top = 63
           Width = 281
-          Color = 16440572
+          Color = 16507901
           Style.BorderColor = 14065456
           Style.BorderStyle = xbsSingle
           Style.ButtonStyle = btsSimple
@@ -742,15 +742,6 @@ object setexpay2: Tsetexpay2
           TabOrder = 0
           DataField = 'bod_desc'
           DataSource = DSbill
-        end
-        object Edit1: TEdit
-          Left = 665
-          Top = 33
-          Width = 121
-          Height = 20
-          TabOrder = 1
-          Text = 'Edit1'
-          Visible = False
         end
         object dxDBMemo1: TdxDBMemo
           Left = 602
@@ -765,7 +756,7 @@ object setexpay2: Tsetexpay2
           Style.BorderColor = 12615680
           Style.BorderStyle = xbsSingle
           Style.ButtonStyle = btsSimple
-          TabOrder = 2
+          TabOrder = 1
           DataField = 'zmemo'
           DataSource = DSbill
           Height = 70
@@ -787,7 +778,7 @@ object setexpay2: Tsetexpay2
           Color = clWhite
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 3
+          TabOrder = 2
           DataSource = DSbill_dtl
           Filter.Criteria = {00000000}
           HighlightColor = 16777088
@@ -912,6 +903,24 @@ object setexpay2: Tsetexpay2
             SummaryField = 'amot'
             SummaryFormat = '###,###,##0.00;; '
           end
+        end
+        object Edit1: TEdit
+          Left = 169
+          Top = 285
+          Width = 121
+          Height = 20
+          TabOrder = 3
+          Text = 'Edit1'
+          Visible = False
+        end
+        object Edit2: TEdit
+          Left = 170
+          Top = 310
+          Width = 121
+          Height = 20
+          TabOrder = 4
+          Text = 'Edit2'
+          Visible = False
         end
       end
     end
