@@ -195,7 +195,6 @@ type
     Label6: TLabel;
     DBText3: TDBText;
     dxDBGrid1: TdxDBGrid;
-    dxDBGrid1creat_dt: TdxDBGridDateColumn;
     dxDBGrid1bod_cd: TdxDBGridMaskColumn;
     dxDBGrid1Cbod_status: TdxDBGridMaskColumn;
     dxDBGrid1mate_name: TdxDBGridColumn;
@@ -208,11 +207,12 @@ type
     dxDBGrid1receiver: TdxDBGridColumn;
     dxDBGrid1storager: TdxDBGridColumn;
     dxDBGrid1checker: TdxDBGridMaskColumn;
-    dxDBGrid1check_dt: TdxDBGridDateColumn;
     dxDBGrid1bod_id: TdxDBGridColumn;
     dxDBGrid1bod_status_id: TdxDBGridColumn;
     dxDBGrid1creat_by: TdxDBGridColumn;
     billstoppay: TBooleanField;
+    dxDBGrid1creat_dt: TdxDBGridColumn;
+    dxDBGrid1check_dt: TdxDBGridColumn;
     procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -348,7 +348,13 @@ begin
     commandtext:=commandtext+' left join tb_bank f on a.bank_id=f.bank_id';
     commandtext:=commandtext+' left join tb_staff g on a.broker_id=g.sta_id';
 //    commandtext:=commandtext+' left join (select b.bod_id,carry_dt2=min(c.carry_dt) from tb_bill_dtl b,vi_bodstadtlmed c where b.bod_id=c.bod_id and (b.type_id=36 and b.med_id=c.bod_id1 or b.type_id=1 and b.med_id=c.rec_id) group by b.bod_id) h on a.bod_id=h.bod_id';
-    commandtext:=commandtext+' left join (select b.bod_id,carry_dt2=max(a.carry_dt) from tb_bill_dtl b inner join SAP_ZSD_015 a on b.med_id=a.rec_id group by b.bod_id) h on a.bod_id=h.bod_id';
+//    commandtext:=commandtext+' left join (select b.bod_id,carry_dt2=max(a.carry_dt) from tb_bill_dtl b inner join SAP_ZSD_015 a on b.med_id=a.rec_id group by b.bod_id) h on a.bod_id=h.bod_id';
+
+    commandtext:=commandtext+' left join ( select bod_id,carry_dt2=max(a.carry_dt) from (';
+    commandtext:=commandtext+' select b.bod_id,a.carry_dt from tb_bill_dtl b inner join SAP_ZSD_015 a on b.med_id=a.rec_id and b.type_id=0';
+    commandtext:=commandtext+' union all select b.bod_id,c.carry_dt from tb_bill_dtl b inner join vi_bodstadtlmed c on b.bod_id=c.bod_id and (b.type_id=36 and b.med_id=c.bod_id1 or b.type_id=1 and b.med_id=c.rec_id)';
+    commandtext:=commandtext+' ) a group by a.bod_id) h on a.bod_id=h.bod_id';
+
     commandtext:=commandtext+' where a.bod_type_id=37 and a.bod_status_id in (1,5)';
     if RadioGroup1.ItemIndex=0 then commandtext:=commandtext+'  and a.creat_dt>= '''+datetostr(dxdateedit1.date)+''' and a.creat_dt< dateadd(day,1,'''+datetostr(dxdateedit4.date)+''')';
     if RadioGroup1.ItemIndex=1 then commandtext:=commandtext+'  and h.carry_dt2>= '''+datetostr(dxdateedit1.date)+''' and h.carry_dt2< dateadd(day,1,'''+datetostr(dxdateedit4.date)+''')';

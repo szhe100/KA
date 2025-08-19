@@ -28,8 +28,6 @@ type
     Label4: TLabel;
     Label7: TLabel;
     Label9: TLabel;
-    Label10: TLabel;
-    Label11: TLabel;
     DSbill: TDataSource;
     dxDBEdit1: TdxDBEdit;
     StyleController: TdxEditStyleController;
@@ -41,7 +39,6 @@ type
     SpeedButton9: TSpeedButton;
     DBText9: TDBText;
     DBText10: TDBText;
-    DBText11: TDBText;
     bill: TClientDataSet;
     billbod_id: TIntegerField;
     billbod_cd: TStringField;
@@ -61,7 +58,6 @@ type
     dxDateEdit1: TdxDateEdit;
     billbod_desc: TStringField;
     DBText15: TDBText;
-    DBText16: TDBText;
     billbroker_id: TIntegerField;
     DBText14: TDBText;
     billdst_id: TIntegerField;
@@ -81,7 +77,6 @@ type
     billbroker: TStringField;
     billmate_name: TStringField;
     dxDBGrid1: TdxDBGrid;
-    dxDBGrid1creat_dt: TdxDBGridDateColumn;
     dxDBGrid1bod_cd: TdxDBGridMaskColumn;
     dxDBGrid1Cbod_status: TdxDBGridMaskColumn;
     dxDBGrid1mate_name: TdxDBGridColumn;
@@ -89,7 +84,6 @@ type
     dxDBGrid1bod_amot: TdxDBGridMaskColumn;
     dxDBGrid1creater: TdxDBGridMaskColumn;
     dxDBGrid1checker: TdxDBGridMaskColumn;
-    dxDBGrid1check_dt: TdxDBGridDateColumn;
     dxDBGrid1bod_id: TdxDBGridColumn;
     billzmemo: TMemoField;
     Label22: TLabel;
@@ -179,6 +173,12 @@ type
     dxDBGrid2material_code: TdxDBGridColumn;
     Label6: TLabel;
     DBText6: TDBText;
+    dxDBGrid1creat_dt: TdxDBGridColumn;
+    dxDBGrid1check_dt: TdxDBGridColumn;
+    Label10: TLabel;
+    DBText16: TDBText;
+    Label11: TLabel;
+    DBText11: TDBText;
     procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -377,9 +377,12 @@ begin
     commandtext:=commandtext+' left join tb_staff e on a.check_by=e.sta_id';
     commandtext:=commandtext+' left join tb_bank f on a.bank_id=f.bank_id';
     commandtext:=commandtext+' left join tb_staff g on a.broker_id=g.sta_id';
-//    commandtext:=commandtext+' left join (select b.bod_id,carry_dt2=min(c.carry_dt) from tb_bill_dtl b,vi_bodstadtlmed c where b.bod_id=c.bod_id and (b.type_id=36 and b.med_id=c.bod_id1 or b.type_id=1 and b.med_id=c.rec_id) group by b.bod_id) h on a.bod_id=h.bod_id';
-    commandtext:=commandtext+' left join (select b.bod_id,carry_dt2=max(a.carry_dt) from tb_bill_dtl b inner join SAP_ZSD_015 a on b.med_id=a.rec_id group by b.bod_id) h on a.bod_id=h.bod_id';
+//    commandtext:=commandtext+' left join (select b.bod_id,carry_dt2=max(a.carry_dt) from tb_bill_dtl b inner join SAP_ZSD_015 a on b.med_id=a.rec_id group by b.bod_id) h on a.bod_id=h.bod_id';
 
+    commandtext:=commandtext+' left join ( select bod_id,carry_dt2=max(a.carry_dt) from (';
+    commandtext:=commandtext+' select b.bod_id,a.carry_dt from tb_bill_dtl b inner join SAP_ZSD_015 a on b.med_id=a.rec_id and b.type_id=0';
+    commandtext:=commandtext+' union all select b.bod_id,c.carry_dt from tb_bill_dtl b inner join vi_bodstadtlmed c on b.bod_id=c.bod_id and (b.type_id=36 and b.med_id=c.bod_id1 or b.type_id=1 and b.med_id=c.rec_id)';
+    commandtext:=commandtext+' ) a group by a.bod_id) h on a.bod_id=h.bod_id';
 {
                 commandtext:='select bod_type=''²É¹º'',b.bod_id,b.dtl_id,b.med_id,b.price,b.rela_value,b.amot,a.carry_dt,bod_cd=GBELN,agent_id=0,agent=NAME_FIRST,';  //bod_id=b.med_id,
                 commandtext:=commandtext+' material_code=a.MATNR,med_code='''',med_name=ARKTX,specifi=ZGG,pdt_place=ZSCQY,med_unit=''''';
