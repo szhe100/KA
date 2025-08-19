@@ -272,6 +272,8 @@ type
       var ADone: Boolean);
     procedure dxEdit1KeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure dxDateEdit1DblClick(Sender: TObject);
+    procedure dxDateEdit2DblClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -450,6 +452,10 @@ with qry1 do
     //            else commandtext:=commandtext+'  and j.check_dt>= '''+datetostr(dxdateedit1.date)+''' and j.check_dt< dateadd(day,1,'''+datetostr(dxdateedit2.date)+''')';
 		end
         else commandtext:=commandtext+' and a.bod_cd='''+trim(dxEdit1.text)+'''';
+
+        if RadioGroup2.ItemIndex=1 then commandtext:=commandtext+' and not exists (select 1 from tb_bill x,tb_bill_dtl y where x.bod_type_id=30 and x.bod_id=y.bod_id and y.med_id=a.bod_id)';
+        if RadioGroup2.ItemIndex=2 then commandtext:=commandtext+' and exists (select 1 from tb_bill x,tb_bill_dtl y where x.bod_type_id=30 and x.bod_status_id in (0,2) and x.bod_id=y.bod_id and y.med_id=a.bod_id)';
+        if RadioGroup2.ItemIndex=3 then commandtext:=commandtext+' and exists (select 1 from tb_bill x,tb_bill_dtl y where x.bod_type_id=30 and x.bod_status_id=1 and x.bod_id=y.bod_id and y.med_id=a.bod_id)';
 
 //        if Trim(dxLookupEdit1.text)<>'' then commandtext:=commandtext+' and k.level_id1='+level1.fieldbyname('obj_id').asstring;
         if trim(dxbuttonedit1.text)<>'' then commandtext:=commandtext+' and c.mate_name=(select top 1 mate_name from tb_busimate where mate_id='+inttostr(dxbuttonedit1.tag)+')';
@@ -771,6 +777,22 @@ begin
     dxEdit1.selectall;
     dxEdit1.setfocus;
 end;
+end;
+
+procedure Tsetreport22.dxDateEdit1DblClick(Sender: TObject);
+var Year, Month, Day: Word;
+begin
+//showmessage(datetostr(dxDateEdit1.date));
+decodedate(dxDateEdit1.date,year,month,day);
+dxDateEdit1.date:=encodedate(year,1,1);
+end;
+
+procedure Tsetreport22.dxDateEdit2DblClick(Sender: TObject);
+var Year, Month, Day: Word;
+begin
+//showmessage(datetostr(dxDateEdit1.date));
+decodedate(dxDateEdit2.date,year,month,day);
+dxDateEdit2.date:=encodedate(year,12,31);
 end;
 
 end.

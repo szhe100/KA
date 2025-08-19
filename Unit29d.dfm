@@ -434,9 +434,13 @@ object setreport22: Tsetreport22
     Left = 63
     Top = 3
     Width = 88
+    Hint = #21452#20987#21462#24180#39318#26085
+    ParentShowHint = False
+    ShowHint = True
     Style.ButtonTransparence = ebtAlways
     Style.Edges = [edgLeft, edgTop, edgRight, edgBottom]
     TabOrder = 2
+    OnDblClick = dxDateEdit1DblClick
     Alignment = taCenter
     StyleController = StyleController
     Date = -700000.000000000000000000
@@ -446,9 +450,13 @@ object setreport22: Tsetreport22
     Left = 175
     Top = 3
     Width = 88
+    Hint = #21452#20987#21462#24180#23614#26085
+    ParentShowHint = False
+    ShowHint = True
     Style.ButtonTransparence = ebtAlways
     Style.Edges = [edgLeft, edgTop, edgRight, edgBottom]
     TabOrder = 3
+    OnDblClick = dxDateEdit2DblClick
     Alignment = taCenter
     StyleController = StyleController
     Date = -700000.000000000000000000
@@ -517,7 +525,6 @@ object setreport22: Tsetreport22
       #24050#21046#21333
       #24050#20184#27454)
     TabOrder = 6
-    Visible = False
   end
   object PageControl1: TPageControl
     Left = 0

@@ -255,6 +255,8 @@ type
       ASelected, AFocused, ANewItemRow: Boolean; var AText: String;
       var AColor: TColor; AFont: TFont; var AAlignment: TAlignment;
       var ADone: Boolean);
+    procedure dxDateEdit1DblClick(Sender: TObject);
+    procedure dxDateEdit2DblClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -713,6 +715,22 @@ begin
     end;
 end;
 }
+end;
+
+procedure Tsetreport11.dxDateEdit1DblClick(Sender: TObject);
+var Year, Month, Day: Word;
+begin
+//showmessage(datetostr(dxDateEdit1.date));
+decodedate(dxDateEdit1.date,year,month,day);
+dxDateEdit1.date:=encodedate(year,1,1);
+end;
+
+procedure Tsetreport11.dxDateEdit2DblClick(Sender: TObject);
+var Year, Month, Day: Word;
+begin
+//showmessage(datetostr(dxDateEdit1.date));
+decodedate(dxDateEdit2.date,year,month,day);
+dxDateEdit2.date:=encodedate(year,12,31);
 end;
 
 end.
