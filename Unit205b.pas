@@ -434,7 +434,7 @@ begin
 with bill do
     case fieldbyname('bod_status_id').asinteger of
         0: fieldbyname('cbod_status').asstring:='部门申请';
-        1: fieldbyname('cbod_status').asstring:='审核审核';
+        1: fieldbyname('cbod_status').asstring:='审核完成';
         2: fieldbyname('cbod_status').asstring:='部门审核';
         3: fieldbyname('cbod_status').asstring:='财务复核';
         5: fieldbyname('cbod_status').asstring:='财务审核';
@@ -466,7 +466,7 @@ if (ANode.Values[dxdbgrid1cbod_status.Index] ='作废') then Acolor := $00F8CBF4; 
 if (AColumn = dxDBGrid1cbod_status) then
 begin
     if (ANode.Values[dxdbgrid1cbod_status.Index] ='财务复核') then Acolor := $00FBFB91; //$00FDE0FE; //$00FFFFE1;    // 黄色
-    if (ANode.Strings[dxDBGrid1cbod_status.Index] = '完成审核') then
+    if (ANode.Strings[dxDBGrid1cbod_status.Index] = '审核完成') then
     begin
         AColor := clgreen;  //clLime;
         AFont.Color := clwhite;  //clBlack;

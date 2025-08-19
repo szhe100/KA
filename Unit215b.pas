@@ -647,7 +647,7 @@ begin
         commandtext:=commandtext+' left join (select mate_id,mate_code,mate_name from tb_busimate where mate_type_id=2) b on a.NAME1=b.mate_name';
         commandtext:=commandtext+' left join (select mate_id,mate_code,mate_name,district from tb_busimate where mate_type_id=4) c on c.mate_code=a.ASSIGNED_BP'; //按名称join 出错概率大, 确保mate_code唯一时，可用mate_code link    c.mate_code=a.ASSIGNED_BP'; //a.NAME_FIRST=c.mate_name';
 
-        commandtext:=commandtext+' left join (select b.med_id,amot=sum(cast(b.amot as decimal(15,2))) from tb_bill a,tb_bill_dtl b where a.bod_type_id=37 and a.bod_id=b.bod_id group by b.med_id) d on d.med_id=a.rec_id';
+        commandtext:=commandtext+' left join (select b.med_id,amot=sum(cast(b.amot as decimal(15,2))) from tb_bill a,tb_bill_dtl b where a.bod_type_id=37 and a.bod_id=b.bod_id and b.type_id=0 group by b.med_id) d on d.med_id=a.rec_id';
         commandtext:=commandtext+' left join (select b.med_id,amot=sum(cast(b.amot as decimal(15,2))) from tb_bill a,tb_bill_dtl b where a.bod_type_id=37 and a.bod_status_id=1 and a.bod_id=b.bod_id and b.type_id=0 group by b.med_id) e on e.med_id=a.rec_id';
         commandtext:=commandtext+' left join (select c.rec_id,c.type_id,c.rate,c.rate1,c.price1,c.price2,c.type_id2,agent_id1=c.agent_id,agent_code1=f.mate_code,d.agent_id,d.amot,d.fee,agent_code=e.mate_code,agent=e.mate_name';
         commandtext:=commandtext+'   from tb_busiframe3 c left join tb_busiframe3_dtl d on c.rec_id=d.rela_id left join tb_busimate e on d.agent_id=e.mate_id left join tb_busimate f on c.agent_id=f.mate_id) i';

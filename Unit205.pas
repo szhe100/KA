@@ -570,7 +570,7 @@ begin
     if (ANode.Values[dxdbgrid1cbod_status.Index] ='部门申请') then Acolor := $00A3FEFC;    // 黄色
     if (ANode.Values[dxdbgrid1cbod_status.Index] ='作废') then Acolor := $00F8CBF4;    // 淡红
     if (ANode.Values[dxdbgrid1cbod_status.Index] ='财务复核') then Acolor := $00FBFB91; //$00FDE0FE; //$00FFFFE1;    // 黄色
-    if (ANode.Strings[dxDBGrid1cbod_status.Index] = '完成审核') then
+    if (ANode.Strings[dxDBGrid1cbod_status.Index] = '审核完成') then
     begin
         AColor := clgreen;  //clLime;
         AFont.Color := clwhite;  //clBlack;
