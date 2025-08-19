@@ -168,6 +168,7 @@ type
     dxDBGrid1bod_id: TdxDBGridColumn;
     dxDBGrid1bod_status_id: TdxDBGridColumn;
     dxDBGrid1creat_by: TdxDBGridColumn;
+    GIFimage2: TRxGIFAnimator;
     procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -434,6 +435,7 @@ begin
         speedbutton7.enabled:=(state=dsbrowse) and (active) and (recordcount>0)
             and (fieldbyname('creat_by').asinteger=curuserid) and (fieldbyname('bod_status_id').asinteger=0);
         gifimage1.visible:= fieldbyname('bod_status_id').asinteger=1;
+        gifimage2.visible:= fieldbyname('bod_status_id').asinteger=2;
         if state=dsbrowse then setunupdatestatus;
     end;
     if (pagecontrol1.activepage=TabSheet1) or (bill.fieldbyname('bod_id').asinteger=0) then exit;
@@ -449,7 +451,8 @@ begin
             else
             begin
                 if active then close;
-                commandtext:='select bod_type=''采购'',bod_id=b.med_id,dtl_id=b.med_id,b.med_id,b.price,b.rela_value,b.amot,a.carry_dt,bod_cd=GBELN,agent_id=0,agent=NAME_FIRST,';
+//                commandtext:='select bod_type=''采购'',bod_id=b.med_id,dtl_id=b.med_id,b.med_id,b.price,b.rela_value,b.amot,a.carry_dt,bod_cd=GBELN,agent_id=0,agent=NAME_FIRST,';
+                commandtext:='select bod_type=''采购'',b.bod_id,b.dtl_id,b.med_id,b.price,b.rela_value,b.amot,a.carry_dt,bod_cd=GBELN,agent_id=0,agent=NAME_FIRST,';
                 commandtext:=commandtext+' material_code=a.MATNR,med_code='''',med_name=ARKTX,specifi=ZGG,pdt_place=ZSCQY,med_unit=''''';
                 commandtext:=commandtext+' from tb_bill_dtl b'; //
                 commandtext:=commandtext+' inner join SAP_ZSD_015 a on b.med_id=a.rec_id';
@@ -479,7 +482,7 @@ begin
 with bill do
 begin
 //    if fieldbyname('bod_status_id').asinteger=1
-    if not (fieldbyname('bod_status_id').asinteger in [0,6])
+    if fieldbyname('bod_status_id').asinteger<>0
         then raise Exception.Create('本单已非制单状态，不可更改');
     if (curuserid<>fieldbyname('creat_by').asinteger) and (fieldbyname('bod_cd').asstring='')
         then raise Exception.Create('非本人单据，请勿制单');

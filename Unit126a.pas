@@ -360,7 +360,8 @@ begin
             else
             begin
                 if active then close;
-                commandtext:='select bod_type=''²É¹º'',bod_id=b.med_id,dtl_id=b.med_id,b.med_id,b.price,b.rela_value,b.amot,a.carry_dt,bod_cd=GBELN,agent_id=0,agent=NAME_FIRST,';
+//                commandtext:='select bod_type=''²É¹º'',bod_id=b.med_id,dtl_id=b.med_id,b.med_id,b.price,b.rela_value,b.amot,a.carry_dt,bod_cd=GBELN,agent_id=0,agent=NAME_FIRST,';
+                commandtext:='select bod_type=''²É¹º'',b.bod_id,b.dtl_id,b.med_id,b.price,b.rela_value,b.amot,a.carry_dt,bod_cd=GBELN,agent_id=0,agent=NAME_FIRST,';
                 commandtext:=commandtext+' material_code=a.MATNR,med_code='''',med_name=ARKTX,specifi=ZGG,pdt_place=ZSCQY,med_unit=''''';
                 commandtext:=commandtext+' from tb_bill_dtl b'; //
                 commandtext:=commandtext+' inner join SAP_ZSD_015 a on b.med_id=a.rec_id';
