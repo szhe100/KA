@@ -1181,7 +1181,8 @@ begin
     if s2>'' then delete(s2,1,1);  //删除 s2 首字符 ','
 end;
 //showmessage('s1:'+s1+'  s2:'+s2);
-if mi=0 then raise Exception.Create('无可生成其他支出核销单记录(销售单价不一致 或 完成核销申请的不可申请)');
+if mi=0 then raise Exception.Create('无可生成其他支出核销单记录(销售单价不一致 或 已核销申请的不可申请)');
+//if mi=0 then raise Exception.Create('无可生成其他支出核销单记录(销售单价不一致 或 完成核销申请的不可申请)');
 if (s1='') and (s2='') then raise Exception.Create('未取得明细id数据，可先按"检查数据"按钮');
 with dm.pubqry do
 begin
@@ -1264,7 +1265,8 @@ begin
     commandtext:=commandtext+' from tb_bill a,tb_bill_dtl b ';
     commandtext:=commandtext+' where a.bod_type_id=37 and a.bod_status_id<>1 and a.bod_id=b.bod_id and (1=2 ';
     if s1>'' then commandtext:=commandtext+' or b.type_id=36 and b.med_id in ('+s1+')';
-    if s2>'' then commandtext:=commandtext+' or b.type_id=1  and b.med_id in ('+s2+')';
+    if s2>'' then commandtext:=commandtext+' or b.type_id in (0,1)  and b.med_id in ('+s2+')';
+//    if s2>'' then commandtext:=commandtext+' or b.type_id=1  and b.med_id in ('+s2+')';
     commandtext:=commandtext+')';
 //edit4.text:=commandtext;
     open;

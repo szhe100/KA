@@ -2308,6 +2308,38 @@ object setexpaycheck: Tsetexpaycheck
   object PopupMenu1: TPopupMenu
     Left = 313
     Top = 168
+    object N1: TMenuItem
+      Caption = #29983#25104#20854#20182#25903#20986#26680#38144#21333
+      OnClick = N1Click
+    end
+    object N4: TMenuItem
+      Caption = '-'
+    end
+    object N13: TMenuItem
+      Caption = #29983#25104#20854#20182#25903#20986#25910#27454#21333
+      OnClick = N13Click
+    end
+    object N14: TMenuItem
+      Caption = '-'
+    end
+    object N2: TMenuItem
+      Caption = #26680#23545#26412#21333#20419#38144#35268#21017
+      OnClick = N2Click
+    end
+    object N5: TMenuItem
+      Caption = '-'
+    end
+    object N11: TMenuItem
+      Caption = #26597#35810#26680#38144#21333#25454
+      OnClick = N11Click
+    end
+    object N6: TMenuItem
+      Caption = '-'
+    end
+    object N17: TMenuItem
+      Caption = #25353#21015#20540#26597#35810'('#21487#36873#22810#34892')'
+      OnClick = N17Click
+    end
     object N3: TMenuItem
       Caption = #25353#36873#25321#26597#35810'('#21487#22810#36873')'
       object N16: TMenuItem
@@ -2346,38 +2378,6 @@ object setexpaycheck: Tsetexpaycheck
         Caption = '&9 '#29289#26009#32534#30721
         OnClick = N16Click
       end
-    end
-    object N17: TMenuItem
-      Caption = #25353#21015#20540#26597#35810'('#21487#36873#22810#34892')'
-      OnClick = N17Click
-    end
-    object N5: TMenuItem
-      Caption = '-'
-    end
-    object N1: TMenuItem
-      Caption = #29983#25104#20854#20182#25903#20986#26680#38144#21333
-      OnClick = N1Click
-    end
-    object N4: TMenuItem
-      Caption = '-'
-    end
-    object N13: TMenuItem
-      Caption = #29983#25104#20854#20182#25903#20986#25910#27454#21333
-      OnClick = N13Click
-    end
-    object N14: TMenuItem
-      Caption = '-'
-    end
-    object N2: TMenuItem
-      Caption = #26680#23545#26412#21333#20419#38144#35268#21017
-      OnClick = N2Click
-    end
-    object N6: TMenuItem
-      Caption = '-'
-    end
-    object N11: TMenuItem
-      Caption = #26597#35810#26680#38144#21333#25454
-      OnClick = N11Click
     end
     object N12: TMenuItem
       Caption = '-'

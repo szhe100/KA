@@ -474,7 +474,8 @@ begin
             else
             begin
                 if active then close;
-                commandtext:='select bod_type=''采购'',b.bod_id,b.dtl_id,b.med_id,b.price,b.rela_value,b.amot,a.carry_dt,bod_cd=GBELN,agent_id=0,agent=NAME_FIRST,';  //bod_id=b.med_id,
+                commandtext:='select b.dtl_id,b.amot,h.* from tb_bill_dtl b inner join (';
+                commandtext:=commandtext+' select bod_type=''采购'',b.bod_id,b.dtl_id,b.med_id,b.price,b.rela_value,b.amot,a.carry_dt,bod_cd=GBELN,agent_id=0,agent=NAME_FIRST,';  //bod_id=b.med_id,
                 commandtext:=commandtext+' material_code=a.MATNR,med_code='''',med_name=ARKTX,specifi=ZGG,pdt_place=ZSCQY,med_unit=''''';
                 commandtext:=commandtext+' from tb_bill_dtl b'; //
                 commandtext:=commandtext+' inner join SAP_ZSD_015 a on b.med_id=a.rec_id';
@@ -485,6 +486,7 @@ begin
                 commandtext:=commandtext+' from tb_bill_dtl b'; //
                 commandtext:=commandtext+' inner join vi_bodstadtlmed c on b.bod_id=c.bod_id and (b.type_id=36 and b.med_id=c.bod_id1 or b.type_id=1 and b.med_id=c.rec_id)';
                 commandtext:=commandtext+' where b.bod_id='+bill.fieldbyname('bod_id').asstring; //+' and b.type_id=36 and b.med_id=c.bod_id';
+                commandtext:=commandtext+' ) h on b.dtl_id=h.dtl_id';
 
 {
                 commandtext:='select b.bod_id,b.dtl_id,b.med_id,b.price,b.rela_value,b.amot,c.carry_dt,c.bod_cd,c.agent_id,c.agent,';
@@ -610,7 +612,7 @@ begin
     if fieldbyname('dst_id').asinteger=0 then raise Exception.Create('请选择客户');
 //    if fieldbyname('carry_dt').isnull then raise Exception.Create('请输入发生日期');
     refreshmyrecord(bill,dm.Refreshcds,0,'a.bod_id',fieldbyname('bod_id').asinteger);
-    if fieldbyname('bod_amot').asfloat>300000 then raise Exception.Create('合计实付金额不可超过30万，请修改实付金额后重新提交申请');
+//    if fieldbyname('bod_amot').asfloat>300000 then raise Exception.Create('合计实付金额不可超过30万，请修改实付金额后重新提交申请');
 end;
 with dm.pubqry do
 begin
@@ -729,10 +731,11 @@ end;
 
 procedure Tsetexpay.bill_dtlBeforePost(DataSet: TDataSet);
 begin
+setprogress(0);
 with bill_dtl do
 begin
-    if fieldbyname('amot').NewValue>fieldbyname('amot').OldValue
-        then raise Exception.Create('实付金额不可超过原值');
+//    if fieldbyname('amot').NewValue>fieldbyname('amot').OldValue
+//        then raise Exception.Create('实付金额不可超过原值');
     if fieldbyname('amot').asfloat>fieldbyname('price').asfloat+fieldbyname('rela_value').asfloat
         then raise Exception.Create('实付金额不可超过应付金额+应付促销费');
 end;

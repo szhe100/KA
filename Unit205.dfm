@@ -363,7 +363,7 @@ object setexpay: Tsetexpay
           ParentFont = False
         end
         object Label1: TLabel
-          Left = 187
+          Left = 234
           Top = 3
           Width = 210
           Height = 20
@@ -397,7 +397,7 @@ object setexpay: Tsetexpay
           Caption = #21046#21333#26102#38388':'
         end
         object Label7: TLabel
-          Left = 190
+          Left = 237
           Top = 69
           Width = 54
           Height = 12
@@ -499,14 +499,14 @@ object setexpay: Tsetexpay
           Shape = stRoundRect
         end
         object Shape1: TShape
-          Left = 247
+          Left = 294
           Top = 64
           Width = 275
           Height = 1
           Pen.Color = 14065456
         end
         object DBText12: TDBText
-          Left = 247
+          Left = 294
           Top = 50
           Width = 48
           Height = 12
@@ -515,7 +515,7 @@ object setexpay: Tsetexpay
           DataSource = DSbill
         end
         object Label12: TLabel
-          Left = 190
+          Left = 237
           Top = 51
           Width = 54
           Height = 12
@@ -693,14 +693,14 @@ object setexpay: Tsetexpay
             0CAE6371942DF642DF59953572B825BB164A01003B}
         end
         object Label6: TLabel
-          Left = 626
+          Left = 640
           Top = 69
           Width = 66
           Height = 12
           Caption = #19994#21153#36127#36131#20154':'
         end
         object DBText6: TDBText
-          Left = 694
+          Left = 707
           Top = 69
           Width = 42
           Height = 12
@@ -715,7 +715,7 @@ object setexpay: Tsetexpay
           ParentFont = False
         end
         object dxDBEdit1: TdxDBEdit
-          Left = 245
+          Left = 292
           Top = 63
           Width = 281
           Color = 16513239

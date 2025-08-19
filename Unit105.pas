@@ -601,7 +601,7 @@ begin
     if fieldbyname('dst_id').asinteger=0 then raise Exception.Create('请选择客户');
 //    if fieldbyname('carry_dt').isnull then raise Exception.Create('请输入发生日期');
     refreshmyrecord(bill,dm.Refreshcds,0,'a.bod_id',fieldbyname('bod_id').asinteger);
-    if fieldbyname('bod_amot').asfloat>300000 then raise Exception.Create('合计实付金额不可超过30万，请修改实付金额后重新提交申请');
+//    if fieldbyname('bod_amot').asfloat>300000 then raise Exception.Create('合计实付金额不可超过30万，请修改实付金额后重新提交申请');
 end;
 with dm.pubqry do
 begin
