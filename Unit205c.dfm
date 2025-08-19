@@ -183,7 +183,7 @@ object setexpay3: Tsetexpay3
         OptionsDB = [edgoCancelOnExit, edgoCanDelete, edgoCanInsert, edgoCanNavigation, edgoConfirmDelete, edgoLoadAllRecords, edgoSmartReload, edgoUseBookmarks]
         OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoRowSelect, edgoUseBitmap]
         OnCustomDrawCell = dxDBGrid1CustomDrawCell
-        object dxDBGrid1creat_dt: TdxDBGridDateColumn
+        object dxDBGrid1creat_dt: TdxDBGridColumn
           Width = 78
           BandIndex = 0
           RowIndex = 0
@@ -196,13 +196,12 @@ object setexpay3: Tsetexpay3
           Font.Height = -12
           Font.Name = #23435#20307
           Font.Style = []
-          Width = 60
+          Width = 65
           BandIndex = 0
           RowIndex = 0
           FieldName = 'bod_cd'
           SummaryFooterType = cstCount
           SummaryFooterFormat = '##,###'#21333
-          DisableFilter = True
         end
         object dxDBGrid1Cbod_status: TdxDBGridMaskColumn
           Alignment = taCenter
@@ -297,19 +296,19 @@ object setexpay3: Tsetexpay3
           RowIndex = 0
           FieldName = 'checker'
         end
-        object dxDBGrid1check_dt: TdxDBGridDateColumn
-          Width = 70
-          BandIndex = 0
-          RowIndex = 0
-          FieldName = 'check_dt'
-          DisableFilter = True
-        end
         object dxDBGrid1bod_id: TdxDBGridColumn
           Sorted = csDown
           Visible = False
           BandIndex = 0
           RowIndex = 0
           FieldName = 'bod_id'
+          DisableFilter = True
+        end
+        object dxDBGrid1check_dt: TdxDBGridColumn
+          Width = 70
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'check_dt'
           DisableFilter = True
         end
         object dxDBGrid1bod_status_id: TdxDBGridColumn
@@ -442,7 +441,7 @@ object setexpay3: Tsetexpay3
         end
         object DBText15: TDBText
           Left = 66
-          Top = 350
+          Top = 360
           Width = 48
           Height = 12
           AutoSize = True
@@ -451,14 +450,14 @@ object setexpay3: Tsetexpay3
         end
         object Label9: TLabel
           Left = 11
-          Top = 349
+          Top = 360
           Width = 54
           Height = 12
           Caption = #21046' '#21333' '#20154':'
         end
         object Label14: TLabel
           Left = 147
-          Top = 350
+          Top = 360
           Width = 66
           Height = 12
           Caption = #37096#38376#23457#26680#20154':'
@@ -466,7 +465,7 @@ object setexpay3: Tsetexpay3
         end
         object DBText4: TDBText
           Left = 211
-          Top = 350
+          Top = 360
           Width = 42
           Height = 12
           AutoSize = True
@@ -476,14 +475,14 @@ object setexpay3: Tsetexpay3
         end
         object Label18: TLabel
           Left = 269
-          Top = 350
+          Top = 360
           Width = 66
           Height = 12
           Caption = #36130#21153#22797#26680#20154':'
         end
         object DBText5: TDBText
           Left = 335
-          Top = 350
+          Top = 360
           Width = 42
           Height = 12
           AutoSize = True
@@ -655,15 +654,15 @@ object setexpay3: Tsetexpay3
           Caption = #20184#27454#24080#25143':'
         end
         object Label10: TLabel
-          Left = 410
-          Top = 350
+          Left = 506
+          Top = 360
           Width = 66
           Height = 12
           Caption = #36130#21153#23457#26680#20154':'
         end
         object DBText16: TDBText
-          Left = 476
-          Top = 350
+          Left = 572
+          Top = 360
           Width = 48
           Height = 12
           AutoSize = True
@@ -671,15 +670,15 @@ object setexpay3: Tsetexpay3
           DataSource = DSbill
         end
         object Label11: TLabel
-          Left = 530
-          Top = 350
+          Left = 626
+          Top = 360
           Width = 54
           Height = 12
           Caption = #23457#26680#26102#38388':'
         end
         object DBText11: TDBText
-          Left = 585
-          Top = 350
+          Left = 681
+          Top = 360
           Width = 48
           Height = 12
           AutoSize = True

@@ -183,7 +183,7 @@ object setexpay2: Tsetexpay2
         OptionsDB = [edgoCancelOnExit, edgoCanDelete, edgoCanInsert, edgoCanNavigation, edgoConfirmDelete, edgoLoadAllRecords, edgoSmartReload, edgoUseBookmarks]
         OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoRowSelect, edgoUseBitmap]
         OnCustomDrawCell = dxDBGrid1CustomDrawCell
-        object dxDBGrid1creat_dt: TdxDBGridDateColumn
+        object dxDBGrid1creat_dt: TdxDBGridColumn
           Width = 78
           BandIndex = 0
           RowIndex = 0
@@ -196,13 +196,12 @@ object setexpay2: Tsetexpay2
           Font.Height = -12
           Font.Name = #23435#20307
           Font.Style = []
-          Width = 60
+          Width = 65
           BandIndex = 0
           RowIndex = 0
           FieldName = 'bod_cd'
           SummaryFooterType = cstCount
           SummaryFooterFormat = '##,###'#21333
-          DisableFilter = True
         end
         object dxDBGrid1Cbod_status: TdxDBGridMaskColumn
           Alignment = taCenter
@@ -297,19 +296,19 @@ object setexpay2: Tsetexpay2
           RowIndex = 0
           FieldName = 'checker'
         end
-        object dxDBGrid1check_dt: TdxDBGridDateColumn
-          Width = 70
-          BandIndex = 0
-          RowIndex = 0
-          FieldName = 'check_dt'
-          DisableFilter = True
-        end
         object dxDBGrid1bod_id: TdxDBGridColumn
           Sorted = csDown
           Visible = False
           BandIndex = 0
           RowIndex = 0
           FieldName = 'bod_id'
+          DisableFilter = True
+        end
+        object dxDBGrid1check_dt: TdxDBGridColumn
+          Width = 70
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'check_dt'
           DisableFilter = True
         end
         object dxDBGrid1bod_status_id: TdxDBGridColumn
@@ -410,13 +409,6 @@ object setexpay2: Tsetexpay2
           Height = 12
           Caption = #21046' '#21333' '#20154':'
         end
-        object Label11: TLabel
-          Left = 530
-          Top = 361
-          Width = 54
-          Height = 12
-          Caption = #23457#26680#26102#38388':'
-        end
         object DBText9: TDBText
           Left = 70
           Top = 35
@@ -447,21 +439,6 @@ object setexpay2: Tsetexpay2
           Font.Style = []
           ParentFont = False
         end
-        object DBText11: TDBText
-          Left = 585
-          Top = 361
-          Width = 48
-          Height = 12
-          AutoSize = True
-          DataField = 'check_dt'
-          DataSource = DSbill
-          Font.Charset = GB2312_CHARSET
-          Font.Color = clBlack
-          Font.Height = -12
-          Font.Name = #23435#20307
-          Font.Style = []
-          ParentFont = False
-        end
         object DBText15: TDBText
           Left = 68
           Top = 361
@@ -469,15 +446,6 @@ object setexpay2: Tsetexpay2
           Height = 12
           AutoSize = True
           DataField = 'creater'
-          DataSource = DSbill
-        end
-        object DBText16: TDBText
-          Left = 476
-          Top = 361
-          Width = 48
-          Height = 12
-          AutoSize = True
-          DataField = 'checker'
           DataSource = DSbill
         end
         object Shape1: TShape
@@ -657,13 +625,6 @@ object setexpay2: Tsetexpay2
           Height = 12
           Caption = #20184#27454#24080#25143':'
         end
-        object Label10: TLabel
-          Left = 410
-          Top = 361
-          Width = 66
-          Height = 12
-          Caption = #36130#21153#23457#26680#20154':'
-        end
         object Label35: TLabel
           Left = 574
           Top = 45
@@ -722,6 +683,44 @@ object setexpay2: Tsetexpay2
           Height = 12
           AutoSize = True
           DataField = 'agent'
+          DataSource = DSbill
+          Font.Charset = GB2312_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = #23435#20307
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label10: TLabel
+          Left = 506
+          Top = 361
+          Width = 66
+          Height = 12
+          Caption = #36130#21153#23457#26680#20154':'
+        end
+        object DBText16: TDBText
+          Left = 572
+          Top = 361
+          Width = 48
+          Height = 12
+          AutoSize = True
+          DataField = 'checker'
+          DataSource = DSbill
+        end
+        object Label11: TLabel
+          Left = 626
+          Top = 361
+          Width = 54
+          Height = 12
+          Caption = #23457#26680#26102#38388':'
+        end
+        object DBText11: TDBText
+          Left = 681
+          Top = 361
+          Width = 48
+          Height = 12
+          AutoSize = True
+          DataField = 'check_dt'
           DataSource = DSbill
           Font.Charset = GB2312_CHARSET
           Font.Color = clBlack
