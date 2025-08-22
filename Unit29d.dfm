@@ -143,7 +143,7 @@ object setreport22: Tsetreport22
   PixelsPerInch = 96
   TextHeight = 12
   object Shape7: TShape
-    Left = 378
+    Left = 375
     Top = 5
     Width = 54
     Height = 22
@@ -325,7 +325,7 @@ object setreport22: Tsetreport22
     Transparent = True
   end
   object Label6: TLabel
-    Left = 380
+    Left = 377
     Top = 11
     Width = 48
     Height = 12
@@ -465,7 +465,7 @@ object setreport22: Tsetreport22
   object dxLookupTreeView1: TdxLookupTreeView
     Left = 376
     Top = 47
-    Width = 127
+    Width = 131
     Height = 20
     CanSelectParents = True
     DropDownRows = 30
@@ -487,7 +487,10 @@ object setreport22: Tsetreport22
     TreeViewShowLines = True
     TreeViewShowRoot = True
     TreeViewSortType = stNone
+    OnCloseUp = dxLookupTreeView1CloseUp
+    OnDropDown = dxLookupTreeView1DropDown
     OnKeyDown = dxLookupTreeView1KeyDown
+    OnMouseMove = dxLookupTreeView1MouseMove
     DividedChar = '.'
     ListSource = DM.DSdistrict
     KeyField = 'code'
@@ -834,8 +837,14 @@ object setreport22: Tsetreport22
           RowIndex = 0
           FieldName = 'agent'
         end
-        object dxDBGrid2bod_desc1: TdxDBGridColumn
+        object dxDBGrid2bod_desc: TdxDBGridColumn
           Caption = #21333#25454#25688#35201
+          Width = 93
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'bod_desc'
+        end
+        object dxDBGrid2bod_desc1: TdxDBGridColumn
           Width = 93
           BandIndex = 0
           RowIndex = 0
@@ -1067,9 +1076,15 @@ object setreport22: Tsetreport22
     TabOrder = 10
   end
   object dxEdit1: TdxEdit
-    Left = 433
-    Top = 6
-    Width = 68
+    Left = 430
+    Top = 4
+    Width = 77
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Arial'
+    Font.Style = []
+    ParentFont = False
     Style.Edges = [edgLeft, edgTop, edgRight, edgBottom]
     TabOrder = 11
     OnKeyDown = dxEdit1KeyDown
@@ -1794,7 +1809,7 @@ object setreport22: Tsetreport22
       DisplayLabel = #21333#25454#38468#27880
       FieldName = 'bod_desc'
       ReadOnly = True
-      Size = 30
+      Size = 50
     end
     object IntegerField13: TIntegerField
       FieldName = 'carry_by'

@@ -620,6 +620,12 @@ object setexpaycheck: Tsetexpaycheck
     Left = 365
     Top = 46
     Width = 110
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Arial'
+    Font.Style = []
+    ParentFont = False
     Style.Edges = [edgLeft, edgTop, edgRight, edgBottom]
     TabOrder = 9
     OnKeyDown = dxEdit1KeyDown
@@ -1726,15 +1732,6 @@ object setexpaycheck: Tsetexpaycheck
         end
       end
     end
-  end
-  object Edit4: TEdit
-    Left = 800
-    Top = 48
-    Width = 121
-    Height = 20
-    TabOrder = 15
-    Text = 'Edit4'
-    Visible = False
   end
   object DSqry: TDataSource
     DataSet = qry

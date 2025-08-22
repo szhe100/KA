@@ -279,7 +279,7 @@ object setbusimate: Tsetbusimate
     Top = 58
     Width = 900
     Height = 453
-    ActivePage = TabSheet2
+    ActivePage = TabSheet1
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0

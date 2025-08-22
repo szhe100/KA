@@ -233,13 +233,14 @@ type
     qry1channel: TStringField;
     qry1channel_dtl: TStringField;
     qry1bod_desc1: TStringField;
-    dxDBGrid2bod_desc1: TdxDBGridColumn;
+    dxDBGrid2bod_desc: TdxDBGridColumn;
     Edit2: TEdit;
     qry1material_code: TStringField;
     qry1bod_cd2: TStringField;
     dxDBGrid2bank_name1: TdxDBGridColumn;
     qry1carry_dt1: TDateTimeField;
     dxDBGrid2carry_dt1: TdxDBGridColumn;
+    dxDBGrid2bod_desc1: TdxDBGridColumn;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -274,6 +275,10 @@ type
       Shift: TShiftState);
     procedure dxDateEdit1DblClick(Sender: TObject);
     procedure dxDateEdit2DblClick(Sender: TObject);
+    procedure dxLookupTreeView1DropDown(Sender: TObject);
+    procedure dxLookupTreeView1MouseMove(Sender: TObject;
+      Shift: TShiftState; X, Y: Integer);
+    procedure dxLookupTreeView1CloseUp(Sender: TObject; Accept: Boolean);
   private
     { Private declarations }
   public
@@ -415,10 +420,10 @@ with qry1 do
             close;
         end
         else mi:=0;
-        commandtext:='select creat_dt=cast(convert(char(10),a.creat_dt,20) as datetime),j.carry_dt,carry_dt1=c.carry_dt,check_dt1=a.check_dt,a.*,bod_cd2=j.bod_cd,amot=cast(b.amot as decimal(15,2)),price=cast(b.price as decimal(15,4)),';
-        commandtext:=commandtext+' c.*,creater=dbo.fn_staff_name(a.creat_by),checker=dbo.fn_staff_name(a.check_by), broker='''',c.agent,receiver='''',acnt_bank='''',bank_account='''',';
+        commandtext:='select c.bod_desc1,creat_dt=cast(convert(char(10),a.creat_dt,20) as datetime),j.carry_dt,carry_dt1=c.carry_dt,check_dt1=a.check_dt,a.*,bod_cd2=j.bod_cd,amot=cast(b.amot as decimal(15,2)),price=cast(b.price as decimal(15,4)),';
+        commandtext:=commandtext+' c.*,creater=dbo.fn_staff_name(a.creat_by),checker=dbo.fn_staff_name(a.check_by), broker='''',receiver='''',acnt_bank='''',bank_account='''',';   //c.agent,
 //        commandtext:=commandtext+' c.mate_name,c.bod_cd1,creater=dbo.fn_staff_name(a.creat_by),checker=dbo.fn_staff_name(a.check_by), broker='''',c.agent,receiver='''',acnt_bank='''',bank_account='''',';
-        commandtext:=commandtext+' carryer=dbo.fn_staff_name(a.carry_by),receiver1='''',storager=dbo.fn_staff_name(a.storage_by),';    
+        commandtext:=commandtext+' carryer=dbo.fn_staff_name(a.carry_by),receiver1='''',storager=dbo.fn_staff_name(a.storage_by),';
         commandtext:=commandtext+' cdistrict='''',bank_name='''',depo_acco='''',bank_id1=0,j.bank_name1,';
         commandtext:=commandtext+' level2='''',level3='''', leader=''''';
 //        commandtext:=commandtext+' dist1=dbo.fn_getdistrictname(l.district,1), dist2=dbo.fn_getdistrictname(l.district,2), level1='',level2='',level3='', leader='',
@@ -793,6 +798,23 @@ begin
 //showmessage(datetostr(dxDateEdit1.date));
 decodedate(dxDateEdit2.date,year,month,day);
 dxDateEdit2.date:=encodedate(year,12,31);
+end;
+
+procedure Tsetreport22.dxLookupTreeView1DropDown(Sender: TObject);
+begin
+setprogress(1);
+end;
+
+procedure Tsetreport22.dxLookupTreeView1MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+setprogress(0);
+end;
+
+procedure Tsetreport22.dxLookupTreeView1CloseUp(Sender: TObject;
+  Accept: Boolean);
+begin
+(Sender as TdxLookupTreeView).text:=dm.district.fieldbyname('cdistrict').asstring;
 end;
 
 end.

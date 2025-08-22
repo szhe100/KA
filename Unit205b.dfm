@@ -184,7 +184,8 @@ object setexpay2: Tsetexpay2
         OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoRowSelect, edgoUseBitmap]
         OnCustomDrawCell = dxDBGrid1CustomDrawCell
         object dxDBGrid1creat_dt: TdxDBGridColumn
-          Width = 78
+          Caption = #21046#21333#26102#38388
+          Width = 120
           BandIndex = 0
           RowIndex = 0
           FieldName = 'creat_dt'
@@ -264,7 +265,6 @@ object setexpay2: Tsetexpay2
           SummaryFooterType = cstSum
           SummaryFooterField = 'bod_amot'
           SummaryFooterFormat = '###,###,##0.00;; '
-          DisableFilter = True
           SummaryType = cstSum
           SummaryField = 'bod_amot'
         end
@@ -274,13 +274,6 @@ object setexpay2: Tsetexpay2
           BandIndex = 0
           RowIndex = 0
           FieldName = 'creater'
-        end
-        object dxDBGrid1receiver: TdxDBGridColumn
-          DisableEditor = True
-          Width = 69
-          BandIndex = 0
-          RowIndex = 0
-          FieldName = 'receiver'
         end
         object dxDBGrid1storager: TdxDBGridColumn
           DisableEditor = True
@@ -305,11 +298,11 @@ object setexpay2: Tsetexpay2
           DisableFilter = True
         end
         object dxDBGrid1check_dt: TdxDBGridColumn
-          Width = 70
+          Caption = #23457#26680#26102#38388
+          Width = 120
           BandIndex = 0
           RowIndex = 0
           FieldName = 'check_dt'
-          DisableFilter = True
         end
         object dxDBGrid1bod_status_id: TdxDBGridColumn
           Visible = False

@@ -115,7 +115,6 @@ type
     billreceiver: TStringField;
     billstorager: TStringField;
     DBText7: TDBText;
-    dxDBGrid1receiver: TdxDBGridColumn;
     dxDBGrid1storager: TdxDBGridColumn;
     billdeputy: TStringField;
     billacnt_bank: TStringField;

@@ -1470,7 +1470,11 @@ end;
 procedure Tsetreport10.dxLookupTreeView1CloseUp(Sender: TObject;
   Accept: Boolean);
 begin
-(Sender as TdxLookupTreeView).width:=98;
+with (Sender as TdxLookupTreeView) do
+begin
+    width:=98;
+    text:=dm.district.fieldbyname('cdistrict').asstring;
+end;
 end;
 
 end.

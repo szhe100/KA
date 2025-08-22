@@ -257,6 +257,10 @@ type
       var ADone: Boolean);
     procedure dxDateEdit1DblClick(Sender: TObject);
     procedure dxDateEdit2DblClick(Sender: TObject);
+    procedure dxLookupTreeView1CloseUp(Sender: TObject; Accept: Boolean);
+    procedure dxLookupTreeView1DropDown(Sender: TObject);
+    procedure dxLookupTreeView1MouseMove(Sender: TObject;
+      Shift: TShiftState; X, Y: Integer);
   private
     { Private declarations }
   public
@@ -731,6 +735,23 @@ begin
 //showmessage(datetostr(dxDateEdit1.date));
 decodedate(dxDateEdit2.date,year,month,day);
 dxDateEdit2.date:=encodedate(year,12,31);
+end;
+
+procedure Tsetreport11.dxLookupTreeView1CloseUp(Sender: TObject;
+  Accept: Boolean);
+begin
+(Sender as TdxLookupTreeView).text:=dm.district.fieldbyname('cdistrict').asstring;
+end;
+
+procedure Tsetreport11.dxLookupTreeView1DropDown(Sender: TObject);
+begin
+setprogress(1);
+end;
+
+procedure Tsetreport11.dxLookupTreeView1MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+setprogress(0);
 end;
 
 end.

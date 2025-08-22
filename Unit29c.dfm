@@ -441,7 +441,10 @@ object setreport11: Tsetreport11
     TreeViewShowLines = True
     TreeViewShowRoot = True
     TreeViewSortType = stNone
+    OnCloseUp = dxLookupTreeView1CloseUp
+    OnDropDown = dxLookupTreeView1DropDown
     OnKeyDown = dxLookupTreeView1KeyDown
+    OnMouseMove = dxLookupTreeView1MouseMove
     DividedChar = '.'
     ListSource = DM.DSdistrict
     KeyField = 'code'

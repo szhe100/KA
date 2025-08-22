@@ -291,7 +291,6 @@ type
     dxDBGrid2bal0: TdxDBGridColumn;
     qry1agent_code1: TStringField;
     N17: TMenuItem;
-    Edit4: TEdit;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -562,7 +561,7 @@ begin
         commandtext:=commandtext+' left join tb_medicine m on a.med_id=m.med_id';
         commandtext:=commandtext+' left join (select b.med_id,ckd_amot2a=sum(cast(b.amot as decimal(15,2))), ';
         commandtext:=commandtext+' 				ckd_amot1=sum(case a.bod_status_id when 1 then 1 else 0 end*cast(b.amot as decimal(15,2)))';
-        commandtext:=commandtext+' 			  from tb_bill a,tb_bill_dtl b where a.bod_type_id=37';
+        commandtext:=commandtext+' 			  from tb_bill a,tb_bill_dtl b where a.bod_type_id=37';   // and a.bod_status_id=1 
         if Trim(dxEdit1.text)='' then commandtext:=commandtext+' and a.carry_dt>='''+datetostr(dxdateedit1.date)+'''';   //dxEdit1.text<>''时，日期范围不要限制
 
         commandtext:=commandtext+' and a.bod_id=b.bod_id and b.type_id=36 group by b.med_id) y on y.med_id=a.bod_id';
@@ -635,7 +634,7 @@ begin
         commandtext:=commandtext+' agent_code1=case when i.rec_id>0 then i.agent_code else a.ASSIGNED_BP end,';
         commandtext:=commandtext+' stoppay=cast(0 as bit), a.VTEXT,a.ZKDGRP,dist1=ZZREGION, dist2=ZCITYNAME, level1=ZBEZEI,';  //ZCITYNAME
         commandtext:=commandtext+' creater=ZTERNAM,dst_id=b.mate_id,mate_name=NAME1,b.mate_id,BSTKD,material_code=a.MATNR,med_code='''',med_name=ARKTX,specifi=ZGG,pdt_place=ZSCQY,med_unit='''',type_id1=0,bat_cd=CHARG,';
-        commandtext:=commandtext+' a.ckd_amot,ckd_amot1=e.amot,a.ckd_amot2,ckd_amot2a=d.amot,a.ckd_amot3,';
+        commandtext:=commandtext+' a.ckd_amot,ckd_amot1=e.amot,a.ckd_amot2,ckd_amot2a=d.amot,a.ckd_amot3,';    //ckd_amot2a=d.amot,
         commandtext:=commandtext+' a.qty,price=cast(ZPR03 as decimal(15,4)),amot=cast(a.qty*cast(ZPR03 as decimal(15,4)) as decimal(15,2)),amot1=cast(a.amot1 as decimal(15,2)),amot2=cast(a.amot2 as decimal(15,2)),price1=cast(a.KONV as decimal(15,4)),'; //a.price,'; //price10=i.price10,';
         //dbo].[fn_getprice1a](@provcode varchar(10),@citycode varchar(10),@materialcode varchar(20),@dt datetime)
         commandtext:=commandtext+' price10=dbo.fn_getprice1a(ZREGIO,ZCITYNUM,a.MATNR,a.carry_dt),'; //
@@ -682,7 +681,7 @@ begin
         commandtext:=commandtext+' left join tb_medicine m on a.med_id=m.med_id';
         commandtext:=commandtext+' left join (select b.med_id,ckd_amot2a=sum(cast(b.amot as decimal(15,2))), ';
         commandtext:=commandtext+' 				ckd_amot1=sum(case a.bod_status_id when 1 then 1 else 0 end*cast(b.amot as decimal(15,2)))';
-        commandtext:=commandtext+' 			  from tb_bill a,tb_bill_dtl b where a.bod_type_id=37';
+        commandtext:=commandtext+' 			  from tb_bill a,tb_bill_dtl b where a.bod_type_id=37'; // and a.bod_status_id=1 
         if Trim(dxEdit1.text)='' then commandtext:=commandtext+' and a.carry_dt>='''+datetostr(dxdateedit1.date)+'''';   //dxEdit1.text<>''时，日期范围不要限制
 
         commandtext:=commandtext+' and a.bod_id=b.bod_id and b.type_id=36 group by b.med_id) y on y.med_id=a.bod_id';
@@ -790,7 +789,10 @@ begin
     fieldbyname('Camot').asfloat:=fieldbyname('price1').asfloat*fieldbyname('qty').asfloat;
     fieldbyname('Cnot_amot').asfloat:=fieldbyname('Camot1').asfloat+fieldbyname('Camot3').asfloat-fieldbyname('ckd_amot').asfloat;  //未收款金额
 //    fieldbyname('Cnot_amot').asfloat:=fieldbyname('Camot1').asfloat+fieldbyname('Camot2').asfloat-fieldbyname('ckd_amot1').asfloat;
-    fieldbyname('camot2').asfloat:= fieldbyname('ckd_amot2a').asfloat-fieldbyname('ckd_amot').asfloat;  //已审未付金额 = 已审核金额—已收款金额
+
+//    fieldbyname('camot2').asfloat:= fieldbyname('ckd_amot2a').asfloat-fieldbyname('ckd_amot').asfloat;  //已审未付金额 = 已审核金额—已收款金额
+    fieldbyname('camot2').asfloat:= fieldbyname('ckd_amot1').asfloat-fieldbyname('ckd_amot').asfloat;  //已审未付金额 = 已审核金额—已付款金额
+
     fieldbyname('camot4').asfloat:= fieldbyname('Camot1').asfloat+fieldbyname('Camot3').asfloat-fieldbyname('ckd_amot2a').asfloat;  //未申请金额”，取值为：应付金额+应付促销费—已申请金额
 
     case fieldbyname('type_id').asinteger of
@@ -1766,7 +1768,12 @@ end;
 procedure Tsetexpaycheck.dxLookupTreeView1CloseUp(Sender: TObject;
   Accept: Boolean);
 begin
-(Sender as TdxLookupTreeView).width:=110;
+//(Sender as TdxLookupTreeView).width:=110;
+with (Sender as TdxLookupTreeView) do
+begin
+    width:=110;
+    text:=dm.district.fieldbyname('cdistrict').asstring;
+end;
 end;
 
 procedure Tsetexpaycheck.N13Click(Sender: TObject);
@@ -1917,7 +1924,7 @@ begin
 //    if s2>'' then commandtext:=commandtext+' or b.type_id=1  and b.med_id in ('+s2+')';
     if s2>'' then commandtext:=commandtext+' or b.type_id=0  and b.med_id in ('+s2+')';
     commandtext:=commandtext+')';
-edit4.text:=commandtext;
+edit3.text:=commandtext;
     open;
     if recordcount>0 then
     begin
@@ -2135,7 +2142,10 @@ begin
     fieldbyname('Camot').asfloat:=fieldbyname('price1').asfloat*fieldbyname('qty').asfloat;
 }
     fieldbyname('Cnot_amot').asfloat:=fieldbyname('Camot1').asfloat+fieldbyname('Camot3').asfloat-fieldbyname('ckd_amot').asfloat;  //未收款金额
-    fieldbyname('camot2').asfloat:= fieldbyname('ckd_amot2a').asfloat-fieldbyname('ckd_amot').asfloat;  //已审未付金额 = 已审核金额—已收款金额
+
+//    fieldbyname('camot2').asfloat:= fieldbyname('ckd_amot2a').asfloat-fieldbyname('ckd_amot').asfloat;  //已审未付金额 = 已审核金额—已收款金额
+    fieldbyname('camot2').asfloat:= fieldbyname('ckd_amot1').asfloat-fieldbyname('ckd_amot').asfloat;  //已审未付金额 = 已审核金额—已付款金额
+
     fieldbyname('camot4').asfloat:= fieldbyname('Camot1').asfloat+fieldbyname('Camot3').asfloat-fieldbyname('ckd_amot2a').asfloat;  //未申请金额”，取值为：应付金额+应付促销费—已申请金额
 
     fieldbyname('fckdamot3').asboolean := (fieldbyname('ckd_amot3').asfloat<>0)
