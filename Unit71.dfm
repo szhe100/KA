@@ -154,7 +154,7 @@ object setbrokerfeeapply: Tsetbrokerfeeapply
       object dxDBGrid1: TdxDBGrid
         Left = 0
         Top = 0
-        Width = 724
+        Width = 815
         Height = 387
         Bands = <
           item
@@ -183,13 +183,13 @@ object setbrokerfeeapply: Tsetbrokerfeeapply
         OptionsDB = [edgoCancelOnExit, edgoCanDelete, edgoCanInsert, edgoCanNavigation, edgoConfirmDelete, edgoLoadAllRecords, edgoSmartReload, edgoUseBookmarks]
         OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoInvertSelect, edgoUseBitmap]
         OnCustomDrawCell = dxDBGrid1CustomDrawCell
-        object dxDBGrid1creat_dt: TdxDBGridDateColumn
+        object dxDBGrid1creat_dt: TdxDBGridColumn
+          Caption = #21046#21333#26102#38388
           DisableEditor = True
-          Width = 68
+          Width = 115
           BandIndex = 0
           RowIndex = 0
           FieldName = 'creat_dt'
-          DisableFilter = True
         end
         object dxDBGrid1bod_cd: TdxDBGridMaskColumn
           Alignment = taCenter
@@ -205,7 +205,6 @@ object setbrokerfeeapply: Tsetbrokerfeeapply
           FieldName = 'bod_cd'
           SummaryFooterType = cstCount
           SummaryFooterFormat = '##,###'#21333
-          DisableFilter = True
         end
         object dxDBGrid1Cbod_status: TdxDBGridMaskColumn
           Alignment = taCenter
@@ -228,22 +227,12 @@ object setbrokerfeeapply: Tsetbrokerfeeapply
           RowIndex = 0
           FieldName = 'broker'
         end
-        object dxDBGrid1stoppay: TdxDBGridCheckColumn
-          DisableEditor = True
-          Width = 69
-          BandIndex = 0
-          RowIndex = 0
-          FieldName = 'stoppay'
-          ValueChecked = 'True'
-          ValueUnchecked = 'False'
-        end
         object dxDBGrid1bod_desc: TdxDBGridMaskColumn
           DisableEditor = True
           Width = 120
           BandIndex = 0
           RowIndex = 0
           FieldName = 'bod_desc'
-          DisableFilter = True
         end
         object dxDBGrid1bod_amot: TdxDBGridColumn
           DisableEditor = True
@@ -254,7 +243,6 @@ object setbrokerfeeapply: Tsetbrokerfeeapply
           SummaryFooterType = cstSum
           SummaryFooterField = 'bod_amot'
           SummaryFooterFormat = '###,###,##0.00;; '
-          DisableFilter = True
           SummaryType = cstSum
           SummaryField = 'bod_amot'
           SummaryFormat = '###,###,##0.00;; '
@@ -292,14 +280,13 @@ object setbrokerfeeapply: Tsetbrokerfeeapply
           RowIndex = 0
           FieldName = 'checker'
         end
-        object dxDBGrid1check_dt: TdxDBGridDateColumn
+        object dxDBGrid1check_dt: TdxDBGridColumn
           Caption = #25209#20934#26102#38388
           DisableEditor = True
-          Width = 65
+          Width = 115
           BandIndex = 0
           RowIndex = 0
           FieldName = 'check_dt'
-          DisableFilter = True
         end
         object dxDBGrid1bod_id: TdxDBGridColumn
           DisableEditor = True

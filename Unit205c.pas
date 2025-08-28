@@ -213,6 +213,7 @@ type
     dxDBGrid1check_dt: TdxDBGridColumn;
     dxDBGrid1bod_status_id: TdxDBGridColumn;
     dxDBGrid1creat_by: TdxDBGridColumn;
+    Button1: TButton;
     procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -250,6 +251,7 @@ type
     procedure bill_dtlBeforePost(DataSet: TDataSet);
     procedure N1Click(Sender: TObject);
     procedure bill_dtlCalcFields(DataSet: TDataSet);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
     procedure setupdatestatus;
@@ -773,6 +775,11 @@ begin
         4: fieldbyname('ctype2').asstring:='不办个户不交资料';
     end;
 end;
+end;
+
+procedure Tsetexpay3.Button1Click(Sender: TObject);
+begin
+SpeedButton3Click(nil);
 end;
 
 end.

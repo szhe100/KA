@@ -600,7 +600,7 @@ object setexpaycheck: Tsetexpaycheck
   end
   object Edit1: TEdit
     Left = 672
-    Top = 24
+    Top = 8
     Width = 121
     Height = 20
     TabOrder = 6
@@ -609,7 +609,7 @@ object setexpaycheck: Tsetexpaycheck
   end
   object Edit2: TEdit
     Left = 672
-    Top = 44
+    Top = 28
     Width = 121
     Height = 20
     TabOrder = 7
@@ -629,11 +629,13 @@ object setexpaycheck: Tsetexpaycheck
     Style.Edges = [edgLeft, edgTop, edgRight, edgBottom]
     TabOrder = 9
     OnKeyDown = dxEdit1KeyDown
+    Alignment = taCenter
     StyleController = StyleController
+    StoredValues = 1
   end
   object Edit3: TEdit
     Left = 672
-    Top = 63
+    Top = 47
     Width = 121
     Height = 20
     TabOrder = 10
@@ -1730,6 +1732,12 @@ object setexpaycheck: Tsetexpaycheck
           RowIndex = 0
           FieldName = 'Camot7'
         end
+        object dxDBGrid1rule_id: TdxDBGridColumn
+          Visible = False
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'rule_id'
+        end
       end
     end
   end
@@ -1753,6 +1761,9 @@ object setexpaycheck: Tsetexpaycheck
     object qryrec_id: TAutoIncField
       FieldName = 'rec_id'
       ReadOnly = True
+    end
+    object qryrule_id: TIntegerField
+      FieldName = 'rule_id'
     end
     object qrydtl_id: TAutoIncField
       FieldName = 'dtl_id'
@@ -2303,8 +2314,8 @@ object setexpaycheck: Tsetexpaycheck
     end
   end
   object PopupMenu1: TPopupMenu
-    Left = 313
-    Top = 168
+    Left = 209
+    Top = 208
     object N1: TMenuItem
       Caption = #29983#25104#20854#20182#25903#20986#26680#38144#21333
       OnClick = N1Click

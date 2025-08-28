@@ -291,6 +291,8 @@ type
     dxDBGrid2bal0: TdxDBGridColumn;
     qry1agent_code1: TStringField;
     N17: TMenuItem;
+    qryrule_id: TIntegerField;
+    dxDBGrid1rule_id: TdxDBGridColumn;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -511,25 +513,46 @@ begin
         
         commandtext:=commandtext+' camot=cast(cast(a.KONV as decimal(15,4))*a.qty as decimal(15,2)), camot1=cast(i.amot*a.qty as decimal(15,2)),camot3=cast(i.fee*a.qty as decimal(15,2)),';
 
-        commandtext:=commandtext+' a.ckd_amot,ckd_amot1=e.amot,a.ckd_amot2,ckd_amot2a=d.amot,a.ckd_amot3,';
+//        commandtext:=commandtext+' a.ckd_amot,ckd_amot1=e.amot,a.ckd_amot2,ckd_amot2a=d.amot,a.ckd_amot3,';
+        commandtext:=commandtext+' ckd_amot=d.amot2,ckd_amot1=d.amot1,a.ckd_amot2,ckd_amot2a=d.amot,a.ckd_amot3,';    //ckd_amot2a=d.amot,
         commandtext:=commandtext+' a.qty,price=cast(ZPR03 as decimal(15,4)),amot=cast(a.qty*cast(ZPR03 as decimal(15,4)) as decimal(15,2)),amot1=cast(a.amot1 as decimal(15,2)),amot2=cast(a.amot2 as decimal(15,2)),price1=cast(a.KONV as decimal(15,4)),'; //a.price,'; //price10=i.price10,';
         //dbo].[fn_getprice1a](@provcode varchar(10),@citycode varchar(10),@materialcode varchar(20),@dt datetime)
         commandtext:=commandtext+' price10=dbo.fn_getprice1a(ZREGIO,ZCITYNUM,a.MATNR,a.carry_dt),'; //
         commandtext:=commandtext+' i.type_id,i.type_id2,i.rate,i.rate1,fee=cast(i.fee as decimal(15,4)),amot1a=cast(i.amot as decimal(15,4)),cprice1=i.price1,cprice2=i.price2,fee_type_id=0,';
-        commandtext:=commandtext+' not_amot=cast((isnull(i.amot,0)+isnull(i.fee,0))*a.qty-isnull(a.ckd_amot,0) as decimal(15,2))';
+//        commandtext:=commandtext+' not_amot=cast((isnull(i.amot,0)+isnull(i.fee,0))*a.qty-isnull(a.ckd_amot,0) as decimal(15,2))';
+        commandtext:=commandtext+' not_amot=cast((isnull(i.amot,0)+isnull(i.fee,0))*a.qty-isnull(d.amot2,0) as decimal(15,2))';
         commandtext:=commandtext+' ,amot5=cast(case when cast(a.KONV as decimal(15,4))=0 then 0 else cast(a.amot1/cast(a.KONV as decimal(15,4)) as decimal(15,2))*i.amot end as decimal(15,2))'; //-isnull(a.ckd_amot,0)';
 
         commandtext:=commandtext+' from SAP_ZSD_015 a';
         commandtext:=commandtext+' left join (select mate_id,mate_code,mate_name from tb_busimate where mate_type_id=2) b on a.NAME1=b.mate_name';
         commandtext:=commandtext+' left join (select mate_id,mate_code,mate_name,district from tb_busimate where mate_type_id=4) c on c.mate_code=a.ASSIGNED_BP'; //按名称join 出错概率大, 确保mate_code唯一时，可用mate_code link    c.mate_code=a.ASSIGNED_BP'; //a.NAME_FIRST=c.mate_name';
 
-        commandtext:=commandtext+' left join (select b.med_id,amot=sum(cast(b.amot as decimal(15,2))) from tb_bill a,tb_bill_dtl b where a.bod_type_id=37 and a.bod_id=b.bod_id group by b.med_id) d on d.med_id=a.rec_id';
-        commandtext:=commandtext+' left join (select b.med_id,amot=sum(cast(b.amot as decimal(15,2))) from tb_bill a,tb_bill_dtl b where a.bod_type_id=37 and a.bod_status_id=1 and a.bod_id=b.bod_id and b.type_id=0 group by b.med_id) e on e.med_id=a.rec_id';
-        commandtext:=commandtext+' left join (select c.rec_id,c.type_id,c.rate,c.rate1,c.price1,c.price2,c.type_id2,agent_id1=c.agent_id,agent_code1=f.mate_code,d.agent_id,d.amot,d.fee,agent_code=e.mate_code,agent=e.mate_name';
+        commandtext:=commandtext+' left join (select rule_id=d.rec_id,c.rec_id,c.type_id,c.rate,c.rate1,c.price1,c.price2,c.type_id2,agent_id1=c.agent_id,agent_code1=f.mate_code,d.agent_id,d.amot,d.fee,agent_code=e.mate_code,agent=e.mate_name';
         commandtext:=commandtext+'   from tb_busiframe3 c left join tb_busiframe3_dtl d on c.rec_id=d.rela_id left join tb_busimate e on d.agent_id=e.mate_id left join tb_busimate f on c.agent_id=f.mate_id) i';
         commandtext:=commandtext+'  on i.rec_id=dbo.fn_getbusiframe3recid(a.VTWEG,a.KDGRP,b.mate_id,c.mate_id,a.MATNR,cast(a.KONV as decimal(15,4)),cast(ZPR03 as decimal(15,4)),a.carry_dt)';
+{
+        commandtext:=commandtext+' left join (select b.med_id,amot=sum(cast(b.amot as decimal(15,2))) from tb_bill a,tb_bill_dtl b where a.bod_type_id=37 and a.bod_id=b.bod_id group by b.med_id) d on d.med_id=a.rec_id';
+        commandtext:=commandtext+' left join (select b.med_id,amot=sum(cast(b.amot as decimal(15,2))) from tb_bill a,tb_bill_dtl b where a.bod_type_id=37 and a.bod_status_id=1 and a.bod_id=b.bod_id and b.type_id=0 group by b.med_id) e on e.med_id=a.rec_id';
+}
+{
+        commandtext:=commandtext+' left join (select b.med_id,rule_id=isnull(b.rule_id,0),amot=sum(cast(b.amot as decimal(15,2))),amot1=sum(case when a.bod_status_id=1 then 1 else 0 end*cast(b.amot as decimal(15,2)))';
+        commandtext:=commandtext+'  from tb_bill a,tb_bill_dtl b where a.bod_type_id=37 and a.bod_id=b.bod_id and b.type_id=0 group by b.med_id,isnull(b.rule_id,0)) d on d.med_id=a.rec_id and (d.rule_id=i.rule_id or d.rule_id=0)';
+}
+        commandtext:=commandtext+' left join (select b.med_id,rule_id=isnull(b.rule_id,0),amot=sum(cast(b.amot as decimal(15,2))),amot1=sum(case when a.bod_status_id=1 then 1 else 0 end*cast(b.amot as decimal(15,2))),amot2=sum(cast(c.amot as decimal(15,2)))';
+        commandtext:=commandtext+' 	from tb_bill a join tb_bill_dtl b on a.bod_id=b.bod_id';
+        commandtext:=commandtext+'  left join (select b.med_id,amot=sum(b.amot) from tb_bill a,tb_bill_dtl b where a.bod_type_id=30 and a.bod_status_id=1 and a.bod_id=b.bod_id group by b.med_id) c on a.bod_id=c.med_id'; //bod_type_id=30 其他支出出纳付款单
+        commandtext:=commandtext+' 	where a.bod_type_id=37 and b.type_id=0 group by b.med_id,isnull(b.rule_id,0)) d'; //bod_type_id=37 其他支出核销单(付款申请)
+        commandtext:=commandtext+'      on d.med_id=a.rec_id and (d.rule_id=i.rule_id or d.rule_id=0)';
+
     //create function [dbo].[fn_getbusiframe3recid](@channelcode int,@channeldtlcode int,@mateid int,@agentid int,@materialcode varchar(20),@price decimal(15,4),@price1 decimal(15,4),@dt datetime)
 
+
+
+{
+        commandtext:=commandtext+' left join (select c.rec_id,c.type_id,c.rate,c.rate1,c.price1,c.price2,c.type_id2,agent_id1=c.agent_id,agent_code1=f.mate_code,agent_id=0,c.amot,c.fee,agent_code='''',agent=''''';
+        commandtext:=commandtext+'	from tb_busiframe3 c left join tb_busimate f on c.agent_id=f.mate_id) i';
+        commandtext:=commandtext+'	    on i.rec_id=dbo.fn_getbusiframe3recid(a.VTWEG,a.KDGRP,b.mate_id,c.mate_id,a.MATNR,cast(a.KONV as decimal(15,4)),cast(ZPR03 as decimal(15,4)),a.carry_dt)';
+}
         commandtext:=commandtext+' where KDGRP not in (''10'',''19'')'; //  and a.carry_dt>= '2025-05-01' and a.carry_dt< dateadd(day,1,'2025-06-03')
         commandtext:=commandtext+'  and (a.price>cast(ZPR03 as decimal(15,4)) or a.price=cast(ZPR03 as decimal(15,4)) and i.rec_id>0)'; //核销条件:原订单 销售单价 > 考核单价
         if Trim(dxEdit1.text)='' then commandtext:=commandtext+'  and a.carry_dt>='''+datetostr(dxdateedit1.date)+''' and a.carry_dt< dateadd(day,1,'''+datetostr(dxdateedit2.date)+''')'
@@ -627,31 +650,44 @@ begin
         else mi:=0;
 
         //分销采购
-        commandtext:=' select a.rec_id,dtl_id=0,bod_id=0,a.carry_dt,bod_type_id=0,bod_type=''分销采购'',bod_cd=GBELN,bod_cd1=VBELN,bod_cd2='''',bod_cd3=GBELN,bod_desc='''',bod_desc1='''', ';
+        commandtext:=' select i.rule_id,a.rec_id,dtl_id=0,bod_id=0,a.carry_dt,bod_type_id=0,bod_type=''分销采购'',bod_cd=GBELN,bod_cd1=VBELN,bod_cd2='''',bod_cd3=GBELN,bod_desc='''',bod_desc1='''', ';
         commandtext:=commandtext+' broker_id=cast(ZSALESID_O as int),broker=ZSALESNAM_O,';
         commandtext:=commandtext+' agent_code=a.ASSIGNED_BP,agent=case when i.rec_id>0 then dbo.fn_mate_name(i.agent_id1) else a.NAME_FIRST end,agent_id=c.mate_id,a.ASSIGNED_BP,';
         commandtext:=commandtext+' agent1=case when i.rec_id>0 then i.agent else a.NAME_FIRST end,';
         commandtext:=commandtext+' agent_code1=case when i.rec_id>0 then i.agent_code else a.ASSIGNED_BP end,';
         commandtext:=commandtext+' stoppay=cast(0 as bit), a.VTEXT,a.ZKDGRP,dist1=ZZREGION, dist2=ZCITYNAME, level1=ZBEZEI,';  //ZCITYNAME
         commandtext:=commandtext+' creater=ZTERNAM,dst_id=b.mate_id,mate_name=NAME1,b.mate_id,BSTKD,material_code=a.MATNR,med_code='''',med_name=ARKTX,specifi=ZGG,pdt_place=ZSCQY,med_unit='''',type_id1=0,bat_cd=CHARG,';
-        commandtext:=commandtext+' a.ckd_amot,ckd_amot1=e.amot,a.ckd_amot2,ckd_amot2a=d.amot,a.ckd_amot3,';    //ckd_amot2a=d.amot,
+//        commandtext:=commandtext+' a.ckd_amot,ckd_amot1=e.amot,a.ckd_amot2,ckd_amot2a=d.amot,a.ckd_amot3,';
+        commandtext:=commandtext+' ckd_amot=d.amot2,ckd_amot1=d.amot1,a.ckd_amot2,ckd_amot2a=d.amot,a.ckd_amot3,';    //ckd_amot2a=d.amot,
         commandtext:=commandtext+' a.qty,price=cast(ZPR03 as decimal(15,4)),amot=cast(a.qty*cast(ZPR03 as decimal(15,4)) as decimal(15,2)),amot1=cast(a.amot1 as decimal(15,2)),amot2=cast(a.amot2 as decimal(15,2)),price1=cast(a.KONV as decimal(15,4)),'; //a.price,'; //price10=i.price10,';
         //dbo].[fn_getprice1a](@provcode varchar(10),@citycode varchar(10),@materialcode varchar(20),@dt datetime)
         commandtext:=commandtext+' price10=dbo.fn_getprice1a(ZREGIO,ZCITYNUM,a.MATNR,a.carry_dt),'; //
         commandtext:=commandtext+' i.type_id,i.type_id2,i.rate,i.rate1,fee=cast(i.fee as decimal(15,4)),amot1a=cast(i.amot as decimal(15,4)),cprice1=i.price1,cprice2=i.price2,fee_type_id=0,';
-        commandtext:=commandtext+' not_amot=cast((isnull(i.amot,0)+isnull(i.fee,0))*a.qty-isnull(a.ckd_amot,0) as decimal(15,2))';
+//        commandtext:=commandtext+' not_amot=cast((isnull(i.amot,0)+isnull(i.fee,0))*a.qty-isnull(a.ckd_amot,0) as decimal(15,2))';
+        commandtext:=commandtext+' not_amot=cast((isnull(i.amot,0)+isnull(i.fee,0))*a.qty-isnull(d.amot2,0) as decimal(15,2))';
         commandtext:=commandtext+' ,amot5=cast(case when cast(a.KONV as decimal(15,4))=0 then 0 else cast(a.amot1/cast(a.KONV as decimal(15,4)) as decimal(15,2))*i.amot end as decimal(15,2))'; //-isnull(a.ckd_amot,0)';
 
         commandtext:=commandtext+' from SAP_ZSD_015 a';
         commandtext:=commandtext+' left join (select mate_id,mate_code,mate_name from tb_busimate where mate_type_id=2) b on a.NAME1=b.mate_name';
         commandtext:=commandtext+' left join (select mate_id,mate_code,mate_name,district from tb_busimate where mate_type_id=4) c on c.mate_code=a.ASSIGNED_BP'; //按名称join 出错概率大, 确保mate_code唯一时，可用mate_code link    c.mate_code=a.ASSIGNED_BP'; //a.NAME_FIRST=c.mate_name';
 
-        commandtext:=commandtext+' left join (select b.med_id,amot=sum(cast(b.amot as decimal(15,2))) from tb_bill a,tb_bill_dtl b where a.bod_type_id=37 and a.bod_id=b.bod_id and b.type_id=0 group by b.med_id) d on d.med_id=a.rec_id';
-        commandtext:=commandtext+' left join (select b.med_id,amot=sum(cast(b.amot as decimal(15,2))) from tb_bill a,tb_bill_dtl b where a.bod_type_id=37 and a.bod_status_id=1 and a.bod_id=b.bod_id and b.type_id=0 group by b.med_id) e on e.med_id=a.rec_id';
-        commandtext:=commandtext+' left join (select c.rec_id,c.type_id,c.rate,c.rate1,c.price1,c.price2,c.type_id2,agent_id1=c.agent_id,agent_code1=f.mate_code,d.agent_id,d.amot,d.fee,agent_code=e.mate_code,agent=e.mate_name';
+        commandtext:=commandtext+' left join (select rule_id=d.rec_id,c.rec_id,c.type_id,c.rate,c.rate1,c.price1,c.price2,c.type_id2,agent_id1=c.agent_id,agent_code1=f.mate_code,d.agent_id,d.amot,d.fee,agent_code=e.mate_code,agent=e.mate_name';
         commandtext:=commandtext+'   from tb_busiframe3 c left join tb_busiframe3_dtl d on c.rec_id=d.rela_id left join tb_busimate e on d.agent_id=e.mate_id left join tb_busimate f on c.agent_id=f.mate_id) i';
         commandtext:=commandtext+'  on i.rec_id=dbo.fn_getbusiframe3recid(a.VTWEG,a.KDGRP,b.mate_id,c.mate_id,a.MATNR,cast(a.KONV as decimal(15,4)),cast(ZPR03 as decimal(15,4)),a.carry_dt)';
     //create function [dbo].[fn_getbusiframe3recid](@channelcode int,@channeldtlcode int,@mateid int,@agentid int,@materialcode varchar(20),@price decimal(15,4),@price1 decimal(15,4),@dt datetime)
+{
+        commandtext:=commandtext+' left join (select b.med_id,amot=sum(cast(b.amot as decimal(15,2))) from tb_bill a,tb_bill_dtl b where a.bod_type_id=37 and a.bod_id=b.bod_id and b.type_id=0 group by b.med_id) d on d.med_id=a.rec_id';
+        commandtext:=commandtext+' left join (select b.med_id,amot=sum(cast(b.amot as decimal(15,2))) from tb_bill a,tb_bill_dtl b where a.bod_type_id=37 and a.bod_status_id=1 and a.bod_id=b.bod_id and b.type_id=0 group by b.med_id) e on e.med_id=a.rec_id';
+}
+{
+        commandtext:=commandtext+' left join (select b.med_id,rule_id=isnull(b.rule_id,0),amot=sum(cast(b.amot as decimal(15,2))),amot1=sum(case when a.bod_status_id=1 then 1 else 0 end*cast(b.amot as decimal(15,2)))';
+        commandtext:=commandtext+'  from tb_bill a,tb_bill_dtl b where a.bod_type_id=37 and a.bod_id=b.bod_id and b.type_id=0 group by b.med_id,isnull(b.rule_id,0)) d on d.med_id=a.rec_id and (d.rule_id=i.rule_id or d.rule_id=0)';
+}
+        commandtext:=commandtext+' left join (select b.med_id,rule_id=isnull(b.rule_id,0),amot=sum(cast(b.amot as decimal(15,2))),amot1=sum(case when a.bod_status_id=1 then 1 else 0 end*cast(b.amot as decimal(15,2))),amot2=sum(cast(c.amot as decimal(15,2)))';
+        commandtext:=commandtext+' 	from tb_bill a join tb_bill_dtl b on a.bod_id=b.bod_id';
+        commandtext:=commandtext+'  left join (select b.med_id,amot=sum(b.amot) from tb_bill a,tb_bill_dtl b where a.bod_type_id=30 and a.bod_status_id=1 and a.bod_id=b.bod_id group by b.med_id) c on a.bod_id=c.med_id'; //bod_type_id=30 其他支出出纳付款单
+        commandtext:=commandtext+' 	where a.bod_type_id=37 and b.type_id=0 group by b.med_id,isnull(b.rule_id,0)) d'; //bod_type_id=37 其他支出核销单(付款申请)
+        commandtext:=commandtext+'      on d.med_id=a.rec_id and (d.rule_id=i.rule_id or d.rule_id=0)';
 
         commandtext:=commandtext+' where KDGRP not in (''10'',''19'')'; //  and a.carry_dt>= '2025-05-01' and a.carry_dt< dateadd(day,1,'2025-06-03')
         commandtext:=commandtext+'  and (a.price>cast(ZPR03 as decimal(15,4)) or a.price=cast(ZPR03 as decimal(15,4)) and i.rec_id>0)'; //核销条件:原订单 销售单价 > 考核单价
@@ -663,7 +699,7 @@ begin
         if Trim(dxLookupTreeView1.text)<>'' then commandtext:=commandtext+' and (ZREGIO='+dm.district.fieldbyname('code').asstring+' or ZCITYNUM='+dm.district.fieldbyname('code').asstring+')';
 
         //应付记账
-        commandtext:=commandtext+' union all select rec_id=case when h.rec_id is null then a.bod_id else h.rec_id end,dtl_id=a.bod_id,a.bod_id,a.carry_dt,a.bod_type_id,bod_type=''应付记账'',a.bod_cd,bod_cd1='''',bod_cd2='''',bod_cd3='''',a.bod_desc,a.bod_desc1,';
+        commandtext:=commandtext+' union all select rule_id=0,rec_id=case when h.rec_id is null then a.bod_id else h.rec_id end,dtl_id=a.bod_id,a.bod_id,a.carry_dt,a.bod_type_id,bod_type=''应付记账'',a.bod_cd,bod_cd1='''',bod_cd2='''',bod_cd3='''',a.bod_desc,a.bod_desc1,';
         commandtext:=commandtext+' a.broker_id,broker=dbo.fn_staff_name(a.broker_id),agent_code=f.mate_code,agent=f.mate_name,a.agent_id,ASSIGNED_BP=f.mate_code,agent1=f.mate_name,agent_code1=f.mate_code,stoppay=isnull(f.stoppay,0),';
         commandtext:=commandtext+' VTEXT=dbo.fn_obj_desc1(11,a.channel_id),ZKDGRP=dbo.fn_obj_desc1(12,a.channel_dtl_id),';
         commandtext:=commandtext+' dist1=f.BEZEI,dist2=f.CITY1,level1='''',';
@@ -977,7 +1013,7 @@ end;
 
 procedure Tsetexpaycheck.N1Click(Sender: TObject);
 var i,mi,mateid,agentid,bodid,bodtypeid,bodtypeid1,n: integer;
-    r,d,f0,f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11: integer;
+    r,d,f0,f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12: integer;
     s,s1,s2,sql: string;
     mcd: string[20];
     mamt,m7,m8,m9:real;
@@ -1023,7 +1059,7 @@ begin
             end;
 //    commandtext:=commandtext+' insert into tb_bill_dtl (bod_id,type_id,med_id,price,rela_value,amot)';
 
-            sql:=sql+' union all select @id,type_id='+qry.fieldbyname('bod_type_id').asstring+',med_id='+qry.fieldbyname('bod_id').asstring;  //注意应付记账取tb_bill.bod_id
+            sql:=sql+' union all select @id,type_id='+qry.fieldbyname('bod_type_id').asstring+',med_id='+qry.fieldbyname('bod_id').asstring+',rule_id='+qry.fieldbyname('rule_id').asstring;  //注意应付记账取tb_bill.bod_id
             sql:=sql+',price='+floattostr(mamt)+',rela_value=0,amot='+floattostr(mamt);
             s1:=qry.fieldbyname('bod_id').asstring; // 取bod_id值
         end
@@ -1060,7 +1096,7 @@ begin
             end;
 }
 //    commandtext:=commandtext+' insert into tb_bill_dtl (bod_id,type_id,med_id,price,rela_value,amot)';
-            sql:=sql+' union all select @id,type_id='+qry.fieldbyname('bod_type_id').asstring+',med_id='+qry.fieldbyname('rec_id').asstring;  //注意分销采购取tb_bill_stadtl.rec_id
+            sql:=sql+' union all select @id,type_id='+qry.fieldbyname('bod_type_id').asstring+',med_id='+qry.fieldbyname('rec_id').asstring+',rule_id='+qry.fieldbyname('rule_id').asstring;  //注意分销采购取tb_bill_stadtl.rec_id
             sql:=sql+',price='+floattostr(mamt)+',rela_value='+floattostr(qry.fieldbyname('Camot3').asfloat)+',amot='+floattostr(mamt);
             s2:=qry.fieldbyname('rec_id').asstring; // rec_id
         end;
@@ -1091,6 +1127,7 @@ begin
     
     f10:= dxDBGrid1.ColumnByFieldName('cprice1').Index;  //促销规则 销售单价
     f11:= dxDBGrid1.ColumnByFieldName('price1').Index;  //订单 销售单价
+    f12:= dxDBGrid1.ColumnByFieldName('rule_id').Index;
     for i:= 0 to dxDBGrid1.SelectedCount - 1 do
     begin
         if (abs(dxDBGrid1.SelectedNodes[i].values[f3])>0.005) then
@@ -1114,7 +1151,7 @@ begin
 {
                 mamt:=mamt+dxDBGrid1.SelectedNodes[i].values[f3];
 }
-                sql:=sql+' union all select @id,type_id='+dxDBGrid1.SelectedNodes[i].Strings[f0]+',med_id='+dxDBGrid1.SelectedNodes[i].Strings[f5]; //应付记账取tb_bill.bod_id
+                sql:=sql+' union all select @id,type_id='+dxDBGrid1.SelectedNodes[i].Strings[f0]+',med_id='+dxDBGrid1.SelectedNodes[i].Strings[f5]+',rule_id='+dxDBGrid1.SelectedNodes[i].Strings[f12]; //应付记账取tb_bill.bod_id
                 if dxDBGrid1.SelectedNodes[i].values[f6]<strtodate('2024-1-1') then
                 begin
                     s:= s + ' '+formatfloat('###,###,##0.00',dxDBGrid1.SelectedNodes[i].values[f3]);  //Camot4未申请金额
@@ -1147,7 +1184,7 @@ begin
             begin
                 s:= s + #13#10+ dxDBGrid1.SelectedNodes[i].Strings[f1]+' '+ dxDBGrid1.SelectedNodes[i].Strings[f2];
                 s2:= s2 +','+ dxDBGrid1.SelectedNodes[i].Strings[f4];  // 记录 tb_bill_stadtl.rec_id 字符串
-                sql:=sql+' union all select @id,type_id='+dxDBGrid1.SelectedNodes[i].Strings[f0]+',med_id='+dxDBGrid1.SelectedNodes[i].Strings[f4]; //分销采购取tb_bill_stadtl.rec_id
+                sql:=sql+' union all select @id,type_id='+dxDBGrid1.SelectedNodes[i].Strings[f0]+',med_id='+dxDBGrid1.SelectedNodes[i].Strings[f4]+',rule_id='+dxDBGrid1.SelectedNodes[i].Strings[f12]; //分销采购取tb_bill_stadtl.rec_id
                 if dxDBGrid1.SelectedNodes[i].values[f6]<strtodate('2024-1-1') then
                 begin
                     s:= s + ' '+formatfloat('###,###,##0.00',dxDBGrid1.SelectedNodes[i].values[f3]);  //Camot4未申请金额
@@ -1426,8 +1463,8 @@ begin
     commandtext:=commandtext+' select '+inttostr(compid)+','''+mcd+''',37,0,'+inttostr(mateid)+','+inttostr(agentid)+',cast(convert(char(10),getdate(),20) as datetime),'+inttostr(curuserid)+',getdate()';
     commandtext:=commandtext+' select @id=@@identity';
 
-    commandtext:=commandtext+' insert into tb_bill_dtl (bod_id,type_id,med_id,price,rela_value,amot)';
-    commandtext:=commandtext+' select 0,0,0,0,0,0 where 1=2';
+    commandtext:=commandtext+' insert into tb_bill_dtl (bod_id,type_id,med_id,rule_id,price,rela_value,amot)';
+    commandtext:=commandtext+' select 0,0,0,0,0,0,0 where 1=2';
     commandtext:=commandtext+sql;
 {
     if s1<>'' then   // 应付记账
@@ -1491,7 +1528,7 @@ edit3.text:=commandtext;
     close;
 end;
 setprogress(0);
-s:='已成功生成'+mcd+'号其他支出核销单'+#13#10+'--------------------------------------------'+#13#10+'请在"其他支出核销审批流程"中完成审批';
+s:='已成功生成 '+mcd+' 号其他支出核销单'+#13#10+'--------------------------------------------'+#13#10+'请在"其他支出核销审批流程"中完成审批';
 MessageBox(0,pchar(s),'请注意',MB_OK+MB_ICONInformation);
 end;
 
@@ -1546,6 +1583,7 @@ dxDBGrid1rec_id.Visible:=False;
 dxDBGrid1dtl_id.Visible:=False;
 dxDBGrid1bod_id.Visible:=False;
 dxDBGrid1Camot7.Visible:=False;  //用于判断显示颜色
+dxDBGrid1rule_id.Visible:=False;
 setprogress(0);
 end;
 
@@ -1560,6 +1598,7 @@ dxDBGrid1rec_id.Visible:=False;
 dxDBGrid1dtl_id.Visible:=False;
 dxDBGrid1bod_id.Visible:=False;
 dxDBGrid1Camot7.Visible:=False;  //用于判断显示颜色
+dxDBGrid1rule_id.Visible:=False;
 end;
 
 procedure Tsetexpaycheck.FormActivate(Sender: TObject);
@@ -1778,7 +1817,7 @@ end;
 
 procedure Tsetexpaycheck.N13Click(Sender: TObject);
 var i,mi,mateid,agentid,bodid,bodtypeid,n: integer;  //,bodtypeid1
-    r,d,f0,f1,f2,f3,f4,f5,f6,f7,f8,f9: integer;
+    r,d,f0,f1,f2,f3,f4,f5,f6,f7,f8,f9,f10: integer;
     s,s1,s2,sql: string;
     mcd: string[20];
     mamt:real;
@@ -1796,8 +1835,7 @@ begin
             s:= s + #13#10+ qry.fieldbyname('bod_cd').asstring+' 应付记账 ';
             s:= s + '     '+formatfloat('###,###,##0.00',qry.fieldbyname('Camot10').asfloat);  //应收余额
             mamt:=qry.fieldbyname('Camot10').asfloat;
-            sql:=sql+' union all select @id,type_id='+qry.fieldbyname('bod_type_id').asstring+',med_id='+qry.fieldbyname('rec_id').asstring;  //注意应付记账取tb_bill.bod_id
-//            sql:=sql+',price='+floattostr(mamt)+',rela_value=0,amot='+floattostr(mamt);
+            sql:=sql+' union all select @id,type_id='+qry.fieldbyname('bod_type_id').asstring+',med_id='+qry.fieldbyname('rec_id').asstring+',rule_id='+qry.fieldbyname('rule_id').asstring;  //注意应付记账取tb_bill.bod_id
             sql:=sql+',price='+floattostr(mamt)+',amot='+floattostr(mamt);
             s1:=qry.fieldbyname('bod_id').asstring; // 取bod_id值
         end
@@ -1806,7 +1844,7 @@ begin
             s:= s + #13#10+ qry.fieldbyname('bod_cd').asstring+' '+qry.fieldbyname('med_name').asstring;
             s:= s + '     '+formatfloat('###,###,##0.00',qry.fieldbyname('Camot10').asfloat);  //未申请金额
             mamt:=qry.fieldbyname('Camot10').asfloat;
-            sql:=sql+' union all select @id,type_id='+qry.fieldbyname('bod_type_id').asstring+',med_id='+qry.fieldbyname('rec_id').asstring;  //注意分销采购取tb_bill_stadtl.rec_id
+            sql:=sql+' union all select @id,type_id='+qry.fieldbyname('bod_type_id').asstring+',med_id='+qry.fieldbyname('rec_id').asstring+',rule_id='+qry.fieldbyname('rule_id').asstring;  //注意分销采购取tb_bill_stadtl.rec_id
             sql:=sql+',price='+floattostr(mamt)+',amot='+floattostr(mamt);
 //            sql:=sql+',price='+floattostr(mamt)+',rela_value='+floattostr(qry.fieldbyname('Camot3').asfloat)+',amot='+floattostr(mamt);
             s2:=qry.fieldbyname('rec_id').asstring; // rec_id
@@ -1833,6 +1871,7 @@ begin
     f7:= dxDBGrid1.ColumnByFieldName('amot5').Index;  //回款应付金额
     f8:= dxDBGrid1.ColumnByFieldName('Camot3').Index;  //应付促销费
     f9:= dxDBGrid1.ColumnByFieldName('ckd_amot2a').Index;  //已申请金额
+    f10:= dxDBGrid1.ColumnByFieldName('rule_id').Index;
     for i:= 0 to dxDBGrid1.SelectedCount - 1 do
     begin
         if (abs(dxDBGrid1.SelectedNodes[i].values[f3])>0.005) then
@@ -1851,7 +1890,7 @@ begin
             begin
                 s:= s + #13#10+ dxDBGrid1.SelectedNodes[i].Strings[f1]+' 应付记账 '; //+ dxDBGrid1.SelectedNodes[i].Strings[f2]
                 s1:= s1 +','+ dxDBGrid1.SelectedNodes[i].Strings[f5];  // 记录 bod_id 字符串
-                sql:=sql+' union all select @id,type_id='+dxDBGrid1.SelectedNodes[i].Strings[f0]+',med_id='+dxDBGrid1.SelectedNodes[i].Strings[f5]; //应付记账取tb_bill.bod_id
+                sql:=sql+' union all select @id,type_id='+dxDBGrid1.SelectedNodes[i].Strings[f0]+',med_id='+dxDBGrid1.SelectedNodes[i].Strings[f5]+',rule_id='+dxDBGrid1.SelectedNodes[i].Strings[f10]; //应付记账取tb_bill.bod_id
                 s:= s + ' '+formatfloat('###,###,##0.00',dxDBGrid1.SelectedNodes[i].values[f3]);  //Camot10 应收余额
                 mamt:=mamt+dxDBGrid1.SelectedNodes[i].values[f3];  //Camot4
                 sql:=sql+',price='+floattostr(dxDBGrid1.SelectedNodes[i].values[f3])+',amot='+floattostr(dxDBGrid1.SelectedNodes[i].values[f3]);
@@ -1860,7 +1899,7 @@ begin
             begin
                 s:= s + #13#10+ dxDBGrid1.SelectedNodes[i].Strings[f1]+' '+ dxDBGrid1.SelectedNodes[i].Strings[f2];
                 s2:= s2 +','+ dxDBGrid1.SelectedNodes[i].Strings[f4];  // 记录 tb_bill_stadtl.rec_id 字符串
-                sql:=sql+' union all select @id,type_id='+dxDBGrid1.SelectedNodes[i].Strings[f0]+',med_id='+dxDBGrid1.SelectedNodes[i].Strings[f4]; //分销采购取tb_bill_stadtl.rec_id
+                sql:=sql+' union all select @id,type_id='+dxDBGrid1.SelectedNodes[i].Strings[f0]+',med_id='+dxDBGrid1.SelectedNodes[i].Strings[f4]+',rule_id='+dxDBGrid1.SelectedNodes[i].Strings[f10]; //分销采购取tb_bill_stadtl.rec_id
                 s:= s + ' '+formatfloat('###,###,##0.00',dxDBGrid1.SelectedNodes[i].values[f3]);  //Camot10 应收余额
                 mamt:=mamt+dxDBGrid1.SelectedNodes[i].values[f3];
                 sql:=sql+',price='+floattostr(dxDBGrid1.SelectedNodes[i].values[f3])+',amot='+floattostr(dxDBGrid1.SelectedNodes[i].values[f3]);
@@ -2075,15 +2114,15 @@ begin
     commandtext:=commandtext+' select '+inttostr(compid)+','''+mcd+''',58,0,'+inttostr(mateid)+','+inttostr(agentid)+',cast(convert(char(10),getdate(),20) as datetime),'+inttostr(curuserid)+',getdate()';
     commandtext:=commandtext+' select @id=@@identity';
 
-    commandtext:=commandtext+' insert into tb_bill_dtl (bod_id,type_id,med_id,price,amot)'; //rela_value,
-    commandtext:=commandtext+' select 0,0,0,0,0 where 1=2';
+    commandtext:=commandtext+' insert into tb_bill_dtl (bod_id,type_id,med_id,rule_id,price,amot)'; //rela_value,
+    commandtext:=commandtext+' select 0,0,0,0,0,0 where 1=2';
     commandtext:=commandtext+sql;
 edit3.text:=commandtext;
     execute;
     close;
 end;
 setprogress(0);
-s:='已成功生成'+mcd+'号其他支出收款单'+#13#10+'--------------------------------------------'+#13#10+'请在"其他支出收款审批流程"中完成审批';
+s:='已成功生成 '+mcd+' 号其他支出收款单'+#13#10+'--------------------------------------------'+#13#10+'请在"其他支出收款审批流程"中完成审批';
 MessageBox(0,pchar(s),'请注意',MB_OK+MB_ICONInformation);
 end;
 

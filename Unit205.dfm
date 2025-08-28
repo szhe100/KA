@@ -844,7 +844,6 @@ object setexpay: Tsetexpay
             SummaryFooterType = cstSum
             SummaryFooterField = 'rela_value'
             SummaryFooterFormat = '###,###,##0.00;; '
-            DisableFilter = True
             SummaryType = cstSum
             SummaryField = 'rela_value'
             SummaryFormat = '###,###,##0.00;; '

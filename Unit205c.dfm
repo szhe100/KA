@@ -1255,6 +1255,16 @@ object setexpay3: Tsetexpay3
         #37319#36141#21457#29983#26085#26399)
       TabOrder = 3
     end
+    object Button1: TButton
+      Left = 520
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Button1'
+      TabOrder = 4
+      Visible = False
+      OnClick = Button1Click
+    end
   end
   object DSbill: TDataSource
     DataSet = bill

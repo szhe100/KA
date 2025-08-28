@@ -111,7 +111,6 @@ type
     cdsbillstorage_dt: TDateTimeField;
     cdsbillstorager: TStringField;
     dxDBGrid1: TdxDBGrid;
-    dxDBGrid1creat_dt: TdxDBGridDateColumn;
     dxDBGrid1bod_cd: TdxDBGridMaskColumn;
     dxDBGrid1Cbod_status: TdxDBGridMaskColumn;
     dxDBGrid1broker: TdxDBGridColumn;
@@ -121,7 +120,6 @@ type
     dxDBGrid1carryer: TdxDBGridColumn;
     dxDBGrid1carry_dt: TdxDBGridColumn;
     dxDBGrid1checker: TdxDBGridMaskColumn;
-    dxDBGrid1check_dt: TdxDBGridDateColumn;
     dxDBGrid1bod_id: TdxDBGridColumn;
     dxDBGrid1bod_status_id: TdxDBGridColumn;
     cdsbill_dtlmate_name: TStringField;
@@ -165,6 +163,9 @@ type
     dxDBGrid2price: TdxDBGridMaskColumn;
     dxDBGrid2amot: TdxDBGridColumn;
     GIFimage1: TRxGIFAnimator;
+    Button1: TButton;
+    dxDBGrid1creat_dt: TdxDBGridColumn;
+    dxDBGrid1check_dt: TdxDBGridColumn;
     procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -203,6 +204,7 @@ type
       Shift: TShiftState);
     procedure SpeedButton2Click(Sender: TObject);
     procedure SpeedButton3Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
     procedure setupdatestatus;
@@ -741,15 +743,19 @@ SpeedButton3.enabled:=false; // 避免连续按两次
 setprogress(1);
 with dm.pubqry do
 begin
-    if active=true then close;
+    if active then close;
     commandtext:='sp_updatestock17 -17,'+cdsbill.fieldbyname('bod_id').asstring+','+inttostr(curuserid);
     execute;
     close;
 end;
-
 refreshmyrecord(cdsbill,dm.Refreshcds,0,'bod_id',cdsbill.fieldbyname('bod_id').asinteger);
 setunupdatestatus;
 setprogress(0);
+end;
+
+procedure Tsetbrokerfeeapply2.Button1Click(Sender: TObject);
+begin
+SpeedButton3Click(nil);
 end;
 
 end.
