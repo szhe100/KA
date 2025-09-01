@@ -343,10 +343,13 @@ if dxDateEdit1.Text='' then raise Exception.Create('请输入生效日期');
 with dm.pubqry do
 begin
     if active then close;
+    commandtext:='select top 1 1 from tb_settlelist where type_id=4 and year=year('''+dxDateEdit1.text+''')	and month=month('''+dxDateEdit1.text+''')';  //type_id=4 分销结算
+{
     commandtext:='select top 1 1 from tb_settlelist a,(select top 1 district from tb_busimate where mate_id='+inttostr(dxButtonEdit4.Tag)+') b';
     commandtext:=commandtext+' where a.settled=1 and year=year('''+dxDateEdit1.text+''')';
     commandtext:=commandtext+' 	and month=month('''+dxDateEdit1.text+''')';
     commandtext:=commandtext+' 	and dbo.fn_treeischild(b.district,a.district_id)=1';
+}
 //edit5.Text:=commandtext;
     open;
     if recordcount>0 then raise Exception.Create('本商业公司所在区域生效日期年月已结账，不可加入规则');
@@ -730,7 +733,8 @@ begin
     sql:=sql+' select top 10 * from ( select top 5 info=''第''+line_no+''行 无商业公司或数据无效'' from @tab a where f1='''' or not exists (select 1 from tb_busimate b where mate_type_id=2 and b.mate_name =a.f1)';
     sql:=sql+' union all select top 5 ''第''+line_no+''行 无业务负责人编码或数据无效'' from @tab a where f2='''' or not exists (select 1 from tb_busimate b where mate_type_id=4 and b.mate_code =a.f2)';
     sql:=sql+' union all select top 5 ''第''+line_no+''行 无关联编码或数据无效'' from @tab a where f3='''' or not exists (select 1 from tb_medicine m where m.material_code=a.f3)';
-    sql:=sql+' union all select top 5 ''第''+line_no+''行 无启用日期或数据无效'' from @tab where f4='''' or try_cast(f4 as datetime) is null';
+    sql:=sql+' union all select top 5 ''第''+line_no+''行 无生效日期或数据无效或所在月度已结账'' from @tab where f4='''' or try_cast(f4 as datetime) is null';
+    sql:=sql+'  or exists (select 1 from tb_settlelist where type_id=4 and year=year(f4) and month=month(f4))';  //type_id=4 分销结算
     sql:=sql+' union all select top 5 ''第''+line_no+''行 无渠道名称或数据无效'' from @tab a where a.f5='''' or not exists (select 1 from tb_object b where b.obj_type_id=11 and b.zdesc=a.f5)';
     sql:=sql+' union all select top 5 ''第''+line_no+''行 无子渠道名称或数据无效'' from @tab a where a.f6='''' or not exists (select 1 from tb_object b where b.obj_type_id=12 and b.zdesc=a.f6)';
     sql:=sql+' union all select top 5 ''第''+line_no+''行 比率数据无效'' from @tab where f7<>'''' and try_cast(f7 as decimal(15,4)) is null';

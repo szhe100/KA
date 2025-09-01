@@ -542,7 +542,8 @@ begin
         commandtext:=commandtext+' 	from tb_bill a join tb_bill_dtl b on a.bod_id=b.bod_id';
         commandtext:=commandtext+'  left join (select b.med_id,amot=sum(b.amot) from tb_bill a,tb_bill_dtl b where a.bod_type_id=30 and a.bod_status_id=1 and a.bod_id=b.bod_id group by b.med_id) c on a.bod_id=c.med_id'; //bod_type_id=30 其他支出出纳付款单
         commandtext:=commandtext+' 	where a.bod_type_id=37 and b.type_id=0 group by b.med_id,isnull(b.rule_id,0)) d'; //bod_type_id=37 其他支出核销单(付款申请)
-        commandtext:=commandtext+'      on d.med_id=a.rec_id and (d.rule_id=i.rule_id or d.rule_id=0)';
+        commandtext:=commandtext+'      on d.med_id=a.rec_id and d.rule_id=i.rule_id';
+//        commandtext:=commandtext+'      on d.med_id=a.rec_id and (d.rule_id=i.rule_id or isnull(d.rule_id,0)=0)';
 
     //create function [dbo].[fn_getbusiframe3recid](@channelcode int,@channeldtlcode int,@mateid int,@agentid int,@materialcode varchar(20),@price decimal(15,4),@price1 decimal(15,4),@dt datetime)
 
@@ -687,7 +688,8 @@ begin
         commandtext:=commandtext+' 	from tb_bill a join tb_bill_dtl b on a.bod_id=b.bod_id';
         commandtext:=commandtext+'  left join (select b.med_id,amot=sum(b.amot) from tb_bill a,tb_bill_dtl b where a.bod_type_id=30 and a.bod_status_id=1 and a.bod_id=b.bod_id group by b.med_id) c on a.bod_id=c.med_id'; //bod_type_id=30 其他支出出纳付款单
         commandtext:=commandtext+' 	where a.bod_type_id=37 and b.type_id=0 group by b.med_id,isnull(b.rule_id,0)) d'; //bod_type_id=37 其他支出核销单(付款申请)
-        commandtext:=commandtext+'      on d.med_id=a.rec_id and (d.rule_id=i.rule_id or d.rule_id=0)';
+        commandtext:=commandtext+'      on d.med_id=a.rec_id and d.rule_id=i.rule_id';
+//        commandtext:=commandtext+'      on d.med_id=a.rec_id and (d.rule_id=i.rule_id or isnull(d.rule_id,0)=0)';
 
         commandtext:=commandtext+' where KDGRP not in (''10'',''19'')'; //  and a.carry_dt>= '2025-05-01' and a.carry_dt< dateadd(day,1,'2025-06-03')
         commandtext:=commandtext+'  and (a.price>cast(ZPR03 as decimal(15,4)) or a.price=cast(ZPR03 as decimal(15,4)) and i.rec_id>0)'; //核销条件:原订单 销售单价 > 考核单价

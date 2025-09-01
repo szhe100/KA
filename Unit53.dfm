@@ -4,7 +4,7 @@ object setruleapply: Tsetruleapply
   AutoScroll = False
   Caption = #36153#29992#35268#21017#19994#21153#30003#35831
   ClientHeight = 457
-  ClientWidth = 864
+  ClientWidth = 879
   Color = clBtnFace
   Font.Charset = GB2312_CHARSET
   Font.Color = clWindowText
@@ -142,7 +142,7 @@ object setruleapply: Tsetruleapply
   object PageControl1: TPageControl
     Left = 0
     Top = 43
-    Width = 864
+    Width = 879
     Height = 414
     ActivePage = TabSheet2
     Align = alBottom
@@ -154,7 +154,7 @@ object setruleapply: Tsetruleapply
       object dxDBGrid1: TdxDBGrid
         Left = 0
         Top = 0
-        Width = 856
+        Width = 871
         Height = 387
         Bands = <
           item
@@ -183,17 +183,15 @@ object setruleapply: Tsetruleapply
         OptionsDB = [edgoCancelOnExit, edgoCanDelete, edgoCanInsert, edgoCanNavigation, edgoConfirmDelete, edgoLoadAllRecords, edgoSmartReload, edgoUseBookmarks]
         OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoInvertSelect, edgoUseBitmap]
         OnCustomDrawCell = dxDBGrid1CustomDrawCell
-        object dxDBGrid1creat_dt: TdxDBGridDateColumn
-          DisableEditor = True
-          Width = 68
+        object dxDBGrid1creat_dt: TdxDBGridColumn
+          Caption = #21046#21333#26102#38388
+          Width = 120
           BandIndex = 0
           RowIndex = 0
           FieldName = 'creat_dt'
-          DisableFilter = True
         end
         object dxDBGrid1bod_cd: TdxDBGridMaskColumn
           Alignment = taCenter
-          DisableEditor = True
           Font.Charset = GB2312_CHARSET
           Font.Color = clPurple
           Font.Height = -12
@@ -205,7 +203,6 @@ object setruleapply: Tsetruleapply
           FieldName = 'bod_cd'
           SummaryFooterType = cstCount
           SummaryFooterFormat = '##,###'#21333
-          DisableFilter = True
         end
         object dxDBGrid1Cbod_status: TdxDBGridMaskColumn
           Alignment = taCenter
@@ -313,14 +310,12 @@ object setruleapply: Tsetruleapply
           RowIndex = 0
           FieldName = 'checker'
         end
-        object dxDBGrid1check_dt: TdxDBGridDateColumn
+        object dxDBGrid1check_dt: TdxDBGridColumn
           Caption = #25209#20934#26102#38388
-          DisableEditor = True
-          Width = 65
+          Width = 120
           BandIndex = 0
           RowIndex = 0
           FieldName = 'check_dt'
-          DisableFilter = True
         end
         object dxDBGrid1bod_id: TdxDBGridColumn
           DisableEditor = True
@@ -344,7 +339,7 @@ object setruleapply: Tsetruleapply
       object Panel1: TPanel
         Left = 0
         Top = 0
-        Width = 856
+        Width = 871
         Height = 387
         Align = alClient
         BevelOuter = bvNone
@@ -357,7 +352,7 @@ object setruleapply: Tsetruleapply
         ParentFont = False
         TabOrder = 0
         DesignSize = (
-          856
+          871
           387)
         object Label1: TLabel
           Left = 313
@@ -391,7 +386,7 @@ object setruleapply: Tsetruleapply
           Top = 75
           Width = 54
           Height = 12
-          Caption = #21046#21333#26085#26399':'
+          Caption = #21046#21333#26102#38388':'
         end
         object Label7: TLabel
           Left = 256
@@ -403,15 +398,15 @@ object setruleapply: Tsetruleapply
         object DBText9: TDBText
           Left = 62
           Top = 39
-          Width = 49
-          Height = 12
+          Width = 47
+          Height = 15
           AutoSize = True
           DataField = 'bod_cd'
           DataSource = DSbill
-          Font.Charset = GB2312_CHARSET
+          Font.Charset = ANSI_CHARSET
           Font.Color = clPurple
           Font.Height = -12
-          Font.Name = #23435#20307
+          Font.Name = 'Arial'
           Font.Style = [fsBold]
           ParentFont = False
         end
@@ -446,8 +441,8 @@ object setruleapply: Tsetruleapply
           ParentFont = False
         end
         object DBText15: TDBText
-          Left = 536
-          Top = 294
+          Left = 551
+          Top = 295
           Width = 48
           Height = 12
           Anchors = [akRight, akBottom]
@@ -456,60 +451,64 @@ object setruleapply: Tsetruleapply
           DataSource = DSbill
         end
         object Label9: TLabel
-          Left = 482
-          Top = 294
+          Left = 497
+          Top = 295
           Width = 54
           Height = 12
           Anchors = [akRight, akBottom]
           Caption = #19994#21153#30003#35831':'
         end
         object Label5: TLabel
-          Left = 482
-          Top = 331
+          Left = 801
+          Top = 275
           Width = 54
           Height = 12
           Anchors = [akRight, akBottom]
           Caption = #19994#21153#22797#26680':'
+          Visible = False
         end
         object DBText1: TDBText
-          Left = 536
-          Top = 331
+          Left = 855
+          Top = 275
           Width = 42
           Height = 12
           Anchors = [akRight, akBottom]
           AutoSize = True
           DataField = 'carryer'
           DataSource = DSbill
+          Visible = False
         end
         object Label8: TLabel
-          Left = 482
-          Top = 347
+          Left = 801
+          Top = 291
           Width = 54
           Height = 12
           Anchors = [akRight, akBottom]
           Caption = #22797#26680#26102#38388':'
+          Visible = False
         end
         object DBText2: TDBText
-          Left = 536
-          Top = 347
+          Left = 855
+          Top = 291
           Width = 42
           Height = 12
           Anchors = [akRight, akBottom]
           AutoSize = True
           DataField = 'carry_dt'
           DataSource = DSbill
+          Visible = False
         end
         object Label10: TLabel
-          Left = 667
-          Top = 331
+          Left = 498
+          Top = 347
           Width = 54
           Height = 12
           Anchors = [akRight, akBottom]
           Caption = #36130#21153#23457#25209':'
         end
         object DBText18: TDBText
-          Left = 721
-          Top = 331
+          Left = 551
+          Top = 347
           Width = 48
           Height = 12
           Anchors = [akRight, akBottom]
@@ -518,7 +517,7 @@ object setruleapply: Tsetruleapply
           DataSource = DSbill
         end
         object Label11: TLabel
-          Left = 667
+          Left = 633
           Top = 347
           Width = 54
           Height = 12
@@ -526,7 +525,7 @@ object setruleapply: Tsetruleapply
           Caption = #23457#25209#26102#38388':'
         end
         object DBText11: TDBText
-          Left = 721
+          Left = 687
           Top = 347
           Width = 48
           Height = 12
@@ -542,16 +541,16 @@ object setruleapply: Tsetruleapply
           ParentFont = False
         end
         object Label6: TLabel
-          Left = 482
-          Top = 310
+          Left = 633
+          Top = 295
           Width = 54
           Height = 12
           Anchors = [akRight, akBottom]
           Caption = #30003#35831#26102#38388':'
         end
         object DBText3: TDBText
-          Left = 536
-          Top = 310
+          Left = 687
+          Top = 295
           Width = 42
           Height = 12
           Anchors = [akRight, akBottom]
@@ -579,24 +578,24 @@ object setruleapply: Tsetruleapply
             EDFC858328A602003B}
         end
         object Label12: TLabel
-          Left = 667
-          Top = 294
+          Left = 498
+          Top = 321
           Width = 54
           Height = 12
           Anchors = [akRight, akBottom]
           Caption = #36130#21153#22797#26680':'
         end
         object Label13: TLabel
-          Left = 667
-          Top = 310
+          Left = 633
+          Top = 321
           Width = 54
           Height = 12
           Anchors = [akRight, akBottom]
           Caption = #22797#26680#26102#38388':'
         end
         object DBText4: TDBText
-          Left = 721
-          Top = 310
+          Left = 687
+          Top = 321
           Width = 42
           Height = 12
           Anchors = [akRight, akBottom]
@@ -611,8 +610,8 @@ object setruleapply: Tsetruleapply
           ParentFont = False
         end
         object DBText5: TDBText
-          Left = 721
-          Top = 294
+          Left = 551
+          Top = 321
           Width = 42
           Height = 12
           Anchors = [akRight, akBottom]
@@ -665,7 +664,7 @@ object setruleapply: Tsetruleapply
         object dxDBGrid3: TdxDBGrid
           Left = 6
           Top = 271
-          Width = 428
+          Width = 443
           Height = 116
           Bands = <
             item
@@ -761,7 +760,7 @@ object setruleapply: Tsetruleapply
         object dxDBGrid2: TdxDBGrid
           Left = 6
           Top = 92
-          Width = 848
+          Width = 863
           Height = 180
           Bands = <
             item
@@ -780,7 +779,7 @@ object setruleapply: Tsetruleapply
           HighlightColor = clAqua
           HighlightTextColor = clBlack
           LookAndFeel = lfUltraFlat
-          OptionsBehavior = [edgoEditing, edgoEnterShowEditor, edgoEnterThrough, edgoImmediateEditor, edgoShowHourGlass, edgoTabs, edgoTabThrough, edgoVertThrough]
+          OptionsBehavior = [edgoAutoSort, edgoEditing, edgoEnterShowEditor, edgoEnterThrough, edgoImmediateEditor, edgoMultiSort, edgoShowHourGlass, edgoTabs, edgoTabThrough, edgoVertThrough]
           OptionsDB = [edgoCancelOnExit, edgoCanDelete, edgoCanNavigation, edgoLoadAllRecords, edgoResetColumnFocus, edgoUseBookmarks]
           OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoInvertSelect, edgoUseBitmap]
           ShowRowFooter = True
@@ -916,7 +915,7 @@ object setruleapply: Tsetruleapply
   object Panel2: TPanel
     Left = 0
     Top = 0
-    Width = 864
+    Width = 879
     Height = 42
     Align = alTop
     TabOrder = 1
@@ -1145,7 +1144,7 @@ object setruleapply: Tsetruleapply
       end
     end
     object Panel3: TPanel
-      Left = 748
+      Left = 763
       Top = 1
       Width = 115
       Height = 40

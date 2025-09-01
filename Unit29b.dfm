@@ -1,6 +1,6 @@
 object setreport10: Tsetreport10
-  Left = 121
-  Top = 138
+  Left = 111
+  Top = 129
   AutoScroll = False
   Caption = #19994#21153#21592#36153#29992#27719#24635
   ClientHeight = 522
@@ -1253,7 +1253,9 @@ object setreport10: Tsetreport10
     Style.Edges = [edgLeft, edgTop, edgRight, edgBottom]
     TabOrder = 14
     OnKeyDown = dxEdit1KeyDown
+    Alignment = taCenter
     StyleController = StyleController
+    StoredValues = 1
   end
   object Edit3: TEdit
     Left = 572

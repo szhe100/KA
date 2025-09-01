@@ -194,8 +194,13 @@ type
     cdsbill_dtltype_id2: TIntegerField;
     cdsbill_dtlctype2: TStringField;
     cdsbill_dtlmaterial_code: TStringField;
+    cdsbillmed_code: TStringField;
+    cdsbillmaterial_code: TStringField;
+    cdsbillmed_name: TStringField;
+    cdsbillspecifi: TStringField;
+    cdsbillpdt_place: TStringField;
     dxDBGrid1: TdxDBGrid;
-    dxDBGrid1creat_dt: TdxDBGridDateColumn;
+    dxDBGrid1creat_dt: TdxDBGridColumn;
     dxDBGrid1bod_cd: TdxDBGridMaskColumn;
     dxDBGrid1Cbod_status: TdxDBGridMaskColumn;
     dxDBGrid1broker: TdxDBGridColumn;
@@ -208,14 +213,9 @@ type
     dxDBGrid1carryer: TdxDBGridColumn;
     dxDBGrid1carry_dt: TdxDBGridColumn;
     dxDBGrid1checker: TdxDBGridMaskColumn;
-    dxDBGrid1check_dt: TdxDBGridDateColumn;
+    dxDBGrid1check_dt: TdxDBGridColumn;
     dxDBGrid1bod_id: TdxDBGridColumn;
     dxDBGrid1bod_status_id: TdxDBGridColumn;
-    cdsbillmed_code: TStringField;
-    cdsbillmaterial_code: TStringField;
-    cdsbillmed_name: TStringField;
-    cdsbillspecifi: TStringField;
-    cdsbillpdt_place: TStringField;
     procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -303,8 +303,8 @@ begin
         IDCANCEL: abort;
     end;
 end;
-with cdsbill do if active=true then close;
-with cdsbill_dtl do if active=true then close;
+with cdsbill do if active then close;
+with cdsbill_dtl do if active then close;
 end;
 
 procedure Tsetruleapply.FormClose(Sender: TObject;
@@ -325,14 +325,14 @@ begin
 with cdsbill_dtl do
     if (active=False) or (recordcount=0) or (fieldbyname('med_id').asinteger=0) then
     begin
-        if brokermedtl.Active=True then brokermedtl.Active:=False;
+        if brokermedtl.active then brokermedtl.Active:=False;
         exit;
     end;
     
 with brokermedtl do
 begin
     if tag=cdsbill_dtl.fieldbyname('med_id').asinteger then exit;
-    if active=true then close;
+    if active then close;
     commandtext:='select a.rec_id,a.sta_id,broker=b.zname,a.mate_id,mate_name=dbo.fn_mate_name(a.mate_id),a.fee_type_id,fee_type=dbo.fn_obj_desc(a.fee_type_id),a.rate,a.rela_id,a.creat_by,a.creat_dt,creater=c.zname';
     commandtext:=commandtext+' from tb_brokermedtl a';
     commandtext:=commandtext+' left join tb_staff b on a.sta_id=b.sta_id';
@@ -398,7 +398,7 @@ if cdsbill.recordcount<>0 then
 begin
     with cdsbill_dtl do
     begin
-        if active=true then cancelUpdates;
+        if active then cancelUpdates;
         close;
     end;
     with cdsbill do
@@ -467,7 +467,7 @@ if MessageBox(0,'确定删除本单','请注意',MB_YESNO+MB_ICONQUESTION)<>IDYES then ab
 setprogress(1);
 with dm.pubqry do
 begin
-    if active=true then close;
+    if active then close;
     commandtext:='update tb_bill set bod_type_id=bod_type_id+100,delete_by='+inttostr(curuserid)+',delete_dt=getdate() where bod_id='+cdsbill.fieldbyname('bod_id').asstring;
     execute;
     close;
@@ -475,12 +475,12 @@ end;
 cdsbill.delete;
 with cdsbill_dtl do
 begin
-    if active=true then close;
+    if active then close;
     tag:=0; //可以刷新
 end;
 with brokermedtl do
 begin
-    if active=true then close;
+    if active then close;
     tag:=0; //可以刷新
 end;
 DSbillDataChange(nil,nil);  //刷新cdsbill_dtl
@@ -495,11 +495,11 @@ begin
     with cdsbill do
     begin
         label22.caption:=formatfloat('[##,###]', recordcount);
-        dxDBedit1.enabled:=(active=true) and (recordcount>0) and (fieldbyname('creat_by').asinteger=curuserid);
-        SpeedButton2.enabled:=(state=dsbrowse) and (active=true) and (recordcount>0)
+        dxDBedit1.enabled:=(active) and (recordcount>0) and (fieldbyname('creat_by').asinteger=curuserid);
+        SpeedButton2.enabled:=(state=dsbrowse) and (active) and (recordcount>0)
             and (fieldbyname('bod_status_id').asinteger=0)
             and ((fieldbyname('creat_by').asinteger=curuserid) or (fieldbyname('check_by').asinteger=curuserid));
-        SpeedButton7.enabled:=(state=dsbrowse) and (active=true) and (recordcount>0)
+        SpeedButton7.enabled:=(state=dsbrowse) and (active) and (recordcount>0)
             and (fieldbyname('bod_status_id').asinteger=0)
             and ((fieldbyname('creat_by').asinteger=curuserid) or (fieldbyname('check_by').asinteger=curuserid));
 
@@ -512,12 +512,12 @@ begin
         if tag<>cdsbill.fieldbyname('bod_id').asinteger then
             if cdsbill.RecordCount=0 then
             begin
-                if active=true then close;
+                if active then close;
                 tag:=0;
             end
             else
             begin
-                if active=true then close;
+                if active then close;
                 commandtext:='select b.bod_id,b.dtl_id,b.med_id,b.price,b.price1,b.valid_dt,';
                 commandtext:=commandtext+' a.*,leader=dbo.fn_staff_name(k.sta_id),m.material_code,m.med_code,m.med_name,m.chm_name,m.specifi,m.pdt_place,med_unit=c.zdesc,m.qtyperpack,m.qtyperbox,';
                 commandtext:=commandtext+' stoper=dbo.fn_staff_name(a.stop_by),'; //=dbo.fn_getbidprice1(d.district,a.med_id),';
@@ -560,13 +560,13 @@ begin
 if cdsbill_dtl.RecordCount=0 then raise Exception.Create('无明细数据，不可送审核');
 with dm.pubqry do
 begin
-    if active=true then close;
+    if active then close;
     commandtext:='select top 1 valid_dt from tb_bill_dtl where bod_id='+cdsbill.fieldbyname('bod_id').asstring;
     commandtext:=commandtext+' and isnull(valid_dt,'''')=''''';
     open;
     if recordcount>0 then raise Exception.Create('本单有未设置启用日期记录，不可送审');
 
-    if active=true then close;
+    if active then close;
     commandtext:='select top 5 m.med_code,m.med_name,m.specifi,m.pdt_place';
     commandtext:=commandtext+' from tb_bill_dtl b,tb_medicine m';
     commandtext:=commandtext+' where b.bod_id='+ cdsbill.fieldbyname('bod_id').asstring;
@@ -595,7 +595,7 @@ end;
 {
 with dm.pubqry do
 begin
-    if active=true then close;
+    if active then close;
     commandtext:='select top 10 mate_name=dbo.fn_mate_name(c.mate_id),broker=dbo.fn_staff_name(c.sta_id),m.med_code,m.med_name,m.specifi,m.pdt_place';
     commandtext:=commandtext+' from tb_brokermed c,tb_bill a,tb_bill_dtl b,tb_medicine m ';
     commandtext:=commandtext+' where a.bod_id=b.bod_id and a.bod_id='+cdsbill.fieldbyname('bod_id').asstring;
@@ -617,17 +617,17 @@ begin
     end;
 end;
 }
-if MessageBox(0,'确定本单送业务审核','请注意',MB_YESNO+MB_ICONQUESTION)<>IDYES then abort;
+//if MessageBox(0,'确定本单送业务审核','请注意',MB_YESNO+MB_ICONQUESTION)<>IDYES then abort;
+if MessageBox(0,'确定本单送财务复核','请注意',MB_YESNO+MB_ICONQUESTION)<>IDYES then abort;
 setprogress(1);
 SpeedButton2.enabled:=false; // 避免连续按两次
 with dm.pubqry do
 begin
-    if active=true then close;
-    commandtext:='update tb_bill set bod_status_id=2 where bod_id='+cdsbill.fieldbyname('bod_id').asstring;
+    if active then close;
+    commandtext:='update tb_bill set bod_status_id=3 where bod_id='+cdsbill.fieldbyname('bod_id').asstring;
     execute;
     close;
 end;
-
 refreshmyrecord(cdsbill,dm.Refreshcds,0,'bod_id',cdsbill.fieldbyname('bod_id').asinteger);
 setunupdatestatus;
 setprogress(0);
@@ -747,7 +747,7 @@ setprogress(1);
 //SpeedButton2.enabled:=false; // 避免连续按两次
 with dm.pubqry do
 begin
-    if active=true then close;
+    if active then close;
     commandtext:='update tb_bill set bod_status_id=2 where bod_id in ('+t+') and bod_status_id=0';
     execute;
 end;

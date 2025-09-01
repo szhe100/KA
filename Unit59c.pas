@@ -1046,32 +1046,6 @@ begin
 edit1.text:=commandtext;
 //abort;
             execute;
-{
-            if active then close;
-            commandtext:='insert into tb_sysrule (type_id,comp_id,valid_dt,mate_id,mate_id1,med_id,f1,f2,f4,f5,f6,fee1,dt1,fee2,dt2,fee3,dt3,dt4,creat_by,creat_dt)';
-            commandtext:=commandtext+' values (4,'+inttostr(compid)+','''+datetimetostr(dt)+''','+inttostr(id2)+','+inttostr(id3)+','+inttostr(id4)+',';
-            if cleardeli(sheet.cells[j,5].text)='' then commandtext:=commandtext+'0,' else commandtext:=commandtext+cleardeli(sheet.cells[j,5].text)+','; //5医院托管结算率
-            if cleardeli(sheet.cells[j,6].text)='' then commandtext:=commandtext+'0,' else commandtext:=commandtext+cleardeli(sheet.cells[j,6].text)+','; //6商业托管结算率
-            if cleardeli(sheet.cells[j,7].text)='' then commandtext:=commandtext+'0,' else commandtext:=commandtext+cleardeli(sheet.cells[j,7].text)+','; //6商业托管结算率
-            commandtext:=commandtext+''''+datetimetostr(dt1)+''',';
-            if cleardeli(sheet.cells[j,9].text)='' then commandtext:=commandtext+'0,' else commandtext:=commandtext+cleardeli(sheet.cells[j,9].text)+','; //6商业托管结算率
-            commandtext:=commandtext+''''+datetimetostr(dt2)+''',';
-
-            if cleardeli(sheet.cells[j,11].text)='' then commandtext:=commandtext+'0,' else commandtext:=commandtext+cleardeli(sheet.cells[j,11].text)+','; //6商业托管结算率
-            if dt3=0 then commandtext:=commandtext+'null,' else commandtext:=commandtext+''''+datetimetostr(dt3)+''',';
-            if dt4=0 then commandtext:=commandtext+'null,' else commandtext:=commandtext+''''+datetimetostr(dt4)+''',';
-//            commandtext:=commandtext+''''+datetimetostr(dt4)+''',';
-
-            commandtext:=commandtext+floattostr(price)+','+floattostr(price1)+',dbo.fn_getfeerate1('+inttostr(districtid)+','+inttostr(dxButtonEdit1.tag)+','+floattostr(price)+'),';
-            commandtext:=commandtext+inttostr(curuserid)+',getdate())';
-
-
-
-            commandtext:='insert into tb_sysrule (type_id,comp_id,mate_id,mate_id1,med_id,f4,f5,f6,creat_by,creat_dt)';
-            commandtext:=commandtext+' select top 1 4,'+inttostr(compid)+',mate_id,'+inttostr(dxButtonEdit3.tag)+',';
-            commandtext:=commandtext+inttostr(dxButtonEdit1.tag)+','+floattostr(price)+','+floattostr(price1)+',dbo.fn_getfeerate1(district,'+inttostr(dxButtonEdit1.tag)+','+floattostr(price)+'),';
-            commandtext:=commandtext+inttostr(curuserid)+',getdate() from tb_busimate where mate_id='+inttostr(dxButtonEdit2.tag);
-}
         end;
         j:=j+1;
     end;

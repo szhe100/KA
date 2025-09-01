@@ -1,6 +1,6 @@
 object setbrokermedtl: Tsetbrokermedtl
   Left = 51
-  Top = 105
+  Top = 125
   AutoScroll = False
   Caption = #19994#21153#21592#36153#29992#35268#21017#34920
   ClientHeight = 527
@@ -897,7 +897,7 @@ object setbrokermedtl: Tsetbrokermedtl
         386)
       object SpeedButton4: TSpeedButton
         Left = 108
-        Top = 270
+        Top = 296
         Width = 25
         Height = 25
         Hint = #21152#20837#19994#21153#21592#25104#21592#35268#21017
@@ -987,7 +987,7 @@ object setbrokermedtl: Tsetbrokermedtl
         Visible = False
       end
       object Label8: TLabel
-        Left = 642
+        Left = 954
         Top = 367
         Width = 192
         Height = 12
@@ -999,6 +999,7 @@ object setbrokermedtl: Tsetbrokermedtl
         Font.Name = #23435#20307
         Font.Style = []
         ParentFont = False
+        Visible = False
       end
       object Label13: TLabel
         Left = 747
@@ -1106,6 +1107,18 @@ object setbrokermedtl: Tsetbrokermedtl
           BandIndex = 0
           RowIndex = 0
           FieldName = 'check_dt'
+        end
+        object dxDBGrid1bod_cd: TdxDBGridColumn
+          Alignment = taCenter
+          Font.Charset = GB2312_CHARSET
+          Font.Color = clPurple
+          Font.Height = -12
+          Font.Name = #23435#20307
+          Font.Style = []
+          Width = 81
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'bod_cd'
         end
         object dxDBGrid1bod_desc: TdxDBGridColumn
           Caption = #30003#35831#25688#35201
@@ -1508,18 +1521,18 @@ object setbrokermedtl: Tsetbrokermedtl
         end
       end
       object Edit2: TEdit
-        Left = 760
-        Top = 312
-        Width = 121
+        Left = 754
+        Top = 309
+        Width = 146
         Height = 20
         TabOrder = 3
         Text = 'Edit2'
         Visible = False
       end
       object Edit4: TEdit
-        Left = 912
-        Top = 336
-        Width = 121
+        Left = 754
+        Top = 349
+        Width = 146
         Height = 20
         TabOrder = 4
         Text = 'Edit4'
@@ -1535,9 +1548,9 @@ object setbrokermedtl: Tsetbrokermedtl
         Visible = False
       end
       object Edit3: TEdit
-        Left = 760
-        Top = 336
-        Width = 121
+        Left = 754
+        Top = 329
+        Width = 146
         Height = 20
         TabOrder = 6
         Text = 'Edit3'
@@ -2116,6 +2129,10 @@ object setbrokermedtl: Tsetbrokermedtl
       DisplayLabel = #23457#26680#26085#26399
       FieldName = 'check_dt'
       DisplayFormat = 'yyyy-mm-dd'
+    end
+    object brokermedbod_cd: TStringField
+      DisplayLabel = #30003#35831#21551#29992#21333
+      FieldName = 'bod_cd'
     end
     object brokermedtype_id2: TIntegerField
       FieldName = 'type_id2'

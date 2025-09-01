@@ -340,6 +340,8 @@ type
     brokermedmodifier: TStringField;
     dxDBGrid1modify_dt: TdxDBGridColumn;
     dxDBGrid1modifier: TdxDBGridColumn;
+    brokermedbod_cd: TStringField;
+    dxDBGrid1bod_cd: TdxDBGridColumn;
     procedure dxButtonEdit1ButtonClick(Sender: TObject;
       AbsoluteIndex: Integer);
     procedure SpeedButton2Click(Sender: TObject);
@@ -564,7 +566,7 @@ begin
         commandtext:=commandtext+' b.med_code,b.med_name,b.specifi,b.pdt_place,med_unit=c.zdesc,b.qtyperpack,b.qtyperbox,';
 //        commandtext:=commandtext+' f.check_dt,stoper=dbo.fn_staff_name(a.stop_by),price0=dbo.fn_getfeerate1(d.district,a.med_id,a.price1),fee1=0.0000,'; //dbo.fn_gettrustfee1(a.mate_id,a.med_id,a.price1),
 //        commandtext:=commandtext+' f.check_dt,stoper=dbo.fn_staff_name(a.stop_by),price0=dbo.fn_getprice0a(e.district,a.med_id,a.valid_dt),fee1=0.0000,'; //dbo.fn_gettrustfee1(a.mate_id,a.med_id,a.price1),
-        commandtext:=commandtext+' f.check_dt,stoper=dbo.fn_staff_name(a.stop_by),price0=dbo.fn_getrate2(a.channel_id,a.channel_dtl_id,e.district,a.med_id,a.valid_dt),fee1=0.0000,'; //dbo.fn_gettrustfee1(a.mate_id,a.med_id,a.price1),
+        commandtext:=commandtext+' f.check_dt,f.bod_cd,stoper=dbo.fn_staff_name(a.stop_by),price0=dbo.fn_getrate2(a.channel_id,a.channel_dtl_id,e.district,a.med_id,a.valid_dt),fee1=0.0000,'; //dbo.fn_gettrustfee1(a.mate_id,a.med_id,a.price1),
 //dbo].[fn_getrate2](@channel_id int,@channel_dtl_id int,@districtid int,@medid int,@dt smalldatetime)
         commandtext:=commandtext+' b.chm_name,med_type=dbo.fn_med_type(b.med_id),broker=d.zname,e.mate_name,e.trusted,creater=g.zname,modifier=i.zname,e.district,dist_name=dbo.fn_getdistrictname (e.district,1)+'' ''+dbo.fn_getdistrictname (e.district,2),'; //dbo.fn_getdistrict(e.district),';
         commandtext:=commandtext+' f1=dbo.fn_getsysrulef1(a.mate_id,a.med_id,a.valid_dt),f2=dbo.fn_getsysrulef1a(a.mate_id,a.med_id)';
@@ -577,7 +579,7 @@ begin
         commandtext:=commandtext+' left join tb_busimate h on a.mate_id1=h.mate_id';
         commandtext:=commandtext+' left join tb_staff g on a.creat_by=g.sta_id';
         commandtext:=commandtext+' left join tb_staff i on a.modify_by=i.sta_id';
-        commandtext:=commandtext+' left join (select b.med_id,check_dt=max(a.check_dt) from tb_bill a,tb_bill_dtl b where a.bod_type_id=20 and a.bod_status_id=1 and a.bod_id=b.bod_id group by b.med_id) f on a.rec_id=f.med_id';
+        commandtext:=commandtext+' left join (select b.med_id,bod_cd=max(a.bod_cd),check_dt=max(a.check_dt) from tb_bill a,tb_bill_dtl b where a.bod_type_id=20 and a.bod_status_id=1 and a.bod_id=b.bod_id group by b.med_id) f on a.rec_id=f.med_id';
         if Trim(dxButtonEdit6.text)='' then commandtext:=commandtext+' left join tb_busiframe k on k.rec_id=dbo.fn_getbusiframerecid5(e.district,a.med_id,a.mate_id,a.valid_dt)'
             else commandtext:=commandtext+' inner join tb_busiframe k on k.rec_id=dbo.fn_getbusiframerecid5(e.district,a.med_id,a.mate_id,a.valid_dt)';
     {
@@ -1756,7 +1758,7 @@ begin
     setprogress(1);
 //从第2行开始导入，格式: 1申请摘要, 2渠道名称, 3子渠道名称, 4业务员, 5商业公司, 6医院, 7关联编码, 8明细业务员, 9费用金额, 10医院托管结算率, 11启用日期
     mi:=0;j:=2;  //第1行开始 每行一单
-    sql:='declare @tab table (line_no varchar(3),f1 varchar(100),f2 varchar(100),f3 varchar(100),f4 varchar(100),f5 varchar(100),f6 varchar(100),f7 varchar(100),f8 varchar(100),f9 varchar(100),f10 varchar(100),f11 varchar(100),';
+    sql:='declare @tab table (line_no varchar(3),f1 varchar(300),f2 varchar(100),f3 varchar(100),f4 varchar(100),f5 varchar(100),f6 varchar(300),f7 varchar(100),f8 varchar(100),f9 varchar(100),f10 varchar(100),f11 varchar(100),';
     sql:=sql+' channel_id int,channel_dtl_id int,sta_id int,sta_id1 int,mate_id int,mate_id1 int,med_id int)';
     sql:=sql+' insert into @tab (line_no,f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11)';
     while (sheet.cells[j,2].text<>'') do
@@ -1788,6 +1790,12 @@ begin
 //    sql:=sql+' union all select top 5 ''第''+line_no+''行无医院托管结算率或数据无效'' from @tab where f11<>'''' and try_cast(f11 as decimal(15,4)) is null';
     sql:=sql+' union all select top 5 ''第''+line_no+''行 医院托管结算率数据无效'' from @tab where f10<>'''' and try_cast(f10 as decimal(15,4)) is null';
     sql:=sql+' union all select top 5 ''第''+line_no+''行 无启用日期或数据无效'' from @tab where f11='''' or try_cast(f11 as datetime) is null';
+
+//  如这个 陶北，深圳市福田区第二人民医院，1000010000，第一条没审完，不可以重复导入
+    sql:=sql+' union all select top 5 ''第''+line_no+''行 业务员、医院、品种已有未审核记录,需先完成审核'' from @tab a';
+    sql:=sql+'   where exists (select 1 from tb_brokermed h,tb_staff b,tb_busimate c,tb_medicine m where b.sta_type_id=1 and b.zname =a.f4 and c.mate_type_id=1 and c.mate_name =a.f6 and m.material_code1 =a.f7';  //f4<>'''' and f6<>'''' and f7<>'''' and
+    sql:=sql+'      and h.sta_id=b.sta_id and h.mate_id=c.mate_id and h.med_id=m.med_id and h.valid=null)';
+
     sql:=sql+' ) a order by info';
 //从第2行开始导入，格式: 1申请摘要, 2渠道名称, 3子渠道名称, 4业务员, 5商业公司, 6医院, 7关联编码, 8明细业务员, 9费用金额, 10医院托管结算率, 11启用日期
     with dm.pubqry do

@@ -183,17 +183,15 @@ object setruleapply3: Tsetruleapply3
         OptionsDB = [edgoCancelOnExit, edgoCanDelete, edgoCanInsert, edgoCanNavigation, edgoConfirmDelete, edgoLoadAllRecords, edgoSmartReload, edgoUseBookmarks]
         OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoInvertSelect, edgoUseBitmap]
         OnCustomDrawCell = dxDBGrid1CustomDrawCell
-        object dxDBGrid1creat_dt: TdxDBGridDateColumn
-          DisableEditor = True
-          Width = 68
+        object dxDBGrid1creat_dt: TdxDBGridColumn
+          Caption = #21046#21333#26102#38388
+          Width = 120
           BandIndex = 0
           RowIndex = 0
           FieldName = 'creat_dt'
-          DisableFilter = True
         end
         object dxDBGrid1bod_cd: TdxDBGridMaskColumn
           Alignment = taCenter
-          DisableEditor = True
           Font.Charset = GB2312_CHARSET
           Font.Color = clPurple
           Font.Height = -12
@@ -205,7 +203,6 @@ object setruleapply3: Tsetruleapply3
           FieldName = 'bod_cd'
           SummaryFooterType = cstCount
           SummaryFooterFormat = '##,###'#21333
-          DisableFilter = True
         end
         object dxDBGrid1Cbod_status: TdxDBGridMaskColumn
           Alignment = taCenter
@@ -313,14 +310,12 @@ object setruleapply3: Tsetruleapply3
           RowIndex = 0
           FieldName = 'checker'
         end
-        object dxDBGrid1check_dt: TdxDBGridDateColumn
+        object dxDBGrid1check_dt: TdxDBGridColumn
           Caption = #25209#20934#26102#38388
-          DisableEditor = True
-          Width = 65
+          Width = 120
           BandIndex = 0
           RowIndex = 0
           FieldName = 'check_dt'
-          DisableFilter = True
         end
         object dxDBGrid1bod_id: TdxDBGridColumn
           DisableEditor = True
@@ -391,7 +386,7 @@ object setruleapply3: Tsetruleapply3
           Top = 75
           Width = 54
           Height = 12
-          Caption = #21046#21333#26085#26399':'
+          Caption = #21046#21333#26102#38388':'
         end
         object Label7: TLabel
           Left = 281
@@ -465,70 +460,16 @@ object setruleapply3: Tsetruleapply3
             EDFC858328A602003B}
         end
         object Label9: TLabel
-          Left = 481
-          Top = 294
+          Left = 497
+          Top = 295
           Width = 54
           Height = 12
           Anchors = [akRight, akBottom]
           Caption = #19994#21153#30003#35831':'
         end
-        object Label6: TLabel
-          Left = 481
-          Top = 310
-          Width = 54
-          Height = 12
-          Anchors = [akRight, akBottom]
-          Caption = #30003#35831#26102#38388':'
-        end
-        object Label5: TLabel
-          Left = 481
-          Top = 331
-          Width = 54
-          Height = 12
-          Anchors = [akRight, akBottom]
-          Caption = #19994#21153#22797#26680':'
-        end
-        object Label8: TLabel
-          Left = 481
-          Top = 347
-          Width = 54
-          Height = 12
-          Anchors = [akRight, akBottom]
-          Caption = #22797#26680#26102#38388':'
-        end
-        object DBText2: TDBText
-          Left = 535
-          Top = 347
-          Width = 42
-          Height = 12
-          Anchors = [akRight, akBottom]
-          AutoSize = True
-          DataField = 'carry_dt'
-          DataSource = DSbill
-        end
-        object DBText1: TDBText
-          Left = 535
-          Top = 331
-          Width = 42
-          Height = 12
-          Anchors = [akRight, akBottom]
-          AutoSize = True
-          DataField = 'carryer'
-          DataSource = DSbill
-        end
-        object DBText3: TDBText
-          Left = 535
-          Top = 310
-          Width = 42
-          Height = 12
-          Anchors = [akRight, akBottom]
-          AutoSize = True
-          DataField = 'creat_dt'
-          DataSource = DSbill
-        end
         object DBText15: TDBText
-          Left = 535
-          Top = 294
+          Left = 551
+          Top = 295
           Width = 48
           Height = 12
           Anchors = [akRight, akBottom]
@@ -536,25 +477,27 @@ object setruleapply3: Tsetruleapply3
           DataField = 'creater'
           DataSource = DSbill
         end
-        object Label11: TLabel
-          Left = 666
-          Top = 347
-          Width = 54
+        object DBText5: TDBText
+          Left = 551
+          Top = 321
+          Width = 42
           Height = 12
           Anchors = [akRight, akBottom]
-          Caption = #23457#25209#26102#38388':'
+          AutoSize = True
+          DataField = 'receiver'
+          DataSource = DSbill
         end
         object Label10: TLabel
-          Left = 666
-          Top = 331
+          Left = 498
+          Top = 347
           Width = 54
           Height = 12
           Anchors = [akRight, akBottom]
           Caption = #36130#21153#23457#25209':'
         end
         object DBText18: TDBText
-          Left = 720
-          Top = 331
+          Left = 551
+          Top = 347
           Width = 48
           Height = 12
           Anchors = [akRight, akBottom]
@@ -562,8 +505,32 @@ object setruleapply3: Tsetruleapply3
           DataField = 'checker'
           DataSource = DSbill
         end
+        object Label12: TLabel
+          Left = 498
+          Top = 321
+          Width = 54
+          Height = 12
+          Anchors = [akRight, akBottom]
+          Caption = #36130#21153#22797#26680':'
+        end
+        object Label13: TLabel
+          Left = 633
+          Top = 321
+          Width = 54
+          Height = 12
+          Anchors = [akRight, akBottom]
+          Caption = #22797#26680#26102#38388':'
+        end
+        object Label11: TLabel
+          Left = 633
+          Top = 347
+          Width = 54
+          Height = 12
+          Anchors = [akRight, akBottom]
+          Caption = #23457#25209#26102#38388':'
+        end
         object DBText11: TDBText
-          Left = 720
+          Left = 687
           Top = 347
           Width = 48
           Height = 12
@@ -579,8 +546,8 @@ object setruleapply3: Tsetruleapply3
           ParentFont = False
         end
         object DBText4: TDBText
-          Left = 720
-          Top = 310
+          Left = 687
+          Top = 321
           Width = 42
           Height = 12
           Anchors = [akRight, akBottom]
@@ -594,31 +561,23 @@ object setruleapply3: Tsetruleapply3
           Font.Style = []
           ParentFont = False
         end
-        object DBText5: TDBText
-          Left = 720
-          Top = 294
+        object DBText3: TDBText
+          Left = 687
+          Top = 295
           Width = 42
           Height = 12
           Anchors = [akRight, akBottom]
           AutoSize = True
-          DataField = 'receiver'
+          DataField = 'creat_dt'
           DataSource = DSbill
         end
-        object Label12: TLabel
-          Left = 666
-          Top = 294
+        object Label6: TLabel
+          Left = 633
+          Top = 295
           Width = 54
           Height = 12
           Anchors = [akRight, akBottom]
-          Caption = #36130#21153#22797#26680':'
-        end
-        object Label13: TLabel
-          Left = 666
-          Top = 310
-          Width = 54
-          Height = 12
-          Anchors = [akRight, akBottom]
-          Caption = #22797#26680#26102#38388':'
+          Caption = #30003#35831#26102#38388':'
         end
         object dxDBEdit1: TdxDBEdit
           Left = 335
@@ -637,8 +596,8 @@ object setruleapply3: Tsetruleapply3
           StoredValues = 64
         end
         object Edit1: TEdit
-          Left = 481
-          Top = 344
+          Left = 705
+          Top = 64
           Width = 121
           Height = 20
           TabOrder = 1
@@ -667,7 +626,7 @@ object setruleapply3: Tsetruleapply3
           HighlightColor = clAqua
           HighlightTextColor = clBlack
           LookAndFeel = lfUltraFlat
-          OptionsBehavior = [edgoEditing, edgoEnterShowEditor, edgoEnterThrough, edgoImmediateEditor, edgoShowHourGlass, edgoTabs, edgoTabThrough, edgoVertThrough]
+          OptionsBehavior = [edgoAutoSort, edgoEditing, edgoEnterShowEditor, edgoEnterThrough, edgoImmediateEditor, edgoMultiSort, edgoShowHourGlass, edgoTabs, edgoTabThrough, edgoVertThrough]
           OptionsDB = [edgoCancelOnExit, edgoCanDelete, edgoCanNavigation, edgoLoadAllRecords, edgoResetColumnFocus, edgoUseBookmarks]
           OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoInvertSelect, edgoUseBitmap]
           ShowRowFooter = True
@@ -822,7 +781,7 @@ object setruleapply3: Tsetruleapply3
           HighlightColor = clAqua
           HighlightTextColor = clBlack
           LookAndFeel = lfUltraFlat
-          OptionsBehavior = [edgoAnsiSort, edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoImmediateEditor, edgoMultiSort, edgoTabThrough, edgoVertThrough]
+          OptionsBehavior = [edgoAutoSort, edgoEditing, edgoEnterShowEditor, edgoEnterThrough, edgoImmediateEditor, edgoMultiSort, edgoShowHourGlass, edgoTabs, edgoTabThrough, edgoVertThrough]
           OptionsDB = [edgoCancelOnExit, edgoCanDelete, edgoCanNavigation, edgoLoadAllRecords, edgoUseBookmarks]
           OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoInvertSelect, edgoUseBitmap]
           Anchors = [akLeft, akRight, akBottom]

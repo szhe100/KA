@@ -429,7 +429,7 @@ object setbusiframe3: Tsetbusiframe3
   end
   object SpeedButton5: TSpeedButton
     Left = 108
-    Top = 386
+    Top = 412
     Width = 25
     Height = 25
     Hint = #21152#20837#25104#21592#19994#21153#36127#36131#20154#35268#21017

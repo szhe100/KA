@@ -349,12 +349,14 @@ begin
     commandtext:=commandtext+' mate_id1=a.src_id,mate_id2=a.dst_id,mate_id3=0,mate_id4=0,mate_id5=0,';
 //    commandtext:=commandtext+' mate_id1=a.src_id,mate_id2=a.dst_id,mate_id3=f.mate_id,mate_id4=g.mate_id,mate_id5=h.mate_id,';
 //    commandtext:=commandtext+' mate_name1=dbo.fn_mate_name(a.src_id),mate_name2=dbo.fn_mate_name(a.dst_id),mate_name3=f.mate_name,mate_name4=g.mate_name,mate_name5=h.mate_name,';
+    commandtext:=commandtext+' b.mate_name1,b.mate_name2,b.mate_name3,b.mate_name4,mate_name5='''','; //dbo.fn_getlevelmatename(d.material_code1,j.district,5,a.carry_dt),';
+{
     commandtext:=commandtext+' mate_name1=dbo.fn_mate_name(a.src_id),'; //dbo.fn_getlevelmatename(d.material_code1,j.district,1,a.carry_dt),';
     commandtext:=commandtext+' mate_name2=case when j.mate_type_id=1 then '''' else j.mate_name end,'; //dbo.fn_getlevelmatename(d.material_code1,j.district,2,a.carry_dt),';
     commandtext:=commandtext+' mate_name3='''','; //dbo.fn_getlevelmatename(d.material_code1,j.district,3,a.carry_dt),';
     commandtext:=commandtext+' mate_name4='''','; //dbo.fn_getlevelmatename(d.material_code1,j.district,4,a.carry_dt),';
     commandtext:=commandtext+' mate_name5='''','; //dbo.fn_getlevelmatename(d.material_code1,j.district,5,a.carry_dt),';
-
+}
 //dbo.fn_getlevelmatename(@materialcode varchar(20),@districtcode varchar(10),@levelid tinyint,@dt datetime)
 
 //    commandtext:=commandtext+' mate_id1=i.mate_id,mate_id2=e.mate_id,mate_id3=f.mate_id,mate_id4=g.mate_id,mate_id5=h.mate_id,';

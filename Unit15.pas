@@ -1832,6 +1832,33 @@ begin
         end;
 
         if active then close;
+        commandtext:='select top 3 a.bod_cd,m.material_code,m.med_code,m.med_name,m.specifi,m.pdt_place';
+        commandtext:=commandtext+' from tb_bill a,tb_bill_dtl b,tb_medicine m';
+        commandtext:=commandtext+' where a.bod_id in ('+t+') and a.bod_id=b.bod_id and b.med_id=m.med_id';
+        commandtext:=commandtext+'  and dbo.fn_getbrokermedrecid(a.src_id,a.dst_id,b.med_id,a.carry_dt) is null';
+    //edit3.text:=commandtext;
+        try
+            setprogress(1);
+            open;
+        finally
+            setprogress(0);
+        end;
+        if recordcount>0 then
+        begin
+            first;
+            s:='下列单据品种尚未设置业务员费用规则或已停用(注意生效日期)，请先设置'+ #13#10;
+            s:=s+'------------------------------------------------------------------';  //+ #13#10
+
+            while not eof do
+            begin
+                s := s+ #13#10 +fieldbyname('bod_cd').asstring+' '+fieldbyname('material_code').asstring+' '+fieldbyname('med_name').asstring+' '+fieldbyname('specifi').asstring+' '+fieldbyname('pdt_place').asstring;
+                next;
+            end;
+            MessageBox(0,pchar(s),'请注意',MB_OK+MB_IconError);
+            abort;
+        end;
+
+        if active then close;
         commandtext:='select distinct top 5 a.bod_cd from tb_bill a,tb_bill_dtl b';
         commandtext:=commandtext+' where a.bod_id in ('+t+') and a.bod_id=b.bod_id';
         commandtext:=commandtext+'  and (a.busi_type=1 and b.qty<0 or a.busi_type=2 and b.qty>0)';

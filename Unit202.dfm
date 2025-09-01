@@ -731,7 +731,9 @@ object qryclassexp: Tqryclassexp
     OnClick = dxEdit1Click
     OnEnter = dxEdit1Click
     OnKeyDown = dxEdit1KeyDown
+    Alignment = taCenter
     StyleController = StyleController
+    StoredValues = 1
   end
   object dxButtonEdit3: TdxButtonEdit
     Left = 64
@@ -1253,25 +1255,25 @@ object qryclassexp: Tqryclassexp
       Font.Height = -12
       Font.Name = #23435#20307
       Font.Style = []
-      Width = 80
+      Width = 120
       BandIndex = 0
       RowIndex = 0
       FieldName = 'mate_name1'
     end
     object dxDBGrid1mate_name2: TdxDBGridColumn
-      Width = 80
+      Width = 120
       BandIndex = 0
       RowIndex = 0
       FieldName = 'mate_name2'
     end
     object dxDBGrid1mate_name3: TdxDBGridColumn
-      Width = 80
+      Width = 120
       BandIndex = 0
       RowIndex = 0
       FieldName = 'mate_name3'
     end
     object dxDBGrid1mate_name4: TdxDBGridColumn
-      Width = 80
+      Width = 120
       BandIndex = 0
       RowIndex = 0
       FieldName = 'mate_name4'

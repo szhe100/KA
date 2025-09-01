@@ -618,7 +618,7 @@ object setexpaycheck: Tsetexpaycheck
   end
   object dxEdit1: TdxEdit
     Left = 365
-    Top = 46
+    Top = 45
     Width = 110
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -757,7 +757,7 @@ object setexpaycheck: Tsetexpaycheck
   end
   object dxLookupTreeView1: TdxLookupTreeView
     Left = 365
-    Top = 25
+    Top = 24
     Width = 110
     Height = 20
     CanSelectParents = True
