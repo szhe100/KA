@@ -372,6 +372,13 @@ begin
     if fieldbyname('dst_id').asinteger=0 then raise Exception.Create('请选择商业公司');
     if fieldbyname('agent_id').asinteger=0 then raise Exception.Create('请选择代理人');
 end;
+with dm.pubqry do
+begin
+    if active then close;
+    commandtext:='select top 1 1 from tb_settlelist where type_id=4 and year=year('''+bill.fieldbyname('carry_dt').asstring+''') and month=month('''+bill.fieldbyname('carry_dt').asstring+''')';  //type_id=4 分销结算
+    open;
+    if recordcount>0 then raise Exception.Create('本生效日期所在月度已结账，不可审核');
+end;
 if MessageBox(0,'确定本单审核通过','请注意',MB_YESNO+MB_ICONQUESTION)<>IDYES then abort;
 setprogress(1);
 SpeedButton2.enabled:=false; // 避免连续按两次

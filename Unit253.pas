@@ -20,9 +20,7 @@ type
     dxDBGrid1Cbod_status: TdxDBGridMaskColumn;
     dxDBGrid1bod_amot: TdxDBGridMaskColumn;
     dxDBGrid1creater: TdxDBGridMaskColumn;
-    dxDBGrid1creat_dt: TdxDBGridDateColumn;
     dxDBGrid1checker: TdxDBGridMaskColumn;
-    dxDBGrid1check_dt: TdxDBGridDateColumn;
     dxDBGrid1bod_desc: TdxDBGridMaskColumn;
     Panel1: TPanel;
     Label1: TLabel;
@@ -151,6 +149,8 @@ type
     N3: TMenuItem;
     N1: TMenuItem;
     N2: TMenuItem;
+    dxDBGrid1creat_dt: TdxDBGridColumn;
+    dxDBGrid1check_dt: TdxDBGridColumn;
     procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -521,6 +521,10 @@ end;
 with dm.pubqry do
 begin
     if active then close;
+    commandtext:='select top 1 1 from tb_settlelist where type_id=4 and year=year('''+bill.fieldbyname('carry_dt').asstring+''') and month=month('''+bill.fieldbyname('carry_dt').asstring+''')';  //type_id=4 分销结算
+    open;
+    if recordcount>0 then raise Exception.Create('本生效日期所在月度已结账，不可送审核');
+{
     commandtext:='select top 1 1 from tb_settlelist a,(select top 1 district from tb_busimate c,tb_bill a where a.bod_id='+ bill.fieldbyname('bod_id').asstring+' and c.mate_id=a.dst_id) b';
     commandtext:=commandtext+' where a.settled=1 and year=year('''+ bill.fieldbyname('carry_dt').asstring+''')';
     commandtext:=commandtext+' 	and month=month('''+ bill.fieldbyname('carry_dt').asstring+''')';
@@ -528,6 +532,7 @@ begin
 edit2.Text:=commandtext;
     open;
     if recordcount>0 then raise Exception.Create('本单商业公司所在区域发生日期年月已结账，不可送审核');
+}
 end;
 if MessageBox(0,'确定本单送审核','请注意',MB_YESNO+MB_ICONQUESTION)<>IDYES then abort;
 setprogress(1);

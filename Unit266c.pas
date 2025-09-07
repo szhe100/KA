@@ -352,7 +352,8 @@ begin
 }
 //edit5.Text:=commandtext;
     open;
-    if recordcount>0 then raise Exception.Create('本商业公司所在区域生效日期年月已结账，不可加入规则');
+//    if recordcount>0 then raise Exception.Create('本商业公司所在区域生效日期年月已结账，不可加入规则');
+    if recordcount>0 then raise Exception.Create('本生效日期所在月度已结账，不可加入规则');
 
     if active then close;
     commandtext:='select top 1 1 from tb_busiframe3'; // where broker_id='+inttostr(dxButtonEdit2.tag);

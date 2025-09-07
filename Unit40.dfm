@@ -395,6 +395,7 @@ object setsettle: Tsetsettle
       FieldName = 'month'
     end
     object dxDBGrid1ctype: TdxDBGridColumn
+      Alignment = taCenter
       DisableEditor = True
       Font.Charset = GB2312_CHARSET
       Font.Color = clNavy

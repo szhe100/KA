@@ -183,6 +183,13 @@ object setexpaybook: Tsetexpaybook
         OptionsDB = [edgoCancelOnExit, edgoCanDelete, edgoCanInsert, edgoCanNavigation, edgoConfirmDelete, edgoLoadAllRecords, edgoSmartReload, edgoUseBookmarks]
         OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoRowSelect, edgoUseBitmap]
         OnCustomDrawCell = dxDBGrid1CustomDrawCell
+        object dxDBGrid1creat_dt: TdxDBGridColumn
+          Caption = #21046#21333#26102#38388
+          Width = 120
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'creat_dt'
+        end
         object dxDBGrid1carry_dt: TdxDBGridColumn
           Alignment = taCenter
           Width = 69
@@ -284,20 +291,15 @@ object setexpaybook: Tsetexpaybook
           RowIndex = 0
           FieldName = 'creater'
         end
-        object dxDBGrid1creat_dt: TdxDBGridDateColumn
-          Width = 78
-          BandIndex = 0
-          RowIndex = 0
-          FieldName = 'creat_dt'
-        end
         object dxDBGrid1checker: TdxDBGridMaskColumn
           Width = 45
           BandIndex = 0
           RowIndex = 0
           FieldName = 'checker'
         end
-        object dxDBGrid1check_dt: TdxDBGridDateColumn
-          Width = 70
+        object dxDBGrid1check_dt: TdxDBGridColumn
+          Caption = #23457#26680#26102#38388
+          Width = 120
           BandIndex = 0
           RowIndex = 0
           FieldName = 'check_dt'
@@ -761,9 +763,11 @@ object setexpaybook: Tsetexpaybook
           Style.ButtonTransparence = ebtAlways
           Style.Edges = [edgLeft, edgTop, edgRight, edgBottom]
           TabOrder = 4
+          Alignment = taCenter
           DataField = 'carry_dt'
           DataSource = DSbill
           StyleController = StyleController
+          StoredValues = 1
         end
         object dxDBButtonEdit2: TdxDBButtonEdit
           Left = 230

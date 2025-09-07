@@ -193,6 +193,8 @@ type
     dxDBGrid1broker: TdxDBGridColumn;
     qryterminal_id: TStringField;
     dxDBGrid1terminal_id: TdxDBGridColumn;
+    N9: TMenuItem;
+    N10: TMenuItem;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -238,6 +240,7 @@ type
     procedure dxLookupTreeView1MouseMove(Sender: TObject;
       Shift: TShiftState; X, Y: Integer);
     procedure dxLookupTreeView1DropDown(Sender: TObject);
+    procedure N9Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -258,7 +261,7 @@ procedure Tqryclassexp.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
 with qry do
-    if active=true then close;
+    if active then close;
 dxDBGrid1.SaveToIniFile(extractfilepath(Application.ExeName)+self.name+'-dxDBGrid1.ini');//保存
 fbodid:=0;
 end;
@@ -282,8 +285,8 @@ end;
 procedure Tqryclassexp.DSqryDataChange(Sender: TObject;
   Field: TField);
 begin
-speedbutton2.enabled:=(qry.active=true) and (qry.recordcount>0);
-speedbutton3.enabled:=(qry.active=true) and (qry.recordcount>0);
+speedbutton2.enabled:=(qry.active) and (qry.recordcount>0);
+speedbutton3.enabled:=(qry.active) and (qry.recordcount>0);
 end;
 
 procedure Tqryclassexp.FormCreate(Sender: TObject);
@@ -316,7 +319,7 @@ begin
     y2:=yearof(dxDateEdit2.Date);
     with dm.pubqry do
     begin
-        if active=True then close;
+        if active then close;
         commandtext:='select top 1 1 from tb_sysright a,(select obj_id=1,zdesc=''2015'' union all select obj_id=2,zdesc=''2016'' union all select obj_id=3,zdesc=''2017'' union all select obj_id=4,zdesc=''2018'') b';
         commandtext:=commandtext+' where a.type_id=1 and a.sta_id='+inttostr(curuserid)+' and a.obj_id=b.obj_id and b.zdesc='''+Trim(inttostr(y1))+'''';
         commandtext:=commandtext+' union all select top 1 1 from tb_sysright a,(select obj_id=1,zdesc=''2015'' union all select obj_id=2,zdesc=''2016'' union all select obj_id=3,zdesc=''2017'' union all select obj_id=4,zdesc=''2018'') b';
@@ -606,11 +609,11 @@ with qry do
     if (active=false) or (recordcount=0) then exit;
 with dm.pubqry do
 begin
-    if active=true then close;
+    if active then close;
     commandtext:='select top 1 f1 from tb_staff where sta_id='+inttostr(curuserid);
     open;
     if (recordcount=0) or (fields[0].asboolean=False) then raise Exception.Create('无权限发电子邮件');
-    if active=true then close;
+    if active then close;
     commandtext:='select top 1 email from tb_staff where sta_id='+inttostr(dxButtonEdit4.tag);
     open;
     if (recordcount=0) or (fieldbyname('email').asstring='') or (pos('@',fieldbyname('email').asstring)=0)
@@ -648,11 +651,11 @@ var st,ss,sm,sr: string;
 begin
 with dm.pubqry do
 begin
-    if active=true then close;
+    if active then close;
     commandtext:='select top 1 f1 from tb_staff where sta_id='+inttostr(curuserid);
     open;
     if (recordcount=0) or (fields[0].asboolean=False) then raise Exception.Create('无权限发电子邮件');
-    if active=True then close;
+    if active then close;
     commandtext:='select distinct b.sta_id,broker=dbo.fn_staff_name(b.sta_id),c.email'; //email=dbo.fn_getemailbydtlid(b.dtl_id)';
     commandtext:=commandtext+' from tb_bill a';
     commandtext:=commandtext+' inner join tb_bill_dtl b on a.bod_id=b.bod_id';
@@ -713,7 +716,7 @@ begin
 end;
 dxButtonEdit4.Text:='';
 dxButtonEdit4.Tag :=0;
-with qry do if active=True then close;
+with qry do if active then close;
 MessageBox(0,pchar(sr),'请注意',MB_OK+MB_ICONInformation);
 end;
 
@@ -770,12 +773,12 @@ var dtlid: integer; //,mi
     sbodid: string;
 begin
 with qry do
-    if (active=True) and (recordcount>0) then dtlid:=fieldbyname('dtl_id').asinteger else dtlid:=0;
+    if (active) and (recordcount>0) then dtlid:=fieldbyname('dtl_id').asinteger else dtlid:=0;
 if MessageBox(0,'确定开始填补数据','请注意',MB_YESNO+MB_ICONQUESTION)<>IDYES then abort;
 {
 with dm.pubqry do
 begin
-    if active=true then close;
+    if active then close;
     commandtext:='exec sp_getbod2dtldata';   // 此功能已在 sp_updatebod2mate 中实现
     execute;
 end;
@@ -793,11 +796,11 @@ begin
 end;
 with dm.pubqry do
 begin
-    if active=true then close;
+    if active then close;
     commandtext:='select bod_id from tb_bill where bod_id in ('+sbodid+')';
     open;
     first;
-    if pubqry.active=True then pubqry.close;
+    if pubqry.active then pubqry.close;
     pubqry.CommandText:='sp_updatebod2mate '+fieldbyname('bod_id').asstring;
     pubqry.Execute;
 end;
@@ -820,7 +823,7 @@ with qry do
 	if (active=False) or (recordcount=0) then exit;
 with dm.pubqry do
 begin
-    if active=True then close;
+    if active then close;
     commandtext:='select top 1 1 from tb_settlelist a,(select top 1 district from tb_busimate c,tb_bill a where a.bod_id='+qry.fieldbyname('bod_id').asstring+' and c.mate_id=a.dst_id) b';
     commandtext:=commandtext+' where a.settled=1 and year=year('''+qry.fieldbyname('carry_dt').asstring+''')';
     commandtext:=commandtext+' 	and month=month('''+qry.fieldbyname('carry_dt').asstring+''')';
@@ -829,11 +832,14 @@ begin
     open;
     if recordcount>0 then raise Exception.Create('本单购货单位所在区域发生日期年月已结账，不可更改');
 
-    if active=true then close;
+    if active then close;
 	CommandText:='sp_updatebod2mate '+qry.fieldbyname('bod_id').asstring;
 	Execute;
 end;
-refreshmyrecord(qry,dm.Refreshcds,0,'a.bod_id',qry.fieldbyname('bod_id').asinteger);
+//refreshmyrecord(qry,dm.Refreshcds,0,'a.bod_id',qry.fieldbyname('bod_id').asinteger);
+if qry.ReadOnly then qry.ReadOnly:=False;
+refreshmyrecord(qry,dm.Refreshcds,0,'b.dtl_id',qry.fieldbyname('dtl_id').asinteger);
+if qry.ReadOnly then qry.ReadOnly:=True;
 end;
 
 procedure Tqryclassexp.dxDBGrid1CustomDrawCell(Sender: TObject;
@@ -912,6 +918,22 @@ end;
 procedure Tqryclassexp.dxLookupTreeView1DropDown(Sender: TObject);
 begin
 setprogress(1);
+end;
+
+procedure Tqryclassexp.N9Click(Sender: TObject);
+begin
+with qry do
+	if (active=False) or (recordcount=0) then exit;
+with dm.pubqry do
+begin
+    if active then close;
+	CommandText:='update b set mate_name1=c.mate_name1,mate_name2=c.mate_name2,mate_name3=c.mate_name3,mate_name4=c.mate_name4';
+    commandtext:=commandtext+' from tb_bill_dtl b,dbo.fn_suplevelmatename('+qry.fieldbyname('dtl_id').asstring+') c where b.dtl_id='+qry.fieldbyname('dtl_id').asstring;
+	Execute;
+end;
+if qry.ReadOnly then qry.ReadOnly:=False;
+refreshmyrecord(qry,dm.Refreshcds,0,'b.dtl_id',qry.fieldbyname('dtl_id').asinteger);
+if qry.ReadOnly then qry.ReadOnly:=True;
 end;
 
 end.

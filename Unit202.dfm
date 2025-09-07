@@ -1398,7 +1398,9 @@ object qryclassexp: Tqryclassexp
     Style.Edges = [edgLeft, edgTop, edgRight, edgBottom]
     TabOrder = 19
     OnKeyDown = dxEdit1KeyDown
+    Alignment = taCenter
     StyleController = StyleController
+    StoredValues = 1
   end
   object DSqry: TDataSource
     DataSet = qry
@@ -1783,6 +1785,13 @@ object qryclassexp: Tqryclassexp
   object PopupMenu1: TPopupMenu
     Left = 133
     Top = 175
+    object N9: TMenuItem
+      Caption = #37325#31639#21508#32423#21830#19994#20844#21496
+      OnClick = N9Click
+    end
+    object N10: TMenuItem
+      Caption = '-'
+    end
     object N7: TMenuItem
       Caption = #26680#23545#25968#25454
       OnClick = N7Click
