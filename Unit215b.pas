@@ -293,6 +293,10 @@ type
     N17: TMenuItem;
     qryrule_id: TIntegerField;
     dxDBGrid1rule_id: TdxDBGridColumn;
+    qrynot_amot1: TBCDField;
+    qry1not_amot1: TBCDField;
+    qry1bod_type_id: TIntegerField;
+    qry1type_id: TIntegerField;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -487,7 +491,7 @@ end;
 }
 if PageControl1.ActivePage=TabSheet1 then   //客户汇总
 begin
-    setprogress(1);
+//    setprogress(1);
     with qry1 do
     begin
         if active then
@@ -498,11 +502,11 @@ begin
         else sc:='';
 
         //分销采购
-        commandtext:=' select agent_code1,agent1,ZKDGRP,dist1,dist2,bal0=0.00,';
+        commandtext:=' select bod_type_id=max(bod_type_id),type_id=max(type_id),agent_code1,agent1,ZKDGRP,dist1,dist2,bal0=0.00,';
         commandtext:=commandtext+' camot=sum(camot),camot1=sum(camot1),camot3=sum(camot3),';
         commandtext:=commandtext+' ckd_amot=sum(ckd_amot),ckd_amot1=sum(ckd_amot1),ckd_amot2=sum(ckd_amot2),ckd_amot2a=sum(ckd_amot2a),ckd_amot3=sum(ckd_amot3),';
         commandtext:=commandtext+' qty=sum(a.qty),amot=sum(amot),amot1=sum(amot1),amot2=sum(a.amot2),'; //a.price,'; //price10=i.price10,';
-        commandtext:=commandtext+' fee=sum(fee),amot1a=sum(amot1a),not_amot=sum(not_amot),amot5=sum(amot5)';
+        commandtext:=commandtext+' fee=sum(fee),amot1a=sum(amot1a),not_amot=sum(not_amot),not_amot1=sum(not_amot1),amot5=sum(amot5)';
         commandtext:=commandtext+' from (select a.rec_id,dtl_id=0,bod_id=0,a.carry_dt,bod_type_id=0,bod_type=''分销采购'',bod_cd=GBELN,bod_cd1=VBELN,bod_cd2='''',bod_cd3=GBELN,bod_desc='''',bod_desc1='''', ';
         commandtext:=commandtext+' broker_id=cast(ZSALESID_O as int),broker=ZSALESNAM_O,';
         commandtext:=commandtext+' agent_code=a.ASSIGNED_BP,agent=case when i.rec_id>0 then dbo.fn_mate_name(i.agent_id1) else a.NAME_FIRST end,agent_id=c.mate_id,a.ASSIGNED_BP,';
@@ -516,15 +520,16 @@ begin
 //        commandtext:=commandtext+' a.ckd_amot,ckd_amot1=e.amot,a.ckd_amot2,ckd_amot2a=d.amot,a.ckd_amot3,';
 
 //        commandtext:=commandtext+' a.ckd_amot,ckd_amot1=d.amot1,a.ckd_amot2,ckd_amot2a=d.amot,a.ckd_amot3,';    //ckd_amot2a=d.amot,
-        commandtext:=commandtext+' ckd_amot=d.amot2,ckd_amot1=d.amot1,a.ckd_amot2,ckd_amot2a=d.amot,a.ckd_amot3,';    //ckd_amot2a=d.amot,
+        commandtext:=commandtext+' ckd_amot=case when d.amot1<isnull(d.amot2,0) then d.amot1 else d.amot2 end,ckd_amot1=d.amot1,a.ckd_amot2,ckd_amot2a=d.amot,a.ckd_amot3,';    //ckd_amot2a=d.amot,
         commandtext:=commandtext+' a.qty,price=cast(ZPR03 as decimal(15,4)),amot=cast(a.qty*cast(ZPR03 as decimal(15,4)) as decimal(15,2)),amot1=cast(a.amot1 as decimal(15,2)),amot2=cast(a.amot2 as decimal(15,2)),price1=cast(a.KONV as decimal(15,4)),'; //a.price,'; //price10=i.price10,';
         //dbo].[fn_getprice1a](@provcode varchar(10),@citycode varchar(10),@materialcode varchar(20),@dt datetime)
         commandtext:=commandtext+' price10=dbo.fn_getprice1a(ZREGIO,ZCITYNUM,a.MATNR,a.carry_dt),'; //
         commandtext:=commandtext+' i.type_id,i.type_id2,i.rate,i.rate1,fee=cast(i.fee as decimal(15,4)),amot1a=cast(i.amot as decimal(15,4)),cprice1=i.price1,cprice2=i.price2,fee_type_id=0,';
 //        commandtext:=commandtext+' not_amot=cast((isnull(i.amot,0)+isnull(i.fee,0))*a.qty-isnull(a.ckd_amot,0) as decimal(15,2))';
-        commandtext:=commandtext+' not_amot=cast((isnull(i.amot,0)+isnull(i.fee,0))*a.qty-isnull(d.amot2,0) as decimal(15,2))';
+        commandtext:=commandtext+' not_amot=cast((isnull(i.amot,0)+isnull(i.fee,0))*a.qty-case when d.amot1<isnull(d.amot2,0) then d.amot1 else d.amot2 end as decimal(15,2)),';   //未付款金额
+        commandtext:=commandtext+' not_amot1=cast((isnull(i.amot,0)+isnull(i.fee,0))*a.qty-isnull(d.amot,0) as decimal(15,2)),';   //未申请金额
 //        commandtext:=commandtext+' not_amot=cast((isnull(i.amot,0)+isnull(i.fee,0))*a.qty-isnull(a.ckd_amot,0) as decimal(15,2))';
-        commandtext:=commandtext+' ,amot5=cast(case when cast(a.KONV as decimal(15,4))=0 then 0 else cast(a.amot1/cast(a.KONV as decimal(15,4)) as decimal(15,2))*i.amot end as decimal(15,2))'; //-isnull(a.ckd_amot,0)';
+        commandtext:=commandtext+' amot5=cast(case when cast(a.KONV as decimal(15,4))=0 then 0 else cast(a.amot1/cast(a.KONV as decimal(15,4)) as decimal(15,2))*i.amot end as decimal(15,2))'; //-isnull(a.ckd_amot,0)';
 
         commandtext:=commandtext+' from SAP_ZSD_015 a';
         commandtext:=commandtext+' left join (select mate_id,mate_code,mate_name from tb_busimate where mate_type_id=2) b on a.NAME1=b.mate_name';
@@ -548,9 +553,11 @@ begin
         commandtext:=commandtext+' 	where a.bod_type_id=37 and b.type_id=0 group by b.med_id,isnull(b.rule_id,0)) d'; //bod_type_id=37 其他支出核销单(付款申请)
         commandtext:=commandtext+'      on d.med_id=a.rec_id and d.rule_id=i.rule_id';
 }
-        commandtext:=commandtext+' left join (select b.med_id,rule_id=isnull(b.rule_id,0),amot=sum(cast(b.amot as decimal(15,2))),amot1=sum(case when a.bod_status_id=1 then 1 else 0 end*cast(b.amot as decimal(15,2))),amot2=sum(cast(c.amot as decimal(15,2)))';
+        commandtext:=commandtext+' left join (select b.med_id,rule_id=isnull(b.rule_id,0),amot=sum(cast(b.amot as decimal(15,2))),amot1=sum(case when a.bod_status_id=1 then 1 else 0 end*cast(b.amot as decimal(15,2))),';
+        commandtext:=commandtext+'  amot2=sum(case when c.cnt>0 then 1 else 0 end*case when a.bod_status_id=1 then 1 else 0 end*cast(b.amot as decimal(15,2)))';
         commandtext:=commandtext+' 	from tb_bill a join tb_bill_dtl b on a.bod_id=b.bod_id';
-        commandtext:=commandtext+'  left join (select b.med_id,amot=sum(b.amot) from tb_bill a,tb_bill_dtl b where a.bod_type_id=30 and a.bod_status_id=1 and a.bod_id=b.bod_id group by b.med_id) c on a.bod_id=c.med_id'; //bod_type_id=30 其他支出出纳付款单
+//        commandtext:=commandtext+'  left join (select b.med_id,amot=sum(b.amot) from tb_bill a,tb_bill_dtl b where a.bod_type_id=30 and a.bod_status_id=1 and a.bod_id=b.bod_id group by b.med_id) c on a.bod_id=c.med_id'; //bod_type_id=30 其他支出出纳付款单
+        commandtext:=commandtext+'  left join (select b.med_id,cnt=count(1) from tb_bill a,tb_bill_dtl b where a.bod_type_id=30 and a.bod_status_id=1 and a.bod_id=b.bod_id group by b.med_id) c on a.bod_id=c.med_id'; //bod_type_id=30 其他支出出纳付款单
         commandtext:=commandtext+' 	where a.bod_type_id=37 and b.type_id=0 group by b.med_id,isnull(b.rule_id,0)) d'; //bod_type_id=37 其他支出核销单(付款申请)
 //        commandtext:=commandtext+'      on d.med_id=a.rec_id and (d.rule_id=i.rule_id or isnull(d.rule_id,0)=0)';
         commandtext:=commandtext+'      on d.med_id=a.rec_id and d.rule_id=i.rule_id';
@@ -584,9 +591,10 @@ begin
 
         commandtext:=commandtext+' z.ckd_amot,y.ckd_amot1,a.ckd_amot2,y.ckd_amot2a,h.ckd_amot3,';    //h.amot1,
         commandtext:=commandtext+' qty=0,price=0,amot=cast(a.bod_amot as decimal(15,2)),amot1=0.00,amot2=0.00,price1=0,price10=0,';
-        commandtext:=commandtext+' type_id=0,type_id2=0,rate=0,rate1=0,fee=0,amot1a=0,cprice1=0,cprice2=0,fee_type_id=0';
-        commandtext:=commandtext+' ,not_amot=cast(a.bod_amot-isnull(z.ckd_amot,0) as decimal(15,2))';
-        commandtext:=commandtext+' ,amot5=cast(a.bod_amot as decimal(15,2))'; //-isnull(z.ckd_amot,0)';
+        commandtext:=commandtext+' type_id=0,type_id2=0,rate=0,rate1=0,fee=0,amot1a=0,cprice1=0,cprice2=0,fee_type_id=0,';
+        commandtext:=commandtext+' not_amot=cast(a.bod_amot-isnull(z.ckd_amot,0) as decimal(15,2)),';
+        commandtext:=commandtext+' not_amot1=cast(a.bod_amot-isnull(y.ckd_amot2a,0) as decimal(15,2)),';
+        commandtext:=commandtext+' amot5=cast(a.bod_amot as decimal(15,2))'; //-isnull(z.ckd_amot,0)';
         commandtext:=commandtext+' from tb_bill a';
         commandtext:=commandtext+' left join tb_bill_stadtl h on a.bod_id=h.bod_id';
         commandtext:=commandtext+' left join tb_staff d on a.creat_by=d.sta_id';
@@ -621,7 +629,7 @@ begin
         if fdistltd then commandtext:=commandtext+' and exists (select 1 from tb_trustdistrict s,tb_treedata t where s.sta_id='+inttostr(curuserid)+' and t.rec_id=e.district and (t.rec_id=s.dist_id or t.parent=s.dist_id))';
         if fmedltd  then commandtext:=commandtext+' and exists (select 1 from tb_trustmed t where t.sta_id='+inttostr(curuserid)+' and a.med_id=t.med_id)';
 
-
+{
         if RadioGroup3.ItemIndex=1 then commandtext:=commandtext+'  and a.bod_amot=z.ckd_amot'; //已完成收款
         if RadioGroup3.ItemIndex=2 then commandtext:=commandtext+'  and a.bod_amot<>isnull(z.ckd_amot,0)'; //未完成收款
         if RadioGroup3.ItemIndex=3 then commandtext:=commandtext+'  and (1=2)'; //两票其他支出记账单 无促销规则
@@ -630,14 +638,25 @@ begin
             commandtext:=commandtext+' and not exists (select 1 from (select b.med_id,ckd_amot2a=sum(cast(b.amot as decimal(15,2))) from tb_bill a,tb_bill_dtl b where a.bod_type_id=37 and a.bod_status_id in (0,2,3,5) and a.bod_id=b.bod_id';   //1,
             commandtext:=commandtext+' 		and b.type_id=36 group by b.med_id) x where x.med_id=h.bod_id and a.bod_amot=isnull(h.ckd_amot2a,0))';
         end;
+}
         commandtext:=commandtext+' ) a group by agent_code1,agent1,ZKDGRP,dist1,dist2';
-{
+
         if sqry<>'' then
         begin
             commandtext:='select * from ( '+commandtext+' ) a where '+sqry; // VTEXT=''分销''';
             sqry:='';
+        end
+        else if RadioGroup3.ItemIndex>0 then
+        begin
+            commandtext:='select * from ( '+commandtext+' ) a where';
+            case RadioGroup3.ItemIndex of
+                1:  commandtext:=commandtext+' not_amot=0';
+                2:  commandtext:=commandtext+' not_amot<>0';
+                3:  commandtext:=commandtext+' bod_type_id=0 and type_id=0';
+                4:  commandtext:=commandtext+' not_amot1<>0';
+            end;
         end;
-}
+
         edit3.text:=commandtext;
         try
             setprogress(1);
@@ -650,7 +669,7 @@ begin
 end
 else //明细核销
 begin
-    setprogress(1);
+//    setprogress(1);
     with qry do
     begin
         if active then
@@ -669,14 +688,15 @@ begin
         commandtext:=commandtext+' stoppay=cast(0 as bit), a.VTEXT,a.ZKDGRP,dist1=ZZREGION, dist2=ZCITYNAME, level1=ZBEZEI,';  //ZCITYNAME
         commandtext:=commandtext+' creater=ZTERNAM,dst_id=b.mate_id,mate_name=NAME1,b.mate_id,BSTKD,material_code=a.MATNR,med_code='''',med_name=ARKTX,specifi=ZGG,pdt_place=ZSCQY,med_unit='''',type_id1=0,bat_cd=CHARG,';
 //        commandtext:=commandtext+' a.ckd_amot,ckd_amot1=e.amot,a.ckd_amot2,ckd_amot2a=d.amot,a.ckd_amot3,';
-        commandtext:=commandtext+' ckd_amot=d.amot2,ckd_amot1=d.amot1,a.ckd_amot2,ckd_amot2a=d.amot,a.ckd_amot3,';    //ckd_amot2a=d.amot,
+        commandtext:=commandtext+' ckd_amot=case when d.amot1<isnull(d.amot2,0) then d.amot1 else d.amot2 end,ckd_amot1=d.amot1,a.ckd_amot2,ckd_amot2a=d.amot,a.ckd_amot3,';    //ckd_amot2a=d.amot,
         commandtext:=commandtext+' a.qty,price=cast(ZPR03 as decimal(15,4)),amot=cast(a.qty*cast(ZPR03 as decimal(15,4)) as decimal(15,2)),amot1=cast(a.amot1 as decimal(15,2)),amot2=cast(a.amot2 as decimal(15,2)),price1=cast(a.KONV as decimal(15,4)),'; //a.price,'; //price10=i.price10,';
         //dbo].[fn_getprice1a](@provcode varchar(10),@citycode varchar(10),@materialcode varchar(20),@dt datetime)
         commandtext:=commandtext+' price10=dbo.fn_getprice1a(ZREGIO,ZCITYNUM,a.MATNR,a.carry_dt),'; //
         commandtext:=commandtext+' i.type_id,i.type_id2,i.rate,i.rate1,fee=cast(i.fee as decimal(15,4)),amot1a=cast(i.amot as decimal(15,4)),cprice1=i.price1,cprice2=i.price2,fee_type_id=0,';
 //        commandtext:=commandtext+' not_amot=cast((isnull(i.amot,0)+isnull(i.fee,0))*a.qty-isnull(a.ckd_amot,0) as decimal(15,2))';
-        commandtext:=commandtext+' not_amot=cast((isnull(i.amot,0)+isnull(i.fee,0))*a.qty-isnull(d.amot2,0) as decimal(15,2))';
-        commandtext:=commandtext+' ,amot5=cast(case when cast(a.KONV as decimal(15,4))=0 then 0 else cast(a.amot1/cast(a.KONV as decimal(15,4)) as decimal(15,2))*i.amot end as decimal(15,2))'; //-isnull(a.ckd_amot,0)';
+        commandtext:=commandtext+' not_amot=cast((isnull(i.amot,0)+isnull(i.fee,0))*a.qty-case when d.amot1<isnull(d.amot2,0) then d.amot1 else d.amot2 end as decimal(15,2)),';
+        commandtext:=commandtext+' not_amot1=cast((isnull(i.amot,0)+isnull(i.fee,0))*a.qty-isnull(d.amot,0) as decimal(15,2)),';   //未申请金额
+        commandtext:=commandtext+' amot5=cast(case when cast(a.KONV as decimal(15,4))=0 then 0 else cast(a.amot1/cast(a.KONV as decimal(15,4)) as decimal(15,2))*i.amot end as decimal(15,2))'; //-isnull(a.ckd_amot,0)';
 
         commandtext:=commandtext+' from SAP_ZSD_015 a';
         commandtext:=commandtext+' left join (select mate_id,mate_code,mate_name from tb_busimate where mate_type_id=2) b on a.NAME1=b.mate_name';
@@ -701,9 +721,12 @@ begin
         commandtext:=commandtext+' 	where a.bod_type_id=37 and b.type_id=0 group by b.med_id,isnull(b.rule_id,0)) d'; //bod_type_id=37 其他支出核销单(付款申请)
         commandtext:=commandtext+'      on d.med_id=a.rec_id and d.rule_id=i.rule_id';
 }
-        commandtext:=commandtext+' left join (select b.med_id,rule_id=isnull(b.rule_id,0),amot=sum(cast(b.amot as decimal(15,2))),amot1=sum(case when a.bod_status_id=1 then 1 else 0 end*cast(b.amot as decimal(15,2))),amot2=sum(cast(c.amot as decimal(15,2)))';
+        commandtext:=commandtext+' left join (select b.med_id,rule_id=isnull(b.rule_id,0),amot=sum(cast(b.amot as decimal(15,2))),amot1=sum(case when a.bod_status_id=1 then 1 else 0 end*cast(b.amot as decimal(15,2))),';
+        commandtext:=commandtext+'  amot2=sum(case when c.cnt>0 then 1 else 0 end*case when a.bod_status_id=1 then 1 else 0 end*cast(b.amot as decimal(15,2)))';
         commandtext:=commandtext+' 	from tb_bill a join tb_bill_dtl b on a.bod_id=b.bod_id';
-        commandtext:=commandtext+'  left join (select b.med_id,amot=sum(b.amot) from tb_bill a,tb_bill_dtl b where a.bod_type_id=30 and a.bod_status_id=1 and a.bod_id=b.bod_id group by b.med_id) c on a.bod_id=c.med_id'; //bod_type_id=30 其他支出出纳付款单
+//        commandtext:=commandtext+'  left join (select b.med_id,amot=sum(b.amot) from tb_bill a,tb_bill_dtl b where a.bod_type_id=30 and a.bod_status_id=1 and a.bod_id=b.bod_id group by b.med_id) c on a.bod_id=c.med_id'; //bod_type_id=30 其他支出出纳付款单
+        commandtext:=commandtext+'  left join (select b.med_id,cnt=count(1) from tb_bill a,tb_bill_dtl b where a.bod_type_id=30 and a.bod_status_id=1 and a.bod_id=b.bod_id group by b.med_id) c on a.bod_id=c.med_id'; //bod_type_id=30 其他支出出纳付款单
+
         commandtext:=commandtext+' 	where a.bod_type_id=37 and b.type_id=0 group by b.med_id,isnull(b.rule_id,0)) d'; //bod_type_id=37 其他支出核销单(付款申请)
 //        commandtext:=commandtext+'      on d.med_id=a.rec_id and (d.rule_id=i.rule_id or isnull(d.rule_id,0)=0)';
         commandtext:=commandtext+'      on d.med_id=a.rec_id and d.rule_id=i.rule_id';
@@ -725,9 +748,10 @@ begin
         commandtext:=commandtext+' creater=d.zname,a.dst_id,e.mate_name,e.mate_id,BSTKD='''',m.material_code,m.med_code,m.med_name,m.specifi,m.pdt_place,med_unit=dbo.fn_obj_desc(m.unit_id),m.type_id1,bat_cd='''',';
         commandtext:=commandtext+' z.ckd_amot,y.ckd_amot1,a.ckd_amot2,y.ckd_amot2a,h.ckd_amot3,';    //h.amot1,
         commandtext:=commandtext+' qty=0,price=0,amot=cast(a.bod_amot as decimal(15,2)),amot1=0.00,amot2=0.00,price1=0,price10=0,';
-        commandtext:=commandtext+' type_id=0,type_id2=0,rate=0,rate1=0,fee=0,amot1a=0,cprice1=0,cprice2=0,fee_type_id=0';
-        commandtext:=commandtext+' ,not_amot=cast(a.bod_amot-isnull(z.ckd_amot,0) as decimal(15,2))';
-        commandtext:=commandtext+' ,amot5=cast(a.bod_amot as decimal(15,2))'; //-isnull(z.ckd_amot,0)';
+        commandtext:=commandtext+' type_id=0,type_id2=0,rate=0,rate1=0,fee=0,amot1a=0,cprice1=0,cprice2=0,fee_type_id=0,';
+        commandtext:=commandtext+' not_amot=cast(a.bod_amot-isnull(z.ckd_amot,0) as decimal(15,2)),';
+        commandtext:=commandtext+' not_amot1=cast(a.bod_amot-isnull(y.ckd_amot2a,0) as decimal(15,2)),';
+        commandtext:=commandtext+' amot5=cast(a.bod_amot as decimal(15,2))'; //-isnull(z.ckd_amot,0)';
         commandtext:=commandtext+' from tb_bill a';
         commandtext:=commandtext+' left join tb_bill_stadtl h on a.bod_id=h.bod_id';
         commandtext:=commandtext+' left join tb_staff d on a.creat_by=d.sta_id';
@@ -762,7 +786,7 @@ begin
         if fdistltd then commandtext:=commandtext+' and exists (select 1 from tb_trustdistrict s,tb_treedata t where s.sta_id='+inttostr(curuserid)+' and t.rec_id=e.district and (t.rec_id=s.dist_id or t.parent=s.dist_id))';
         if fmedltd  then commandtext:=commandtext+' and exists (select 1 from tb_trustmed t where t.sta_id='+inttostr(curuserid)+' and a.med_id=t.med_id)';
 
-
+{
         if RadioGroup3.ItemIndex=1 then commandtext:=commandtext+'  and a.bod_amot=z.ckd_amot'; //已完成收款
         if RadioGroup3.ItemIndex=2 then commandtext:=commandtext+'  and a.bod_amot<>isnull(z.ckd_amot,0)'; //未完成收款
         if RadioGroup3.ItemIndex=3 then commandtext:=commandtext+'  and (1=2)'; //两票其他支出记账单 无促销规则
@@ -771,13 +795,33 @@ begin
             commandtext:=commandtext+' and not exists (select 1 from (select b.med_id,ckd_amot2a=sum(cast(b.amot as decimal(15,2))) from tb_bill a,tb_bill_dtl b where a.bod_type_id=37 and a.bod_status_id in (0,2,3,5) and a.bod_id=b.bod_id';   //1,
             commandtext:=commandtext+' 		and b.type_id=36 group by b.med_id) x where x.med_id=h.bod_id and a.bod_amot=isnull(h.ckd_amot2a,0))';
         end;
+}
         // notice: union 得到的数据 Clientdataset 在post时，报read only 错误，所以要修改tb_bill.ckd_amot2字段，再inner join一下tb_bill
+{
         if sqry<>'' then
         begin
             commandtext:='select * from ( '+commandtext+' ) a where '+sqry; // VTEXT=''分销''';
             sqry:='';
         end;
-        edit3.text:=commandtext;
+}
+        if sqry<>'' then
+        begin
+            commandtext:='select * from ( '+commandtext+' ) a where '+sqry; // VTEXT=''分销''';
+            sqry:='';
+        end
+        else if RadioGroup3.ItemIndex>0 then
+        begin
+            commandtext:='select * from ( '+commandtext+' ) a where';
+            case RadioGroup3.ItemIndex of
+                1:  commandtext:=commandtext+' not_amot=0';
+                2:  commandtext:=commandtext+' not_amot<>0';
+                3:  commandtext:=commandtext+' bod_type_id=0 and type_id=0';
+                4:  commandtext:=commandtext+' not_amot1<>0';
+            end;
+        end;
+
+edit3.text:=commandtext;
+//exit;
         try
             setprogress(1);
             open;

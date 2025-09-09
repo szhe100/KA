@@ -2197,6 +2197,13 @@ object setexpaycheck: Tsetexpaycheck
       EditFormat = '########0.00;; '
       Size = 2
     end
+    object qrynot_amot1: TBCDField
+      DisplayLabel = #26410#30003#35831#37329#39069
+      FieldName = 'not_amot1'
+      DisplayFormat = '###,###,##0.00;; '
+      EditFormat = '########0.00;; '
+      Size = 2
+    end
     object qryamot2: TBCDField
       DisplayLabel = #38144#21806#37329#39069
       FieldName = 'amot2'
@@ -2289,8 +2296,8 @@ object setexpaycheck: Tsetexpaycheck
     ButtonStyle = btsSimple
     Edges = [edgBottom]
     HotTrack = True
-    Left = 511
-    Top = 34
+    Left = 631
+    Top = 26
   end
   object ADOQuery1: TADOQuery
     ConnectionString = 
@@ -2407,8 +2414,8 @@ object setexpaycheck: Tsetexpaycheck
     end
   end
   object ImageList: TImageList
-    Left = 480
-    Top = 34
+    Left = 600
+    Top = 26
     Bitmap = {
       494C010103000500040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
@@ -2690,6 +2697,14 @@ object setexpaycheck: Tsetexpaycheck
     OnCalcFields = qry1CalcFields
     Left = 56
     Top = 258
+    object qry1bod_type_id: TIntegerField
+      FieldName = 'bod_type_id'
+      ReadOnly = True
+    end
+    object qry1type_id: TIntegerField
+      FieldName = 'type_id'
+      ReadOnly = True
+    end
     object qry1agent_code1: TStringField
       DisplayLabel = #26126#32454#19994#21153#36127#36131#20154#32534#30721
       FieldName = 'agent_code1'
@@ -2858,6 +2873,13 @@ object setexpaycheck: Tsetexpaycheck
     object BCDField25: TBCDField
       DisplayLabel = #26410#20184#27454#37329#39069
       FieldName = 'not_amot'
+      DisplayFormat = '###,###,##0.00;; '
+      EditFormat = '########0.00;; '
+      Size = 2
+    end
+    object qry1not_amot1: TBCDField
+      DisplayLabel = #26410#30003#35831#37329#39069
+      FieldName = 'not_amot1'
       DisplayFormat = '###,###,##0.00;; '
       EditFormat = '########0.00;; '
       Size = 2
