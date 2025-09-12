@@ -128,10 +128,10 @@ type
     dxDBGrid1bod_desc: TdxDBGridMaskColumn;
     dxDBGrid1bod_amot: TdxDBGridMaskColumn;
     dxDBGrid1creater: TdxDBGridMaskColumn;
-    dxDBGrid1creat_dt: TdxDBGridDateColumn;
     dxDBGrid1checker: TdxDBGridMaskColumn;
-    dxDBGrid1check_dt: TdxDBGridDateColumn;
     dxDBGrid1Column11: TdxDBGridColumn;
+    dxDBGrid1creat_dt: TdxDBGridColumn;
+    dxDBGrid1check_dt: TdxDBGridColumn;
     procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);

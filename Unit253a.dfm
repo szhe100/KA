@@ -278,29 +278,30 @@ object setexpaybook1: Tsetexpaybook1
           SummaryField = 'bod_amot'
         end
         object dxDBGrid1creater: TdxDBGridMaskColumn
-          Width = 45
+          Width = 60
           BandIndex = 0
           RowIndex = 0
           FieldName = 'creater'
         end
-        object dxDBGrid1creat_dt: TdxDBGridDateColumn
-          Width = 78
+        object dxDBGrid1creat_dt: TdxDBGridColumn
+          Caption = #21046#21333#26102#38388
+          Width = 120
           BandIndex = 0
           RowIndex = 0
           FieldName = 'creat_dt'
         end
         object dxDBGrid1checker: TdxDBGridMaskColumn
-          Width = 45
+          Width = 60
           BandIndex = 0
           RowIndex = 0
           FieldName = 'checker'
         end
-        object dxDBGrid1check_dt: TdxDBGridDateColumn
-          Width = 70
+        object dxDBGrid1check_dt: TdxDBGridColumn
+          Caption = #23457#26680#26102#38388
+          Width = 120
           BandIndex = 0
           RowIndex = 0
           FieldName = 'check_dt'
-          DisableFilter = True
         end
         object dxDBGrid1Column11: TdxDBGridColumn
           Sorted = csDown

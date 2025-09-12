@@ -72,7 +72,7 @@ type
     DBText15: TDBText;
     billreceipt_by: TIntegerField;
     DBText16: TDBText;
-    dxDBGrid1Column11: TdxDBGridColumn;
+    dxDBGrid1bod_id: TdxDBGridColumn;
     billbroker_id: TIntegerField;
     DBText14: TDBText;
     billdst_id: TIntegerField;
@@ -151,6 +151,7 @@ type
     N2: TMenuItem;
     dxDBGrid1creat_dt: TdxDBGridColumn;
     dxDBGrid1check_dt: TdxDBGridColumn;
+    dxDBGrid1bod_status_id: TdxDBGridColumn;
     procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);

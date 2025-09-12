@@ -154,7 +154,7 @@ object setmedexport: Tsetmedexport
       object dxDBGrid1: TdxDBGrid
         Left = 0
         Top = 0
-        Width = 887
+        Width = 917
         Height = 386
         Bands = <
           item
@@ -179,7 +179,7 @@ object setmedexport: Tsetmedexport
         HighlightColor = clAqua
         HighlightTextColor = clBlack
         LookAndFeel = lfUltraFlat
-        OptionsBehavior = [edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoImmediateEditor, edgoMultiSelect, edgoTabThrough, edgoVertThrough]
+        OptionsBehavior = [edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoImmediateEditor, edgoMultiSelect, edgoMultiSort, edgoTabThrough, edgoVertThrough]
         OptionsDB = [edgoCancelOnExit, edgoCanDelete, edgoCanInsert, edgoCanNavigation, edgoConfirmDelete, edgoLoadAllRecords, edgoSmartReload, edgoUseBookmarks]
         OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoInvertSelect, edgoUseBitmap]
         OnCustomDrawCell = dxDBGrid1CustomDrawCell

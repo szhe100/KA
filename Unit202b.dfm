@@ -556,6 +556,14 @@ object qryclassexp2: Tqryclassexp2
     Font.Style = []
     ParentFont = False
   end
+  object Shape11: TShape
+    Left = 896
+    Top = 8
+    Width = 33
+    Height = 33
+    Brush.Color = 11589887
+    Visible = False
+  end
   object RadioGroup2: TRadioGroup
     Left = 517
     Top = 0
@@ -1002,7 +1010,7 @@ object qryclassexp2: Tqryclassexp2
           SummaryField = 'dtl_id'
           SummaryFormat = '###,##0;; '
         end
-        object dxDBGrid2Cbusitype1: TdxDBGridColumn
+        object dxDBGrid2Ctype: TdxDBGridColumn
           Alignment = taCenter
           Width = 69
           BandIndex = 0
@@ -1674,7 +1682,8 @@ object qryclassexp2: Tqryclassexp2
       DisplayLabel = #20986#24211#25968#37327
       FieldName = 'qty'
       ReadOnly = True
-      DisplayFormat = '###,###,###;; '
+      DisplayFormat = '###,###,##0;; '
+      EditFormat = '#########;; '
       Precision = 26
     end
     object qrydiscount: TBCDField
@@ -1688,6 +1697,7 @@ object qryclassexp2: Tqryclassexp2
       FieldName = 'amot'
       ReadOnly = True
       DisplayFormat = '###,###,##0.00;; '
+      EditFormat = '########0.00;; '
       Precision = 26
       Size = 2
     end
@@ -1696,6 +1706,7 @@ object qryclassexp2: Tqryclassexp2
       FieldKind = fkCalculated
       FieldName = 'Camot1'
       DisplayFormat = '###,###,##0.00;; '
+      EditFormat = '########0.00;; '
       Calculated = True
     end
     object qryCamot2: TFloatField
@@ -1703,18 +1714,21 @@ object qryclassexp2: Tqryclassexp2
       FieldKind = fkCalculated
       FieldName = 'Camot2'
       DisplayFormat = '###,###,##0.00;; '
+      EditFormat = '########0.00;; '
       Calculated = True
     end
     object qryprice3: TBCDField
       DisplayLabel = #21830#19994#20215
       FieldName = 'price3'
       DisplayFormat = '###,###,##0.00;; '
+      EditFormat = '########0.00;; '
     end
     object qryCamot3: TFloatField
       DisplayLabel = #21830#19994#37329#39069
       FieldKind = fkCalculated
       FieldName = 'Camot3'
       DisplayFormat = '###,###,##0.00;; '
+      EditFormat = '########0.00;; '
       Calculated = True
     end
     object qrycost: TBCDField
@@ -1722,6 +1736,7 @@ object qryclassexp2: Tqryclassexp2
       FieldName = 'cost'
       ReadOnly = True
       DisplayFormat = '###,###,##0.00;; '
+      EditFormat = '########0.00;; '
       Precision = 32
       Size = 8
     end
@@ -1730,6 +1745,7 @@ object qryclassexp2: Tqryclassexp2
       FieldName = 'profit'
       ReadOnly = True
       DisplayFormat = '###,###,##0.00;; '
+      EditFormat = '########0.00;; '
       Precision = 32
       Size = 8
     end
@@ -1738,6 +1754,7 @@ object qryclassexp2: Tqryclassexp2
       FieldName = 'prate'
       ReadOnly = True
       DisplayFormat = '##0.00%;; '
+      EditFormat = '##0.00;; '
       Precision = 32
       Size = 6
     end

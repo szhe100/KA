@@ -155,7 +155,6 @@ type
     bill_dtlmaterial_code: TStringField;
     dxDBGrid2material_code: TdxDBGridColumn;
     dxDBGrid1: TdxDBGrid;
-    dxDBGrid1creat_dt: TdxDBGridDateColumn;
     dxDBGrid1bod_cd: TdxDBGridMaskColumn;
     dxDBGrid1Cbod_status: TdxDBGridMaskColumn;
     dxDBGrid1mate_name: TdxDBGridColumn;
@@ -169,6 +168,9 @@ type
     dxDBGrid1bod_status_id: TdxDBGridColumn;
     dxDBGrid1creat_by: TdxDBGridColumn;
     GIFimage2: TRxGIFAnimator;
+    dxDBGrid1creat_dt: TdxDBGridColumn;
+    N2: TMenuItem;
+    N3: TMenuItem;
     procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -208,6 +210,7 @@ type
     procedure bill_dtlBeforePost(DataSet: TDataSet);
     procedure N6Click(Sender: TObject);
     procedure N1Click(Sender: TObject);
+    procedure N3Click(Sender: TObject);
   private
     { Private declarations }
     procedure setupdatestatus;
@@ -780,11 +783,56 @@ setprogress(1);
 with dm.pubqry do
 begin
     if active then close;
-    commandtext:='update tb_bill set bod_status_id=3 where bod_id in ('+t+')';
+    commandtext:='update tb_bill set bod_status_id=2 where bod_id in ('+t+')';
     execute;
     SpeedButton5Click(nil);
     MessageBox(0,pchar('所选单据已成功送审核'),'请注意',MB_OK+MB_ICONInformation);
 end;
+end;
+
+procedure Tsetexpayrec.N3Click(Sender: TObject);
+var mi,j,k,l,i : integer;
+    s,t : string;
+begin
+if (bill.active=false) or (bill.recordcount=0) then exit;
+s:=''+ #13#10;  t:='';
+mi:=0;
+if dxDBGrid1.SelectedCount<2 then
+begin
+    if (bill.fieldbyname('bod_status_id').asinteger=0) then
+    begin
+        s:= s + #13#10 + bill.fieldbyname('bod_cd').asstring;
+        t:= t + bill.fieldbyname('bod_id').asstring;
+        mi:=1;
+    end;
+end
+else
+begin
+    j := dxDBGrid1.ColumnByFieldName('bod_status_id').Index;
+    k := dxDBGrid1.ColumnByFieldName('bod_cd').Index;
+    l := dxDBGrid1.ColumnByFieldName('bod_id').Index;
+    for i:= 0 to dxDBGrid1.SelectedCount - 1 do
+    begin
+        if (dxDBGrid1.SelectedNodes[i].Values[j]=0) then
+        begin
+            s:= s + #13#10 + dxDBGrid1.SelectedNodes[i].Strings[k];
+            t:= t + ','+dxDBGrid1.SelectedNodes[i].Strings[l];
+            mi := mi+1;
+        end;
+    end;
+    delete(t,1,1);  //删除 t 首字符 ','
+end;
+if mi=0 then raise Exception.Create('选择单据无效(仅制单状态单据可删除)');
+if MessageBox(0,'确定删除所选单据','请注意',MB_YESNO+MB_ICONQUESTION)<>IDYES then abort;
+setprogress(1);
+//SpeedButton2.enabled:=false; // 避免连续按两次
+with dm.pubqry do
+begin
+    if active then close;
+    commandtext:='update tb_bill set bod_type_id=bod_type_id+100,delete_by='+inttostr(curuserid)+',delete_dt=getdate() where bod_id in ('+t+')';
+    execute;
+end;
+SpeedButton5Click(nil);  //刷新
 end;
 
 end.

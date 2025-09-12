@@ -167,6 +167,7 @@ object setexpaybook2: Tsetexpaybook2
         SummaryGroups = <>
         SummarySeparator = ', '
         Align = alClient
+        PopupMenu = PopupMenu1
         TabOrder = 0
         OnDblClick = dxDBGrid1DblClick
         DataSource = DSbill
@@ -178,16 +179,16 @@ object setexpaybook2: Tsetexpaybook2
         HighlightColor = clAqua
         HighlightTextColor = clBlack
         LookAndFeel = lfUltraFlat
-        OptionsBehavior = [edgoAnsiSort, edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoImmediateEditor, edgoTabThrough, edgoVertThrough]
+        OptionsBehavior = [edgoAnsiSort, edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoImmediateEditor, edgoMultiSelect, edgoMultiSort, edgoTabThrough, edgoVertThrough]
         OptionsDB = [edgoCancelOnExit, edgoCanDelete, edgoCanInsert, edgoCanNavigation, edgoConfirmDelete, edgoLoadAllRecords, edgoSmartReload, edgoUseBookmarks]
         OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoRowSelect, edgoUseBitmap]
         OnCustomDrawCell = dxDBGrid1CustomDrawCell
-        object dxDBGrid1creat_dt: TdxDBGridDateColumn
-          Width = 78
+        object dxDBGrid1creat_dt: TdxDBGridColumn
+          Caption = #21046#21333#26102#38388
+          Width = 120
           BandIndex = 0
           RowIndex = 0
           FieldName = 'creat_dt'
-          DisableFilter = True
         end
         object dxDBGrid1bod_cd: TdxDBGridMaskColumn
           Alignment = taCenter
@@ -202,7 +203,6 @@ object setexpaybook2: Tsetexpaybook2
           FieldName = 'bod_cd'
           SummaryFooterType = cstCount
           SummaryFooterFormat = '##,###'#21333
-          DisableFilter = True
         end
         object dxDBGrid1Cbod_status: TdxDBGridMaskColumn
           Alignment = taCenter
@@ -260,11 +260,10 @@ object setexpaybook2: Tsetexpaybook2
           FieldName = 'Cmed'
         end
         object dxDBGrid1bod_desc: TdxDBGridMaskColumn
-          Width = 60
+          Width = 69
           BandIndex = 0
           RowIndex = 0
           FieldName = 'bod_desc'
-          DisableFilter = True
         end
         object dxDBGrid1bod_amot: TdxDBGridMaskColumn
           Caption = #37329#39069
@@ -275,7 +274,6 @@ object setexpaybook2: Tsetexpaybook2
           SummaryFooterType = cstSum
           SummaryFooterField = 'bod_amot'
           SummaryFooterFormat = '###,###,##0.00;; '
-          DisableFilter = True
           SummaryType = cstSum
           SummaryField = 'bod_amot'
         end
@@ -291,20 +289,25 @@ object setexpaybook2: Tsetexpaybook2
           RowIndex = 0
           FieldName = 'checker'
         end
-        object dxDBGrid1check_dt: TdxDBGridDateColumn
-          Width = 70
+        object dxDBGrid1check_dt: TdxDBGridColumn
+          Caption = #23457#26680#26102#38388
+          Width = 120
           BandIndex = 0
           RowIndex = 0
           FieldName = 'check_dt'
-          DisableFilter = True
         end
-        object dxDBGrid1Column11: TdxDBGridColumn
-          Sorted = csDown
+        object dxDBGrid1bod_id: TdxDBGridColumn
           Visible = False
           BandIndex = 0
           RowIndex = 0
           FieldName = 'bod_id'
           DisableFilter = True
+        end
+        object dxDBGrid1bod_status_id: TdxDBGridColumn
+          Visible = False
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'bod_status_id'
         end
       end
     end
@@ -1109,8 +1112,10 @@ object setexpaybook2: Tsetexpaybook2
         ShowHint = True
         Style.ButtonTransparence = ebtAlways
         TabOrder = 0
+        Alignment = taCenter
         StyleController = StyleController
         Date = -700000.000000000000000000
+        StoredValues = 1
       end
       object dxDateEdit4: TdxDateEdit
         Left = 32
@@ -1122,8 +1127,10 @@ object setexpaybook2: Tsetexpaybook2
         ShowHint = True
         Style.ButtonTransparence = ebtAlways
         TabOrder = 1
+        Alignment = taCenter
         StyleController = StyleController
         Date = -700000.000000000000000000
+        StoredValues = 1
       end
     end
     object dxCheckEdit1: TdxCheckEdit
@@ -1352,5 +1359,27 @@ object setexpaybook2: Tsetexpaybook2
       'select top 1 * from tb_bill')
     Left = 576
     Top = 306
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 68
+    Top = 144
+    object N4: TMenuItem
+      Caption = #25209#37327#36865#23457
+      OnClick = N4Click
+    end
+    object N5: TMenuItem
+      Caption = '-'
+    end
+    object N3: TMenuItem
+      Caption = #25209#37327#21024#38500
+      OnClick = N3Click
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
+    object N2: TMenuItem
+      Caption = #23548#20986'Excel'#34920
+      OnClick = N2Click
+    end
   end
 end

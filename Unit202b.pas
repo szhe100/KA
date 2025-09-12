@@ -143,7 +143,7 @@ type
     dxDBGrid2cmonth: TdxDBGridColumn;
     dxDBGrid2Cbusitype: TdxDBGridColumn;
     dxDBGrid2bod_cd: TdxDBGridColumn;
-    dxDBGrid2Cbusitype1: TdxDBGridColumn;
+    dxDBGrid2Ctype: TdxDBGridColumn;
     dxDBGrid2bod_desc: TdxDBGridColumn;
     dxDBGrid2supplier: TdxDBGridColumn;
     dxDBGrid2mate_name: TdxDBGridColumn;
@@ -220,6 +220,7 @@ type
     qryCtype: TStringField;
     qrymate_type_id: TIntegerField;
     qryterminal_id: TStringField;
+    Shape11: TShape;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -926,23 +927,28 @@ begin
         AFont.Color := clPurple;
     end;
 end;
-if (AColumn = dxDBGrid2Cbusitype1) then
+//if (AColumn = dxDBGrid2Cbusitype1) then
+if (AColumn = dxDBGrid2Ctype) then
 begin
-    if (ANode.Strings[dxDBGrid2Cbusitype1.Index] = '两票分销') then
+    if (ANode.Strings[dxDBGrid2Ctype.Index] = '两票分销') then
     begin
     	AColor := $004EFC56; //$00FEFE94;
     end;
-    if (ANode.Strings[dxDBGrid2Cbusitype1.Index] = '分销') then
+    if (ANode.Strings[dxDBGrid2Ctype.Index] = '分销') then
     begin
         AColor := $00FDFCC1;
     end;
-    if (ANode.Strings[dxDBGrid2Cbusitype1.Index] = '商业流向') then
+    if (ANode.Strings[dxDBGrid2Ctype.Index] = '商业流向') then
     begin
         AColor := $00BAFEFB;
     end;
-    if (ANode.Strings[dxDBGrid2Cbusitype1.Index] = '调拨') then
+    if (ANode.Strings[dxDBGrid2Ctype.Index] = '调拨') then
     begin
         AColor := $00EDD0EE;
+    end;
+    if (ANode.Strings[dxDBGrid2Ctype.Index] = '纯销') then
+    begin
+        AColor := $00B0D8FF;
     end;
 end;
 {
@@ -1015,7 +1021,7 @@ begin
     end;
 	case fieldbyname('mate_type_id').asinteger of  // mate_type_id=1: 医院; 2: 经销商
 		1: fieldbyname('ctype').asstring:='纯销';
-		2: fieldbyname('ctype').asstring:='调拨';
+		2: fieldbyname('ctype').asstring:='分销'; //调拨';
     end;
     
     if fieldbyname('bod_type_id').asinteger=42 then
@@ -1064,8 +1070,7 @@ procedure Tqryclassexp2.SpeedButton3Click(Sender: TObject);
 var Guid:TGUID;
     st,ss,sm: string;
 begin
-if trim(dxbuttonedit4.text)=''
-    then raise Exception.Create('请选择业务员');
+if trim(dxbuttonedit4.text)='' then raise Exception.Create('请选择业务员');
 with qry do
     if (active=false) or (recordcount=0) then exit;
 with dm.pubqry do

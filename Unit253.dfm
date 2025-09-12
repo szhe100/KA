@@ -179,7 +179,7 @@ object setexpaybook: Tsetexpaybook
         HighlightColor = clAqua
         HighlightTextColor = clBlack
         LookAndFeel = lfUltraFlat
-        OptionsBehavior = [edgoAnsiSort, edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoImmediateEditor, edgoTabThrough, edgoVertThrough]
+        OptionsBehavior = [edgoAnsiSort, edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoImmediateEditor, edgoMultiSelect, edgoMultiSort, edgoTabThrough, edgoVertThrough]
         OptionsDB = [edgoCancelOnExit, edgoCanDelete, edgoCanInsert, edgoCanNavigation, edgoConfirmDelete, edgoLoadAllRecords, edgoSmartReload, edgoUseBookmarks]
         OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoRowSelect, edgoUseBitmap]
         OnCustomDrawCell = dxDBGrid1CustomDrawCell
@@ -286,13 +286,15 @@ object setexpaybook: Tsetexpaybook
           SummaryField = 'bod_amot'
         end
         object dxDBGrid1creater: TdxDBGridMaskColumn
-          Width = 45
+          Alignment = taCenter
+          Width = 60
           BandIndex = 0
           RowIndex = 0
           FieldName = 'creater'
         end
         object dxDBGrid1checker: TdxDBGridMaskColumn
-          Width = 45
+          Alignment = taCenter
+          Width = 60
           BandIndex = 0
           RowIndex = 0
           FieldName = 'checker'
@@ -305,13 +307,18 @@ object setexpaybook: Tsetexpaybook
           FieldName = 'check_dt'
           DisableFilter = True
         end
-        object dxDBGrid1Column11: TdxDBGridColumn
-          Sorted = csDown
+        object dxDBGrid1bod_id: TdxDBGridColumn
           Visible = False
           BandIndex = 0
           RowIndex = 0
           FieldName = 'bod_id'
           DisableFilter = True
+        end
+        object dxDBGrid1bod_status_id: TdxDBGridColumn
+          Visible = False
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'bod_status_id'
         end
       end
     end

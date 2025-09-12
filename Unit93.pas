@@ -8,7 +8,7 @@ uses
   wwSpeedButton, wwDBNavigator, wwclearpanel, dxCntner, dxTL, dxDBCtrl,
   dxDBGrid, dxDBTLCl, dxGrClms, Mask, wwdbdatetimepicker, dxEditor,
   dxEdLib, dxDBELib, dxExEdtr, dxDBEdtr, dxExGrEd, dxExELib, Animate,
-  GIFCtrl, DBClient, ADODB, mycds;
+  GIFCtrl, DBClient, ADODB, mycds, Menus;
 
 type
   Tsetexpaybook2 = class(TForm)
@@ -20,9 +20,7 @@ type
     dxDBGrid1Cbod_status: TdxDBGridMaskColumn;
     dxDBGrid1bod_amot: TdxDBGridMaskColumn;
     dxDBGrid1creater: TdxDBGridMaskColumn;
-    dxDBGrid1creat_dt: TdxDBGridDateColumn;
     dxDBGrid1checker: TdxDBGridMaskColumn;
-    dxDBGrid1check_dt: TdxDBGridDateColumn;
     dxDBGrid1bod_desc: TdxDBGridMaskColumn;
     Panel1: TPanel;
     Label1: TLabel;
@@ -69,7 +67,7 @@ type
     billbod_desc: TStringField;
     DBText15: TDBText;
     billreceipt_by: TIntegerField;
-    dxDBGrid1Column11: TdxDBGridColumn;
+    dxDBGrid1bod_id: TdxDBGridColumn;
     billbroker_id: TIntegerField;
     DBText14: TDBText;
     billdst_id: TIntegerField;
@@ -132,6 +130,15 @@ type
     billLchannel_dtl: TStringField;
     dxDBLookupEdit3: TdxDBLookupEdit;
     dxDBLookupEdit2: TdxDBLookupEdit;
+    dxDBGrid1bod_status_id: TdxDBGridColumn;
+    PopupMenu1: TPopupMenu;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N3: TMenuItem;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    dxDBGrid1creat_dt: TdxDBGridColumn;
+    dxDBGrid1check_dt: TdxDBGridColumn;
     procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -167,6 +174,9 @@ type
     procedure dxDBButtonEdit2ButtonClick(Sender: TObject;
       AbsoluteIndex: Integer);
     procedure Button1Click(Sender: TObject);
+    procedure N4Click(Sender: TObject);
+    procedure N3Click(Sender: TObject);
+    procedure N2Click(Sender: TObject);
   private
     { Private declarations }
     procedure setupdatestatus;
@@ -670,6 +680,111 @@ end;
 procedure Tsetexpaybook2.Button1Click(Sender: TObject);
 begin
 SpeedButton2Click(nil);
+end;
+
+procedure Tsetexpaybook2.N4Click(Sender: TObject);
+var mi,j,k,l,i : integer;
+    s,t : string;
+begin
+if (bill.active=false) or (bill.recordcount=0) then exit;
+s:=''+ #13#10;  t:='';
+mi:=0;
+if dxDBGrid1.SelectedCount<2 then
+begin
+    if (bill.fieldbyname('bod_status_id').asinteger=0) then
+    begin
+        s:= s + #13#10 + bill.fieldbyname('bod_cd').asstring;
+        t:= t + bill.fieldbyname('bod_id').asstring;
+        mi:=1;
+    end;
+end
+else
+begin
+    j := dxDBGrid1.ColumnByFieldName('bod_status_id').Index;
+    k := dxDBGrid1.ColumnByFieldName('bod_cd').Index;
+    l := dxDBGrid1.ColumnByFieldName('bod_id').Index;
+    for i:= 0 to dxDBGrid1.SelectedCount - 1 do
+    begin
+        if (dxDBGrid1.SelectedNodes[i].Values[j]=0) then
+        begin
+            s:= s + #13#10 + dxDBGrid1.SelectedNodes[i].Strings[k];
+            t:= t + ','+dxDBGrid1.SelectedNodes[i].Strings[l];
+            mi := mi+1;
+        end;
+    end;
+    delete(t,1,1);  //删除 t 首字符 ','
+end;
+if mi=0 then raise Exception.Create('选择单据无效(仅制单状态单据可送审)');
+with dm.pubqry do
+begin
+    if active then close;
+    commandtext:='select top 1 1 from tB_settlelist a,(select top 1 district from tb_bill a,tb_staff c where a.bod_id in ('+t+') and a.broker_id=c.sta_id) b';
+    commandtext:=commandtext+' where a.settled=1 and year=year('''+bill.fieldbyname('carry_dt').asstring+''')';
+    commandtext:=commandtext+' and month=month('''+bill.fieldbyname('carry_dt').asstring+''')';
+    commandtext:=commandtext+' and dbo.fn_treeischild(b.district,a.district_id)=1';
+    open;
+    if recordcount>0 then raise Exception.Create('所选单据中业务员所在区域与年月已结账，不可送审核');
+end;
+if MessageBox(0,'确定所选单据送审核','请注意',MB_YESNO+MB_ICONQUESTION)<>IDYES then abort;
+setprogress(1);
+//SpeedButton2.enabled:=false; // 避免连续按两次
+with dm.pubqry do
+begin
+    if active then close;
+    commandtext:='update tb_bill set bod_status_id=2 where bod_id in ('+t+')';
+    execute;
+end;
+SpeedButton5Click(nil);  //刷新
+end;
+
+procedure Tsetexpaybook2.N3Click(Sender: TObject);
+var mi,j,k,l,i : integer;
+    s,t : string;
+begin
+if (bill.active=false) or (bill.recordcount=0) then exit;
+s:=''+ #13#10;  t:='';
+mi:=0;
+if dxDBGrid1.SelectedCount<2 then
+begin
+    if (bill.fieldbyname('bod_status_id').asinteger=0) then
+    begin
+        s:= s + #13#10 + bill.fieldbyname('bod_cd').asstring;
+        t:= t + bill.fieldbyname('bod_id').asstring;
+        mi:=1;
+    end;
+end
+else
+begin
+    j := dxDBGrid1.ColumnByFieldName('bod_status_id').Index;
+    k := dxDBGrid1.ColumnByFieldName('bod_cd').Index;
+    l := dxDBGrid1.ColumnByFieldName('bod_id').Index;
+    for i:= 0 to dxDBGrid1.SelectedCount - 1 do
+    begin
+        if (dxDBGrid1.SelectedNodes[i].Values[j]=0) then
+        begin
+            s:= s + #13#10 + dxDBGrid1.SelectedNodes[i].Strings[k];
+            t:= t + ','+dxDBGrid1.SelectedNodes[i].Strings[l];
+            mi := mi+1;
+        end;
+    end;
+    delete(t,1,1);  //删除 t 首字符 ','
+end;
+if mi=0 then raise Exception.Create('选择单据无效(仅制单状态单据可删除)');
+if MessageBox(0,'确定删除所选单据','请注意',MB_YESNO+MB_ICONQUESTION)<>IDYES then abort;
+setprogress(1);
+//SpeedButton2.enabled:=false; // 避免连续按两次
+with dm.pubqry do
+begin
+    if active then close;
+    commandtext:='update tb_bill set bod_type_id=bod_type_id+100,delete_by='+inttostr(curuserid)+',delete_dt=getdate() where bod_id in ('+t+')';
+    execute;
+end;
+SpeedButton5Click(nil);  //刷新
+end;
+
+procedure Tsetexpaybook2.N2Click(Sender: TObject);
+begin
+dm.Save1('xls', 'Microsoft Excel 4.0 Worksheet (*.xls)|*.xls', self.caption+'1.xls', dxDBGrid1.SaveToXLS, self.tag)
 end;
 
 end.

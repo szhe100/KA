@@ -179,16 +179,16 @@ object setexpayrec: Tsetexpayrec
         HighlightColor = clAqua
         HighlightTextColor = clBlack
         LookAndFeel = lfUltraFlat
-        OptionsBehavior = [edgoAnsiSort, edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoImmediateEditor, edgoMultiSelect, edgoTabThrough, edgoVertThrough]
+        OptionsBehavior = [edgoAnsiSort, edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoImmediateEditor, edgoMultiSelect, edgoMultiSort, edgoTabThrough, edgoVertThrough]
         OptionsDB = [edgoCancelOnExit, edgoCanDelete, edgoCanInsert, edgoCanNavigation, edgoConfirmDelete, edgoLoadAllRecords, edgoSmartReload, edgoUseBookmarks]
         OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoRowSelect, edgoUseBitmap]
         OnCustomDrawCell = dxDBGrid1CustomDrawCell
-        object dxDBGrid1creat_dt: TdxDBGridDateColumn
-          Width = 78
+        object dxDBGrid1creat_dt: TdxDBGridColumn
+          Caption = #21046#21333#26102#38388
+          Width = 120
           BandIndex = 0
           RowIndex = 0
           FieldName = 'creat_dt'
-          DisableFilter = True
         end
         object dxDBGrid1bod_cd: TdxDBGridMaskColumn
           Alignment = taCenter
@@ -203,7 +203,6 @@ object setexpayrec: Tsetexpayrec
           FieldName = 'bod_cd'
           SummaryFooterType = cstCount
           SummaryFooterFormat = '##,###'#21333
-          DisableFilter = True
         end
         object dxDBGrid1Cbod_status: TdxDBGridMaskColumn
           Alignment = taCenter
@@ -255,6 +254,7 @@ object setexpayrec: Tsetexpayrec
           SummaryField = 'bod_amot'
         end
         object dxDBGrid1creater: TdxDBGridMaskColumn
+          Alignment = taCenter
           Caption = #21046#21333#20154
           DisableEditor = True
           Width = 69
@@ -263,6 +263,7 @@ object setexpayrec: Tsetexpayrec
           FieldName = 'creater'
         end
         object dxDBGrid1checker: TdxDBGridMaskColumn
+          Alignment = taCenter
           Caption = #23457#26680#20154
           DisableEditor = True
           Width = 69
@@ -271,14 +272,13 @@ object setexpayrec: Tsetexpayrec
           FieldName = 'checker'
         end
         object dxDBGrid1check_dt: TdxDBGridDateColumn
-          Width = 70
+          Caption = #23457#26680#26102#38388
+          Width = 120
           BandIndex = 0
           RowIndex = 0
           FieldName = 'check_dt'
-          DisableFilter = True
         end
         object dxDBGrid1bod_id: TdxDBGridColumn
-          Sorted = csDown
           Visible = False
           BandIndex = 0
           RowIndex = 0
@@ -1160,8 +1160,10 @@ object setexpayrec: Tsetexpayrec
         ShowHint = True
         Style.ButtonTransparence = ebtAlways
         TabOrder = 0
+        Alignment = taCenter
         StyleController = StyleController
         Date = -700000.000000000000000000
+        StoredValues = 1
       end
       object dxDateEdit4: TdxDateEdit
         Left = 32
@@ -1173,8 +1175,10 @@ object setexpayrec: Tsetexpayrec
         ShowHint = True
         Style.ButtonTransparence = ebtAlways
         TabOrder = 1
+        Alignment = taCenter
         StyleController = StyleController
         Date = -700000.000000000000000000
+        StoredValues = 1
       end
     end
     object dxCheckEdit1: TdxCheckEdit
@@ -1535,8 +1539,15 @@ object setexpayrec: Tsetexpayrec
     object N7: TMenuItem
       Caption = '-'
     end
+    object N3: TMenuItem
+      Caption = #25209#37327#21024#38500
+      OnClick = N3Click
+    end
+    object N2: TMenuItem
+      Caption = '-'
+    end
     object N6: TMenuItem
-      Caption = #36716#20986#25253#34920
+      Caption = #23548#20986'Excel'#34920
       OnClick = N6Click
     end
   end
